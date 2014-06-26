@@ -16,14 +16,14 @@
         {% block extrahead %}{% endblock %}
     </head>
     <body>
-        {# Only display the navbar and sidebar if the user is logged in #}
-        {% if user.is_authenticated %}
+        {# Hide the navbar for fullscreen pages #}
+        {% if not fullscreen %}
             <div id="wrapper">
                 {% include "components/navbar.html" %}
                 <div id="page-wrapper">
         {% endif %}
                     {% block content %}{% endblock %}
-        {% if user.is_authenticated %}
+        {% if not fullscreen %}
                 </div>
             </div>
         {% endif %}

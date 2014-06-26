@@ -5,13 +5,11 @@ from django.template.response import SimpleTemplateResponse
 
 def login_(request, **kwargs):
     """Adds template variables to the login view."""
-    # If the user is already authenticated, then go to the home page
-    if request.user.is_authenticated():
-        return redirect('home')
     response = login(request, **kwargs)
     if isinstance(response, SimpleTemplateResponse):
         response.context_data.update({
             'title': 'Login',
+            'fullscreen': True,
         })
     return response
 
