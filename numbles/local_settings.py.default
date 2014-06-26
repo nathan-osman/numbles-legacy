@@ -1,0 +1,36 @@
+"""
+Local settings for Numbles.
+
+Local settings that apply only to a specific installation. Global settings that
+apply to all installations go in settings.py.
+"""
+
+DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+
+# Enable the console email backend when running in debug mode
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Database storage engine(s) for the project
+DATABASES = {
+    'default': {
+        'ENGINE':   'django.db.backends.postgresql_psycopg2',
+        'NAME':     '',
+        'USER':     '',
+        'PASSWORD': '',
+        'HOST':     '',
+        'PORT':     '',
+    },
+}
+
+# Absolute filesystem path where media (uploaded) and static files will be stored
+MEDIA_ROOT  = ''
+STATIC_ROOT = ''
+
+# URL for media and static files
+MEDIA_URL  = '/media/'
+STATIC_URL = '/static/'
+
+# This value must be customized
+SECRET_KEY = ''
