@@ -1,3 +1,3 @@
 ## Numbles
 
-A python web application for managing personal finances.
+A Django-based web application for managing personal finances.
