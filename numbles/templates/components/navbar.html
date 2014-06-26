@@ -11,6 +11,11 @@
     <div class="navbar-collapse navbar-right">
         <p class="navbar-text">
             Current Balance: <strong>$2,344.78</strong>
+            &nbsp;|&nbsp;
+            <a href="{% url "accounts:logout" %}">
+                <span class="glyphicon glyphicon-log-out"></span>
+                Logout
+            </a>
         </p>
     </div>
     {% include "components/sidebar.html" %}

@@ -1,9 +1,13 @@
 from django.conf.urls import patterns, url
 from django.contrib.auth.views import login, logout
+from django.shortcuts import redirect
 from django.template.response import SimpleTemplateResponse
 
 def login_(request, **kwargs):
     """Adds template variables to the login view."""
+    # If the user is already authenticated, then go to the home page
+    if request.user.is_authenticated():
+        return redirect('home')
     response = login(request, **kwargs)
     if isinstance(response, SimpleTemplateResponse):
         response.context_data.update({

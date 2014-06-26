@@ -19,6 +19,9 @@ TIME_ZONE = 'UTC'
 ROOT_URLCONF = 'numbles.urls'
 WSGI_APPLICATION = 'numbles.wsgi.application'
 
+# After login, go to the home page
+LOGIN_REDIRECT_URL = 'home'
+
 INSTALLED_APPS = (
     # Core Django applications
     'django.contrib.admin',
@@ -31,6 +34,8 @@ INSTALLED_APPS = (
     'compressor',
     'south',
     'widget_tweaks',
+    # Numbles applications
+    'numbles.accounts',
 )
 
 # Import all local settings
