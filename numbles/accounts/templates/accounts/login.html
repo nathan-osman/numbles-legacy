@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+    <style>
+        body { padding-top: 20px; }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4>Login</h4>
+                        <p class="help-block">
+                            Please enter your username and password.
+                        </p>
+                        <br>
+                        {% include "components/form.html" %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
