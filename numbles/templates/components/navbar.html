@@ -1,0 +1,17 @@
+<div class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="{% url "home" %}">Numbles</a>
+    </div>
+    <div class="navbar-collapse navbar-right">
+        <p class="navbar-text">
+            Current Balance: <strong>$2,344.78</strong>
+        </p>
+    </div>
+    {% include "components/sidebar.html" %}
+</div>

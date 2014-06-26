@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>{{ title }} &middot; Numbles</title>
+
+        {% load static compress %}
+        {% compress css %}
+            <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+            <link href="{% static "css/sb-admin.css" %}" rel="stylesheet">
+        {% endcompress %}
+    </head>
+    <body>
+        <div id="wrapper">
+            {% include "components/navbar.html" %}
+            <div id="page-wrapper">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+        {% compress js %}
+            <script src="{% static "js/jquery.js" %}"></script>
+            <script src="{% static "js/jquery.metisMenu.js" %}"></script>
+            <script src="{% static "js/bootstrap.js" %}"></script>
+            <script src="{% static "js/sb-admin.js" %}"></script>
+        {% endcompress %}
+    </body>
+</html>
