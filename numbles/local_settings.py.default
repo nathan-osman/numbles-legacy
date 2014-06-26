@@ -8,6 +8,8 @@ apply to all installations go in settings.py.
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+ALLOWED_HOSTS = ['example.org']
+
 # Enable the console email backend when running in debug mode
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -10,6 +10,9 @@ in this file. Installation-specific settings are stored in local_settings.py.
 import os.path
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, 'static'),)
+TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, 'templates'),)
+
 USE_TZ = True
 TIME_ZONE = 'UTC'
 
