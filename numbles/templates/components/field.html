@@ -1,0 +1,16 @@
+{% load widget_tweaks %}
+
+<div class="form-group{% if field.errors %} has-error has-feedback{% endif %}">
+    <label for="id_{{ field.name }}" class="control-label">
+        {{ field.label }}
+    </label>
+    {% render_field field class+="form-control" placeholder=field.help_text %}
+    {% if field.errors %}
+        <span class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
+        {% for error in field.errors %}
+            <p class="help-block text-danger">
+                <strong>{{ error }}</strong>
+            </p>
+        {% endfor %}
+    {% endif %}
+</div>

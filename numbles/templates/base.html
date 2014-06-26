@@ -11,14 +11,22 @@
             <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
             <link href="{% static "css/sb-admin.css" %}" rel="stylesheet">
         {% endcompress %}
+
+        {# Any additional styles/tags for <head> are added here #}
+        {% block extrahead %}{% endblock %}
     </head>
     <body>
-        <div id="wrapper">
-            {% include "components/navbar.html" %}
-            <div id="page-wrapper">
-                {% block content %}{% endblock %}
+        {# Only display the navbar and sidebar if the user is logged in #}
+        {% if user.is_authenticated %}
+            <div id="wrapper">
+                {% include "components/navbar.html" %}
+                <div id="page-wrapper">
+        {% endif %}
+                    {% block content %}{% endblock %}
+        {% if user.is_authenticated %}
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         {% compress js %}
             <script src="{% static "js/jquery.js" %}"></script>
