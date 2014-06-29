@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     # Numbles applications
     'numbles.accounts',
+    'numbles.ledger',
 )
 
 # Import all local settings
