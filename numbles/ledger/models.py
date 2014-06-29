@@ -13,6 +13,12 @@ class Account(models.Model):
     def __unicode__(self):
         return self.name
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('ledger:view_account', (), {
+            'id': self.id,
+        })
+
 
 class Transaction(models.Model):
 
