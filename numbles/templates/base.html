@@ -9,6 +9,7 @@
         {% load static compress %}
         {% compress css %}
             <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
+            <link href="{% static "css/bootstrap-datetimepicker.css" %}" rel="stylesheet">
             <link href="{% static "css/sb-admin.css" %}" rel="stylesheet">
         {% endcompress %}
 
@@ -31,8 +32,15 @@
         {% compress js %}
             <script src="{% static "js/jquery.js" %}"></script>
             <script src="{% static "js/jquery.metisMenu.js" %}"></script>
+            <script src="{% static "js/moment.js" %}"></script>
             <script src="{% static "js/bootstrap.js" %}"></script>
+            <script src="{% static "js/bootstrap-datetimepicker.js" %}"></script>
             <script src="{% static "js/sb-admin.js" %}"></script>
+            <script>
+                $(function() {
+                    $('.date').datetimepicker();
+                });
+            </script>
         {% endcompress %}
     </body>
 </html>

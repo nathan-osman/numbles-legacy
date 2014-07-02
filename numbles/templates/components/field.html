@@ -6,7 +6,16 @@
         {{ field.label }}
     </label>
     {% if not field|widget_type == "checkboxinput" %}
+        {% if field|field_type == "datetimefield" %}
+            <div class="input-group date" data-date-format="YYYY-MM-DD HH:mm:ss" data-date-useSeconds="true">
+        {% endif %}
         {% render_field field class+="form-control" placeholder=field.help_text %}
+        {% if field|field_type == "datetimefield" %}
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+        {% endif %}
     {% endif %}
     {% if field.errors %}
         <span class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
