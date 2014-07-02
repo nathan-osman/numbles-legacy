@@ -41,3 +41,9 @@ class Transaction(models.Model):
 
     def __unicode__(self):
         return self.summary
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('ledger:view_transaction', (), {
+            'id': self.id,
+        })
