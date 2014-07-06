@@ -3,25 +3,25 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 
-from numbles.ledger.forms import AddAccountForm, AddTransactionForm, TransferBetweenAccountsForm
+from numbles.ledger.forms import EditAccountForm, DeleteAccountForm, EditTransactionForm, TransferBetweenAccountsForm, DeleteTransactionForm
 from numbles.ledger.models import Account, Transaction
 
 
 @login_required
-def add_account(request):
+def edit_account(request, id=None):
+    account = id and get_object_or_404(Account, pk=id, user=request.user)
     if request.method == 'POST':
-        form = AddAccountForm(data=request.POST)
+        form = EditAccountForm(instance=account, data=request.POST)
         if form.is_valid():
             account = form.save(commit=False)
             account.user = request.user
             account.save()
             return redirect(account)
     else:
-        form = AddAccountForm()
+        form = EditAccountForm(instance=account)
     return render(request, 'form.html', {
-        'title': 'Add Account',
+        'title': 'Edit "%s"' % account if account else "Add Account",
         'form': form,
-        'description': "Fill in the form below to create a new account.",
     })
 
 
@@ -35,19 +35,34 @@ def view_account(request, id):
 
 
 @login_required
-def add_transaction(request):
+def delete_account(request, id):
+    account = get_object_or_404(Account, pk=id, user=request.user)
     if request.method == 'POST':
-        form = AddTransactionForm(request.user, data=request.POST)
+        form = DeleteAccountForm(data=request.POST)
+        if form.is_valid():
+            account.delete()
+            return redirect('home')
+    else:
+        form = DeleteAccountForm()
+    return render(request, 'form.html', {
+        'title': 'Delete "%s"' % account,
+        'form': form,
+    })
+
+
+@login_required
+def edit_transaction(request, id=None):
+    transaction = id and get_object_or_404(Transaction, pk=id, account__user=request.user)
+    if request.method == 'POST':
+        form = EditTransactionForm(request.user, instance=transaction, data=request.POST)
         if form.is_valid():
             return redirect(form.save())
     else:
-        form = AddTransactionForm(request.user, initial={
-            'date': now(),
-        })
+        initial = {} if transaction else { 'date': now() }
+        form = EditTransactionForm(request.user, instance=transaction, initial=initial)
     return render(request, 'form.html', {
-        'title': 'Add Transaction',
+        'title': 'Edit "%s"' % transaction if transaction else "Add Transaction",
         'form': form,
-        'description': "Fill in the form below to create a new transaction.",
     })
 
 
@@ -84,7 +99,6 @@ def transfer(request):
     return render(request, 'form.html', {
         'title': 'Transfer Between Accounts',
         'form': form,
-        'description': "Fill in the form below to transfer from one account to another.",
     })
 
 
@@ -94,4 +108,20 @@ def view_transaction(request, id):
     return render(request, 'ledger/view_transaction.html', {
         'title': transaction,
         'transaction': transaction,
+    })
+
+
+@login_required
+def delete_transaction(request, id):
+    transaction = get_object_or_404(Transaction, pk=id, account__user=request.user)
+    if request.method == 'POST':
+        form = DeleteTransactionForm(data=request.POST)
+        if form.is_valid():
+            transaction.delete()
+            return redirect(transaction.account)
+    else:
+        form = DeleteTransactionForm()
+    return render(request, 'form.html', {
+        'title': 'Delete "%s"' % transaction,
+        'form': form,
     })
