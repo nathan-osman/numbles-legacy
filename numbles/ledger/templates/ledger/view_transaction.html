@@ -11,6 +11,14 @@
             <br>
             <table class="table table-bordered">
                 <tr>
+                    <th>Account:</th>
+                    <td>
+                        <a href="{{ transaction.account.get_absolute_url }}">
+                            {{ transaction.account }}
+                        </a>
+                    </td>
+                </tr>
+                <tr>
                     <th>Amount:</th>
                     <td>{{ transaction.amount_formatted }}</td>
                 </tr>
@@ -26,7 +34,7 @@
                 {% if transaction.description %}
                     <tr>
                         <th>Description:</th>
-                        <td>{{ transaction.description }}</td>
+                        <td>{{ transaction.description|linebreaksbr }}</td>
                     </tr>
                 {% endif %}
                 <tr>
