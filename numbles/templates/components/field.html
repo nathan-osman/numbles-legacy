@@ -18,7 +18,9 @@
         {% endif %}
     {% endif %}
     {% if field.errors %}
-        <span class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
+        {% if not field|widget_type == "checkboxinput" %}
+            <span class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
+        {% endif %}
         {% for error in field.errors %}
             <p class="help-block text-danger">
                 <strong>{{ error }}</strong>
