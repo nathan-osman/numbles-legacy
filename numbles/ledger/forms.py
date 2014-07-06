@@ -3,21 +3,26 @@ from django import forms
 from numbles.ledger.models import Account, Transaction
 
 
-class AddAccountForm(forms.ModelForm):
+class EditAccountForm(forms.ModelForm):
 
     class Meta:
         model = Account
         fields = ('name', 'include_in_balance')
 
 
-class AddTransactionForm(forms.ModelForm):
+class DeleteAccountForm(forms.Form):
+
+    confirm = forms.BooleanField(label="I confirm that I wish to delete this account (cannot be undone).")
+
+
+class EditTransactionForm(forms.ModelForm):
 
     class Meta:
         model = Transaction
         fields = ('account', 'date', 'summary', 'description', 'amount', 'reconciled')
 
     def __init__(self, user, *args, **kwargs):
-        super(AddTransactionForm, self).__init__(*args, **kwargs)
+        super(EditTransactionForm, self).__init__(*args, **kwargs)
         self.fields['account'].queryset = Account.objects.filter(user=user)
 
 
@@ -41,3 +46,8 @@ class TransferBetweenAccountsForm(forms.Form):
         if cleaned_data['from_account'] == cleaned_data['to_account']:
             raise forms.ValidationError("You must select two different accounts.")
         return cleaned_data
+
+
+class DeleteTransactionForm(forms.Form):
+
+    confirm = forms.BooleanField(label="I confirm that I wish to delete this transaction (cannot be undone).")
