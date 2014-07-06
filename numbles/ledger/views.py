@@ -61,7 +61,7 @@ def transfer(request):
                 account=form.cleaned_data['from_account'],
                 date=form.cleaned_data['date'],
                 summary="Transfer from %s" % form.cleaned_data['from_account'],
-                amount=form.cleaned_data['amount'],
+                amount=(-form.cleaned_data['amount']),
             )
             from_transaction.save()
             to_transaction = Transaction(

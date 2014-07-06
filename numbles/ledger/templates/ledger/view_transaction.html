@@ -4,6 +4,56 @@
     <div class="row">
         <div class="col-sm-6">
             <h1 class="page-header">{{ transaction }}</h1>
+            <p class="text-muted">
+                Detailed information about this transaction is included below.
+                Use the Edit button to make changes to this transaction.
+            </p>
+            <br>
+            <table class="table table-bordered">
+                <tr>
+                    <th>Amount:</th>
+                    <td>{{ transaction.amount_formatted }}</td>
+                </tr>
+                <tr>
+                    <th>Date:</th>
+                    <td>
+                        {{ transaction.date }}
+                        <span class="text-muted">
+                            &mdash; {{ transaction.date|timesince }} ago
+                        </span>
+                    </td>
+                </tr>
+                {% if transaction.description %}
+                    <tr>
+                        <th>Description:</th>
+                        <td>{{ transaction.description }}</td>
+                    </tr>
+                {% endif %}
+                <tr>
+                    <th>Linked:</th>
+                    <td>
+                        {% if transaction.linked %}
+                            <a href="{{ transaction.linked.get_absolute_url }}">
+                                {{ transaction.linked }}
+                            </a>
+                        {% else %}
+                            <span class="text-muted">
+                                No linked transaction
+                            </span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Reconciled:</th>
+                    <td>
+                        {% if transaction.reconciled %}
+                            <span class="text-success">Yes</span>
+                        {% else %}
+                            No
+                        {% endif %}
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 {% endblock %}
