@@ -6,5 +6,6 @@ urlpatterns = patterns('numbles.ledger.views',
     url(r'^account/(?P<id>\d+)/$', 'view_account', name='view_account'),
 
     url(r'^transaction/add/$', 'add_transaction', name='add_transaction'),
+    url(r'^transaction/transfer/$', 'transfer', name='transfer'),
     url(r'^transaction/(?P<id>\d+)/$', 'view_transaction', name='view_transaction'),
 )
