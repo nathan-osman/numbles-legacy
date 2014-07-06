@@ -23,7 +23,7 @@ class Account(models.Model):
 
 class Transaction(models.Model):
 
-    account = models.ForeignKey(Account)
+    account = models.ForeignKey(Account, related_name='transactions')
 
     date = models.DateTimeField(help_text="Date and time of the transaction.")
     summary = models.CharField(max_length=100,
@@ -39,6 +39,9 @@ class Transaction(models.Model):
     linked = models.ForeignKey('self',
                                null=True,
                                blank=True)
+
+    class Meta:
+        ordering = ('date',)
 
     def __unicode__(self):
         return self.summary
