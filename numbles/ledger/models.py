@@ -1,6 +1,5 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils.safestring import mark_safe
 
 
 class Account(models.Model):
@@ -51,12 +50,3 @@ class Transaction(models.Model):
         return ('ledger:view_transaction', (), {
             'id': self.id,
         })
-
-    @property
-    def amount_formatted(self):
-        if self.amount > 0:
-            return mark_safe('<span class="text-success">$%s</span>' % self.amount)
-        elif self.amount == 0:
-            return mark_safe('$%s' % self.amount)
-        else:
-            return mark_safe('<span class="text-danger">-$%s</span>' % abs(self.amount))

@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load ledger %}
 
 {% block content %}
     <div class="row">
@@ -26,8 +27,8 @@
                                 <span class="glyphicon glyphicon-remove"></span>
                             {% endif %}
                         </td>
-                        <td class="text-right">{{ transaction.amount_formatted }}</td>
-                        <td class="text-right">-</td>
+                        <td class="text-right">{{ transaction.amount|currency }}</td>
+                        <td class="text-right">{% accumulate "balance" transaction.amount %}</td>
                     </tr>
                 {% endfor %}
             </table>

@@ -1,14 +1,9 @@
 {% extends "base.html" %}
+{% load ledger %}
 
 {% block content %}
     <div class="row">
         <div class="col-sm-6">
-            <h1 class="page-header">{{ transaction }}</h1>
-            <p class="text-muted">
-                Detailed information about this transaction is included below.
-                Use the Edit button to make changes to this transaction.
-            </p>
-            <br>
             <table class="table table-bordered">
                 <tr>
                     <th>Account:</th>
@@ -20,7 +15,7 @@
                 </tr>
                 <tr>
                     <th>Amount:</th>
-                    <td>{{ transaction.amount_formatted }}</td>
+                    <td>{{ transaction.amount|currency }}</td>
                 </tr>
                 <tr>
                     <th>Date:</th>
@@ -62,6 +57,29 @@
                     </td>
                 </tr>
             </table>
+        </div>
+        <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Transaction Tools</h3>
+                </div>
+                <div class="panel-body">
+                    <p class="text-muted">
+                        Use the tools below to make changes to this transaction.
+                    </p>
+                    <br>
+                    <p>
+                        <a href="{% url "ledger:edit_transaction" transaction.id %}" class="btn btn-primary">
+                            <span class="glyphicon glyphicon-edit"></span>
+                            Edit
+                        </a>
+                        <a href="{% url "ledger:delete_transaction" transaction.id %}" class="btn btn-danger">
+                            <span class="glyphicon glyphicon-trash"></span>
+                            Delete
+                        </a>
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
