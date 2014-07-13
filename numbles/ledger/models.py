@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.dispatch import receiver
 
 
 class Account(models.Model):
@@ -9,6 +10,10 @@ class Account(models.Model):
     name = models.CharField(max_length=40,
                             help_text="Account name.")
     include_in_balance = models.BooleanField(default=False)
+
+    balance = models.DecimalField(max_digits=9,
+                                  decimal_places=2,
+                                  default=0)
 
     def __unicode__(self):
         return self.name
@@ -50,3 +55,34 @@ class Transaction(models.Model):
         return ('ledger:view_transaction', (), {
             'id': self.id,
         })
+
+
+@receiver(models.signals.post_init, sender=Transaction)
+def store_original_amount(instance, **kwargs):
+    """
+    Store the original amount of the transaction.
+    This is necessary so that the difference can be calculated when the
+    transaction is modified or deleted.
+    """
+    instance.original_amount = instance.amount or 0
+
+
+@receiver(models.signals.post_save, sender=Transaction)
+def update_account_balance_post_save(instance, **kwargs):
+    """
+    Update the transaction's account balance.
+    The account stores the sum of all transactions. By calculating the
+    difference of the transaction from its previous value, the sum will
+    continue to reflect the correct sum.
+    """
+    instance.account.balance = models.F('balance') + (instance.amount - instance.original_amount)
+    instance.account.save()
+
+
+@receiver(models.signals.post_delete, sender=Transaction)
+def update_account_balance_post_delete(instance, **kwargs):
+    """
+    Remove the transaction amount from the account balance.
+    """
+    instance.account.balance = models.F('balance') - instance.amount
+    instance.account.save()

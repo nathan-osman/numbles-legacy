@@ -30,10 +30,22 @@
                         <td class="text-right">{{ transaction.amount|currency }}</td>
                         <td class="text-right">{% accumulate "balance" transaction.amount %}</td>
                     </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">
+                            This account does not contain any transactions.
+                        </td>
+                    </tr>
                 {% endfor %}
             </table>
         </div>
         <div class="col-sm-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>Account Balance:</p>
+                    <h3>{{ account.balance|currency }}</h3>
+                </div>
+            </div>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">Account Tools</h3>

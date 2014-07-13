@@ -14,13 +14,14 @@ class Migration(SchemaMigration):
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=40)),
             ('include_in_balance', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('balance', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=9, decimal_places=2)),
         ))
         db.send_create_signal(u'ledger', ['Account'])
 
         # Adding model 'Transaction'
         db.create_table(u'ledger_transaction', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('account', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
+            ('account', self.gf('django.db.models.fields.related.ForeignKey')(related_name='transactions', to=orm['ledger.Account'])),
             ('date', self.gf('django.db.models.fields.DateTimeField')()),
             ('summary', self.gf('django.db.models.fields.CharField')(max_length=100)),
             ('description', self.gf('django.db.models.fields.TextField')(blank=True)),
@@ -78,14 +79,15 @@ class Migration(SchemaMigration):
         },
         u'ledger.account': {
             'Meta': {'object_name': 'Account'},
+            'balance': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '9', 'decimal_places': '2'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'include_in_balance': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
         },
         u'ledger.transaction': {
-            'Meta': {'object_name': 'Transaction'},
-            'account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
+            'Meta': {'ordering': "('date',)", 'object_name': 'Transaction'},
+            'account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'transactions'", 'to': u"orm['ledger.Account']"}),
             'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '9', 'decimal_places': '2'}),
             'date': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
