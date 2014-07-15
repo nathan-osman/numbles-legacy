@@ -16,7 +16,7 @@ class UpdateMixin:
                                   decimal_places=DECIMAL_PLACES,
                                   default=0)
 
-    def update(self):
+    def update(self, update_parent=True):
         """
         Update the field with the sum of a related field.
 
@@ -27,7 +27,7 @@ class UpdateMixin:
         data = self.UPDATE_QUERYSET().aggregate(sum=models.Sum(self.UPDATE_FIELD))
         setattr(self, 'balance', data['sum'])
         self.save()
-        if self.UPDATE_PARENT:
+        if self.UPDATE_PARENT and update_parent:
             getattr(self, self.UPDATE_PARENT).update()
 
 
@@ -108,14 +108,14 @@ class Year(models.Model, UpdateMixin):
     def __unicode__(self):
         return unicode(self.year)
 
-    def update(self):
+    def update(self, *args, **kwargs):
         """
         Self destruct if no longer needed.
         """
         if not self.transactions.count():
             self.delete()
         else:
-            super(Year, self).update()
+            super(Year, self).update(*args, **kwargs)
 
 
 @receiver(models.signals.post_delete, sender=Year)
@@ -132,6 +132,7 @@ class Transaction(models.Model):
     """
 
     user = models.ForeignKey(User)
+    account = models.ForeignKey(Account, related_name='transactions')
     year = models.ForeignKey(Year, related_name='transactions')
 
     date = models.DateTimeField(help_text="Date and time of the transaction.")
@@ -168,12 +169,25 @@ def on_transaction_init(instance, **kwargs):
     """
     Store the original year and amount of the transaction.
     """
-    instance.original_year = instance.date.year
+    instance.original_account = instance.account
+    instance.original_year = instance.year
     instance.original_amount = instance.amount
 
 
+@receiver(models.signals.pre_save, sender=Transaction)
+def on_transaction_pre_save(instance, **kwargs):
+    """
+    Set the appropriate Year for the transaction.
+    """
+    instance.year = Year.objects.get_or_create(
+        user=instance.user,
+        account=instance.account,
+        year=instance.date.year
+    )
+
+
 @receiver(models.signals.post_save, sender=Transaction)
-def on_transaction_save(instance, created, **kwargs):
+def on_transaction_post_save(instance, created, **kwargs):
     """
     Update the transaction's year and account balance.
 
@@ -181,20 +195,13 @@ def on_transaction_save(instance, created, **kwargs):
     transactions. If so, delete it. Also, the new year might not exist, so
     create it if this is the case.
     """
-    changed = instance.original_year != instance.date.year
-    if not created and changed:
-        Year.objects.get(
-            user=instance.user,
-            account=None,
-            year=instance.original_year
-        ).save()
-    if created or changed:
-        year, _ = Year.objects.get_or_create(
-            user=instance.user,
-            account=None,
-            year=instance.date.year
-        )
-        year.update()
+    account_changed = instance.original_account != instance.account
+    year_changed = instance.original_year != instance.year
+    amount_changed = instance.original_amount != instance.amount
+    if account_changed or year_changed or amount_changed:
+        if account_changed or year_changed:
+            instance.original_year.update(account_changed)
+        instance.year.update()
 
 
 @receiver(models.signals.post_delete, sender=Transaction)

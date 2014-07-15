@@ -38,6 +38,7 @@ class Migration(SchemaMigration):
         db.create_table(u'ledger_transaction', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('account', self.gf('django.db.models.fields.related.ForeignKey')(related_name='transactions', to=orm['ledger.Account'])),
             ('year', self.gf('django.db.models.fields.related.ForeignKey')(related_name='transactions', to=orm['ledger.Year'])),
             ('date', self.gf('django.db.models.fields.DateTimeField')()),
             ('summary', self.gf('django.db.models.fields.CharField')(max_length=100)),
@@ -115,6 +116,7 @@ class Migration(SchemaMigration):
         },
         u'ledger.transaction': {
             'Meta': {'ordering': "('date',)", 'object_name': 'Transaction'},
+            'account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'transactions'", 'to': u"orm['ledger.Account']"}),
             'amount': ('django.db.models.fields.DecimalField', [], {'max_digits': '9', 'decimal_places': '2'}),
             'date': ('django.db.models.fields.DateTimeField', [], {}),
             'description': ('django.db.models.fields.TextField', [], {'blank': 'True'}),
