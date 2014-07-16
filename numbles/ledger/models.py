@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.dispatch import receiver
@@ -10,12 +12,6 @@ DECIMAL_PLACES = 2
 
 class UpdateMixin:
 
-    UPDATE_FIELD = 'balance'
-
-    balance = models.DecimalField(max_digits=MAX_DIGITS,
-                                  decimal_places=DECIMAL_PLACES,
-                                  default=0)
-
     def update(self, update_parent=True):
         """
         Update the field with the sum of a related field.
@@ -25,7 +21,7 @@ class UpdateMixin:
         UPDATE_PARENT is set, then it too will recalculate the sum.
         """
         data = self.UPDATE_QUERYSET().aggregate(sum=models.Sum(self.UPDATE_FIELD))
-        setattr(self, 'balance', data['sum'])
+        setattr(self, 'balance', data['sum'] or Decimal('0.00'))
         self.save()
         if self.UPDATE_PARENT and update_parent:
             getattr(self, self.UPDATE_PARENT).update()
@@ -43,7 +39,11 @@ class Total(models.Model, UpdateMixin):
     UPDATE_FIELD = 'balance'
     UPDATE_PARENT = None
 
-    user = models.ForeignKey(User)
+    user = models.OneToOneField(User,
+                                primary_key=True)
+    balance = models.DecimalField(max_digits=MAX_DIGITS,
+                                  decimal_places=DECIMAL_PLACES,
+                                  default=Decimal('0.00'))
 
     def __unicode__(self):
         return self.balance
@@ -69,6 +69,10 @@ class Account(models.Model, UpdateMixin):
 
     user = models.ForeignKey(User)
     total = models.ForeignKey(Total, related_name='accounts')
+
+    balance = models.DecimalField(max_digits=MAX_DIGITS,
+                                  decimal_places=DECIMAL_PLACES,
+                                  default=Decimal('0.00'))
 
     name = models.CharField(max_length=40,
                             help_text="Account name.")
@@ -102,6 +106,10 @@ class Year(models.Model, UpdateMixin):
 
     user = models.ForeignKey(User)
     account = models.ForeignKey(Account, related_name='years')
+
+    balance = models.DecimalField(max_digits=MAX_DIGITS,
+                                  decimal_places=DECIMAL_PLACES,
+                                  default=Decimal('0.00'))
 
     year = models.PositiveSmallIntegerField()
 
@@ -174,7 +182,7 @@ def on_transaction_init(instance, **kwargs):
     instance.original_amount = instance.amount
 
 
-@receiver(models.signals.pre_save, sender=Transaction)
+@receiver(models.signals.post_save, sender=Transaction)
 def on_transaction_pre_save(instance, **kwargs):
     """
     Set the appropriate Year for the transaction.
@@ -198,8 +206,8 @@ def on_transaction_post_save(instance, created, **kwargs):
     account_changed = instance.original_account != instance.account
     year_changed = instance.original_year != instance.year
     amount_changed = instance.original_amount != instance.amount
-    if account_changed or year_changed or amount_changed:
-        if account_changed or year_changed:
+    if created or account_changed or year_changed or amount_changed:
+        if not created and (account_changed or year_changed):
             instance.original_year.update(account_changed)
         instance.year.update()
 

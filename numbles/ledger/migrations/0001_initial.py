@@ -10,8 +10,8 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         # Adding model 'Total'
         db.create_table(u'ledger_total', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
+            ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True, primary_key=True)),
+            ('balance', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=9, decimal_places=2)),
         ))
         db.send_create_signal(u'ledger', ['Total'])
 
@@ -20,6 +20,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('total', self.gf('django.db.models.fields.related.ForeignKey')(related_name='accounts', to=orm['ledger.Total'])),
+            ('balance', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=9, decimal_places=2)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=40)),
             ('include_in_balance', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
@@ -30,6 +31,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('account', self.gf('django.db.models.fields.related.ForeignKey')(related_name='years', to=orm['ledger.Account'])),
+            ('balance', self.gf('django.db.models.fields.DecimalField')(default=0, max_digits=9, decimal_places=2)),
             ('year', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
         ))
         db.send_create_signal(u'ledger', ['Year'])
@@ -103,6 +105,7 @@ class Migration(SchemaMigration):
         },
         u'ledger.account': {
             'Meta': {'object_name': 'Account'},
+            'balance': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '9', 'decimal_places': '2'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'include_in_balance': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '40'}),
@@ -111,8 +114,8 @@ class Migration(SchemaMigration):
         },
         u'ledger.total': {
             'Meta': {'object_name': 'Total'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"})
+            'balance': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '9', 'decimal_places': '2'}),
+            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True', 'primary_key': 'True'})
         },
         u'ledger.transaction': {
             'Meta': {'ordering': "('date',)", 'object_name': 'Transaction'},
@@ -130,6 +133,7 @@ class Migration(SchemaMigration):
         u'ledger.year': {
             'Meta': {'object_name': 'Year'},
             'account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'years'", 'to': u"orm['ledger.Account']"}),
+            'balance': ('django.db.models.fields.DecimalField', [], {'default': '0', 'max_digits': '9', 'decimal_places': '2'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'year': ('django.db.models.fields.PositiveSmallIntegerField', [], {})
