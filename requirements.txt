@@ -2,3 +2,4 @@ Django>=1.6
 South
 django-widget-tweaks
 django_compressor
+pytz

@@ -102,7 +102,7 @@ class Year(models.Model, UpdateMixin):
 
     UPDATE_QUERYSET = lambda self: self.transactions.all()
     UPDATE_FIELD = 'amount'
-    UPDATE_PARENT = 'year'
+    UPDATE_PARENT = 'account'
 
     user = models.ForeignKey(User)
     account = models.ForeignKey(Account, related_name='years')
@@ -177,17 +177,17 @@ def on_transaction_init(instance, **kwargs):
     """
     Store the original year and amount of the transaction.
     """
-    instance.original_account = instance.account
-    instance.original_year = instance.year
+    instance.original_account = instance.account if hasattr(instance, 'account') else None
+    instance.original_year = instance.year if hasattr(instance, 'year') else None
     instance.original_amount = instance.amount
 
 
-@receiver(models.signals.post_save, sender=Transaction)
+@receiver(models.signals.pre_save, sender=Transaction)
 def on_transaction_pre_save(instance, **kwargs):
     """
     Set the appropriate Year for the transaction.
     """
-    instance.year = Year.objects.get_or_create(
+    instance.year, _ = Year.objects.get_or_create(
         user=instance.user,
         account=instance.account,
         year=instance.date.year
