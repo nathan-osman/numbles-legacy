@@ -52,8 +52,13 @@ class TestIncludeBalance(UtilMixin, TestCase):
 class TestTransactionSave(UtilMixin, TestCase):
 
     def test_transaction_save(self):
-        account = self.create_account()
-        transaction = self.create_transaction(account=account)
+        transaction = self.create_transaction(account=self.create_account())
         self.assertEqual(transaction.year.balance, Decimal('12.99'))
-        self.assertEqual(account.balance, Decimal('12.99'))
-        self.assertEqual(account.total.balance, Decimal('12.99'))
+        self.assertEqual(transaction.account.balance, Decimal('12.99'))
+        self.assertEqual(transaction.account.total.balance, Decimal('12.99'))
+        transaction.amount = Decimal('3.99')
+        transaction.save()
+        transaction = Transaction.objects.get(pk=transaction.id)
+        self.assertEqual(transaction.year.balance, Decimal('3.99'))
+        self.assertEqual(transaction.account.balance, Decimal('3.99'))
+        self.assertEqual(transaction.account.total.balance, Decimal('3.99'))

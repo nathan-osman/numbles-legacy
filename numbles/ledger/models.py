@@ -46,7 +46,7 @@ class Total(models.Model, UpdateMixin):
                                   default=Decimal('0.00'))
 
     def __unicode__(self):
-        return self.balance
+        return unicode(self.balance)
 
 
 @receiver(models.signals.post_save, sender=User)
@@ -210,6 +210,7 @@ def on_transaction_post_save(instance, created, **kwargs):
         if not created and (account_changed or year_changed):
             instance.original_year.update(account_changed)
         instance.year.update()
+    on_transaction_init(instance)
 
 
 @receiver(models.signals.post_delete, sender=Transaction)
