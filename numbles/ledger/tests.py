@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from pytz import timezone
 
-from numbles.ledger.models import Account, Transaction
+from numbles.ledger.models import Account, Year, Transaction
 
 
 class UtilMixin:
@@ -28,6 +28,12 @@ class UtilMixin:
         kwargs.setdefault('amount', Decimal('12.99'))
         return Transaction.objects.create(**kwargs)
 
+    def check_balances(self, id, amount):
+        transaction = Transaction.objects.get(pk=id)
+        self.assertEqual(transaction.year.balance, amount)
+        self.assertEqual(transaction.account.balance, amount)
+        self.assertEqual(transaction.account.total.balance, amount)
+
 
 class TestTotalUpdate(UtilMixin, TestCase):
 
@@ -38,6 +44,14 @@ class TestTotalUpdate(UtilMixin, TestCase):
         self.create_account(balance=Decimal('1.01'))
         self.user.total.update()
         self.assertEqual(self.user.total.balance, Decimal('14.00'))
+
+
+class TestYearDeleted(UtilMixin, TestCase):
+
+    def test_year_deleted(self):
+        transaction = self.create_transaction(account=self.create_account())
+        transaction.delete()
+        self.assertEqual(Year.objects.count(), 0)
 
 
 class TestIncludeBalance(UtilMixin, TestCase):
@@ -53,12 +67,36 @@ class TestTransactionSave(UtilMixin, TestCase):
 
     def test_transaction_save(self):
         transaction = self.create_transaction(account=self.create_account())
-        self.assertEqual(transaction.year.balance, Decimal('12.99'))
-        self.assertEqual(transaction.account.balance, Decimal('12.99'))
-        self.assertEqual(transaction.account.total.balance, Decimal('12.99'))
+        self.check_balances(transaction.id, Decimal('12.99'))
         transaction.amount = Decimal('3.99')
         transaction.save()
+        self.check_balances(transaction.id, Decimal('3.99'))
+        transaction.name = "Renamed Test"
+        transaction.save()
+        self.check_balances(transaction.id, Decimal('3.99'))
+
+
+class TestTransactionChangeYear(UtilMixin, TestCase):
+
+    def test_transaction_change_year(self):
+        transaction = self.create_transaction(account=self.create_account())
+        transaction.date = datetime(2001, 1, 1, tzinfo=timezone('UTC'))
+        transaction.save()
+        self.assertEqual(Year.objects.count(), 1)
+        self.assertEqual(Year.objects.first().year, 2001)
+        self.check_balances(transaction.id, Decimal('12.99'))
+
+
+class TestTransactionChangeAccount(UtilMixin, TestCase):
+
+    def test_transaction_change_account(self):
+        account = self.create_account()
+        self.create_transaction(account=account, amount=Decimal('1.01'))
+        transaction = self.create_transaction(account=account)
+        transaction.account = self.create_account()
+        transaction.save()
         transaction = Transaction.objects.get(pk=transaction.id)
-        self.assertEqual(transaction.year.balance, Decimal('3.99'))
-        self.assertEqual(transaction.account.balance, Decimal('3.99'))
-        self.assertEqual(transaction.account.total.balance, Decimal('3.99'))
+        self.assertEqual(Year.objects.count(), 2)
+        self.assertEqual(transaction.year.balance, Decimal('12.99'))
+        self.assertEqual(transaction.account.balance, Decimal('12.99'))
+        self.assertEqual(transaction.account.total.balance, Decimal('14.00'))
