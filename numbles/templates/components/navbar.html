@@ -1,3 +1,5 @@
+{% load ledger %}
+
 <div class="navbar navbar-default navbar-fixed-top">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
@@ -10,7 +12,7 @@
     </div>
     <div class="navbar-collapse navbar-right">
         <p class="navbar-text">
-            Current Balance: <strong>$2,344.78</strong>
+            Current Balance: <strong>{{ user.total|currency }}</strong>
             &nbsp;|&nbsp;
             <a href="{% url "accounts:logout" %}">
                 <span class="glyphicon glyphicon-log-out"></span>

@@ -3,7 +3,8 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 
-from numbles.ledger.forms import EditAccountForm, DeleteAccountForm, EditTransactionForm, TransferBetweenAccountsForm, DeleteTransactionForm
+from numbles.ledger.forms import EditAccountForm, DeleteAccountForm, \
+    EditTransactionForm, TransferBetweenAccountsForm, DeleteTransactionForm
 from numbles.ledger.models import Account, Transaction
 
 
@@ -15,6 +16,7 @@ def edit_account(request, id=None):
         if form.is_valid():
             account = form.save(commit=False)
             account.user = request.user
+            account.total = request.user.total
             account.save()
             return redirect(account)
     else:
@@ -52,13 +54,16 @@ def delete_account(request, id):
 
 @login_required
 def edit_transaction(request, id=None):
-    transaction = id and get_object_or_404(Transaction, pk=id, account__user=request.user)
+    transaction = id and get_object_or_404(Transaction, pk=id, user=request.user)
     if request.method == 'POST':
         form = EditTransactionForm(request.user, instance=transaction, data=request.POST)
         if form.is_valid():
-            return redirect(form.save())
+            transaction = form.save(commit=False)
+            transaction.user = request.user
+            transaction.save()
+            return redirect(transaction)
     else:
-        initial = {} if transaction else { 'date': now() }
+        initial = {} if transaction else {'date': now()}
         form = EditTransactionForm(request.user, instance=transaction, initial=initial)
     return render(request, 'form.html', {
         'title': 'Edit "%s"' % transaction if transaction else "Add Transaction",
@@ -72,25 +77,28 @@ def transfer(request):
     if request.method == 'POST':
         form = TransferBetweenAccountsForm(request.user, data=request.POST)
         if form.is_valid():
+            # Create the "from" transaction
             from_transaction = Transaction(
+                user=request.user,
                 account=form.cleaned_data['from_account'],
                 date=form.cleaned_data['date'],
                 summary="Transfer to %s" % form.cleaned_data['to_account'],
-                amount=(-form.cleaned_data['amount']),
+                amount=-form.cleaned_data['amount']
             )
             from_transaction.save()
+            # Create the "to" transaction
             to_transaction = Transaction(
+                user=request.user,
                 account=form.cleaned_data['to_account'],
                 date=form.cleaned_data['date'],
                 summary="Transfer from %s" % form.cleaned_data['from_account'],
                 amount=form.cleaned_data['amount'],
+                linked=from_transaction
             )
             to_transaction.save()
-            # Link the two transactions together
+            # This must be done separately due to circular reference
             from_transaction.linked = to_transaction
             from_transaction.save()
-            to_transaction.linked = from_transaction
-            to_transaction.save()
             return redirect(to_transaction)
     else:
         form = TransferBetweenAccountsForm(request.user, initial={
@@ -104,7 +112,7 @@ def transfer(request):
 
 @login_required
 def view_transaction(request, id):
-    transaction = get_object_or_404(Transaction, pk=id, account__user=request.user)
+    transaction = get_object_or_404(Transaction, pk=id, user=request.user)
     return render(request, 'ledger/view_transaction.html', {
         'title': transaction,
         'transaction': transaction,
@@ -113,7 +121,7 @@ def view_transaction(request, id):
 
 @login_required
 def delete_transaction(request, id):
-    transaction = get_object_or_404(Transaction, pk=id, account__user=request.user)
+    transaction = get_object_or_404(Transaction, pk=id, user=request.user)
     if request.method == 'POST':
         form = DeleteTransactionForm(data=request.POST)
         if form.is_valid():

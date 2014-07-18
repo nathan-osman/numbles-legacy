@@ -28,11 +28,11 @@ class UtilMixin:
         kwargs.setdefault('amount', Decimal('12.99'))
         return Transaction.objects.create(**kwargs)
 
-    def check_balances(self, id, amount):
+    def check_balances(self, id, amount, account_balance=None, total_balance=None):
         transaction = Transaction.objects.get(pk=id)
         self.assertEqual(transaction.year.balance, amount)
-        self.assertEqual(transaction.account.balance, amount)
-        self.assertEqual(transaction.account.total.balance, amount)
+        self.assertEqual(transaction.account.balance, account_balance or amount)
+        self.assertEqual(transaction.account.total.balance, total_balance or amount)
 
 
 class TestTotalUpdate(UtilMixin, TestCase):
@@ -95,8 +95,5 @@ class TestTransactionChangeAccount(UtilMixin, TestCase):
         transaction = self.create_transaction(account=account)
         transaction.account = self.create_account()
         transaction.save()
-        transaction = Transaction.objects.get(pk=transaction.id)
         self.assertEqual(Year.objects.count(), 2)
-        self.assertEqual(transaction.year.balance, Decimal('12.99'))
-        self.assertEqual(transaction.account.balance, Decimal('12.99'))
-        self.assertEqual(transaction.account.total.balance, Decimal('14.00'))
+        self.check_balances(transaction.id, Decimal('12.99'), total_balance=Decimal('14.00'))
