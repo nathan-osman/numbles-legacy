@@ -6,13 +6,42 @@
         <div class="col-sm-6">
             {% include "ledger/account_list.html" %}
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-6">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <p>Current Balance:</p>
                     <h3>{{ user.total.balance|currency }}</h3>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Income</h3>
+                </div>
+                <div class="panel-body">
+                    <div id="income"></div>
+                </div>
+            </div>
         </div>
     </div>
+{% endblock %}
+
+{% block extrafoot %}
+    <script>
+        Morris.Bar({
+            element: 'income',
+            data: [
+                {% for year in years %}
+                    {% if forloop.counter0 %},{% endif %}
+                    { x: "{{ year.year }}", y: {{ year.sum }} }
+                {% endfor %}
+            ],
+            xkey: 'x',
+            ykeys: ['y'],
+            labels: ['Balance'],
+            hideHover: true,
+            hoverCallback: function(index, options, content, row) {
+                return '<strong>' + row.x + '</strong><br>$' + row.y;
+            }
+        });
+    </script>
 {% endblock %}

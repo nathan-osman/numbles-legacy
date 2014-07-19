@@ -78,6 +78,9 @@ class Account(models.Model, UpdateMixin):
                             help_text="Account name.")
     include_in_balance = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ('-balance', 'name')
+
     def __unicode__(self):
         return self.name
 
@@ -112,6 +115,9 @@ class Year(models.Model, UpdateMixin):
                                   default=Decimal('0.00'))
 
     year = models.PositiveSmallIntegerField()
+
+    class Meta:
+        ordering = ('year',)
 
     def __unicode__(self):
         return unicode(self.year)
