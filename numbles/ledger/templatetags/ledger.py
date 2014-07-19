@@ -18,8 +18,8 @@ def currency(value):
         return mark_safe('<span class="text-danger">-$%s</span>' % abs(value))
 
 
-@register.inclusion_tag('ledger/account_list.html', takes_context=True)
-def account_list(context):
+@register.inclusion_tag('ledger/account_sidebar.html', takes_context=True)
+def account_sidebar(context):
     return {
         'accounts': Account.objects.filter(user=context['user']),
     }

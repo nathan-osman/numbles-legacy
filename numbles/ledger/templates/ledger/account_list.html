@@ -1,13 +1,34 @@
-<ul class="nav nav-second-level">
+{% load ledger %}
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>Name</th>
+        <th class="text-right">Last Transaction</th>
+        <th class="text-right">Balance</th>
+    </tr>
     {% for account in accounts %}
-        <li>
-            <a href="{{ account.get_absolute_url }}">{{ account }}</a>
-        </li>
+        <tr>
+            <td>
+                <a href="{{ account.get_absolute_url }}">
+                    {{ account }}
+                </a>
+            </td>
+            <td class="text-right">
+                {% with account.transactions.all.0 as transaction %}
+                    {% if transaction %}
+                        {{ transaction.date|timesince }} ago
+                    {% else %}
+                        <span class="text-muted">No transactions</span>
+                    {% endif %}
+                {% endwith %}
+            </td>
+            <td class="text-right">{{ account.balance|currency }}</td>
+        </tr>
+    {% empty %}
+        <tr>
+            <td colspan="5" class="text-center text-muted">
+                No accounts match the search criteria.
+            </td>
+        </tr>
     {% endfor %}
-    <li>
-        <a href="{% url "ledger:add_account" %}">
-            <i class="glyphicon glyphicon-plus"></i>
-            Add Account
-        </a>
-    </li>
-</ul>
+</table>
