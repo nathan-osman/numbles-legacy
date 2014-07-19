@@ -4,40 +4,7 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-6">
-            <table class="table table-bordered table-striped">
-                <tr>
-                    <th>Date / Time</th>
-                    <th>Summary</th>
-                    <th class="text-center">Reconciled?</th>
-                    <th class="text-right">Amount</th>
-                    <th class="text-right">Balance</th>
-                </tr>
-                {% for transaction in account.transactions.all %}
-                    <tr>
-                        <td>{{ transaction.date }}</td>
-                        <td>
-                            <a href="{{ transaction.get_absolute_url }}">
-                                {{ transaction.summary }}
-                            </a>
-                        </td>
-                        <td class="text-center">
-                            {% if transaction.reconciled %}
-                                <span class="glyphicon glyphicon-ok text-success"></span>
-                            {% else %}
-                                <span class="glyphicon glyphicon-remove"></span>
-                            {% endif %}
-                        </td>
-                        <td class="text-right">{{ transaction.amount|currency }}</td>
-                        <td class="text-right">{% accumulate "balance" transaction.amount %}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center text-muted">
-                            This account does not contain any transactions.
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+            {% include "ledger/transaction_list.html" %}
         </div>
         <div class="col-sm-3">
             <div class="panel panel-default">

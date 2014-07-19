@@ -1,0 +1,11 @@
+/**
+ * Bootstrap Style Overrides
+ */
+
+#page-wrapper {
+    padding-top: 10px;
+}
+
+.page-header {
+    margin: 10px 0 40px;
+}

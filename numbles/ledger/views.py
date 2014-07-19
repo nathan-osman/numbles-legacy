@@ -23,6 +23,9 @@ def edit_account(request, id=None):
         form = EditAccountForm(instance=account)
     return render(request, 'form.html', {
         'title': 'Edit "%s"' % account if account else "Add Account",
+        'breadcrumbs': [
+            account,
+        ] if account else [],
         'form': form,
     })
 
@@ -48,6 +51,9 @@ def delete_account(request, id):
         form = DeleteAccountForm()
     return render(request, 'form.html', {
         'title': 'Delete "%s"' % account,
+        'breadcrumbs': [
+            account,
+        ],
         'form': form,
     })
 
@@ -67,6 +73,10 @@ def edit_transaction(request, id=None):
         form = EditTransactionForm(request.user, instance=transaction, initial=initial)
     return render(request, 'form.html', {
         'title': 'Edit "%s"' % transaction if transaction else "Add Transaction",
+        'breadcrumbs': [
+            transaction.account,
+            transaction,
+        ] if transaction else [],
         'form': form,
     })
 
@@ -115,6 +125,9 @@ def view_transaction(request, id):
     transaction = get_object_or_404(Transaction, pk=id, user=request.user)
     return render(request, 'ledger/view_transaction.html', {
         'title': transaction,
+        'breadcrumbs': [
+            transaction.account,
+        ],
         'transaction': transaction,
     })
 
@@ -131,5 +144,9 @@ def delete_transaction(request, id):
         form = DeleteTransactionForm()
     return render(request, 'form.html', {
         'title': 'Delete "%s"' % transaction,
+        'breadcrumbs': [
+            transaction.account,
+            transaction,
+        ],
         'form': form,
     })

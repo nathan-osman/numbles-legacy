@@ -11,6 +11,7 @@
             <link href="{% static "css/bootstrap.css" %}" rel="stylesheet">
             <link href="{% static "css/bootstrap-datetimepicker.css" %}" rel="stylesheet">
             <link href="{% static "css/sb-admin.css" %}" rel="stylesheet">
+            <link href="{% static "css/overrides.css" %}" rel="stylesheet">
         {% endcompress %}
 
         {# Any additional styles/tags for <head> are added here #}
@@ -22,6 +23,7 @@
             <div id="wrapper">
                 {% include "components/navbar.html" %}
                 <div id="page-wrapper">
+                    {% include "components/breadcrumbs.html" %}
                     <div class="row">
                         <div class="col-lg-12">
                             <h1 class="page-header">{{ title }}</h1>
