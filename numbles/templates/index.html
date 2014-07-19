@@ -3,22 +3,38 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             {% include "ledger/account_list.html" %}
         </div>
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Current Balance</h3>
+                </div>
                 <div class="panel-body">
-                    <p>Current Balance:</p>
                     <h3>{{ user.total.balance|currency }}</h3>
                 </div>
             </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Income</h3>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Income by Account</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="income-by-account"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <div id="income"></div>
+                <div class="col-lg-6">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Income by Year</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div id="income-by-year"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -27,8 +43,18 @@
 
 {% block extrafoot %}
     <script>
+        Morris.Donut({
+            element: 'income-by-account',
+            data: [
+                {% for account in accounts %}
+                    {% if forloop.counter0 %},{% endif %}
+                    { value: {{ account.balance }}, label: '{{ account|escapejs }}' }
+                {% endfor %}
+            ],
+            formatter: function(x) { return '$' + x; }
+        });
         Morris.Bar({
-            element: 'income',
+            element: 'income-by-year',
             data: [
                 {% for year in years %}
                     {% if forloop.counter0 %},{% endif %}
