@@ -14,6 +14,11 @@
         <p class="navbar-text">
             Current Balance: <strong>{{ user.total|currency }}</strong>
             &nbsp;|&nbsp;
+            <a href="{% url "accounts:profile" %}">
+                <span class="glyphicon glyphicon-user"></span>
+                Profile
+            </a>
+            &nbsp;|&nbsp;
             <a href="{% url "accounts:logout" %}">
                 <span class="glyphicon glyphicon-log-out"></span>
                 Logout
