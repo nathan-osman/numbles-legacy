@@ -7,5 +7,5 @@ class TimezoneMiddleware:
     """
 
     def process_request(self, request):
-        if request.user.is_authenticated:
+        if request.user.is_authenticated():
             timezone.activate(request.user.profile.timezone)
