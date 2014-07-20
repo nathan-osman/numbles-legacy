@@ -3,3 +3,4 @@ South>=0.7
 django-widget-tweaks
 django_compressor
 pytz
+cssmin

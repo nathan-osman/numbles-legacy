@@ -55,5 +55,15 @@ MIDDLEWARE_CLASSES = (
     'numbles.middleware.TimezoneMiddleware',
 )
 
+COMPRESS_OUTPUT_DIR = 'cache'
+COMPRESS_CSS_FILTERS = (
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+)
+COMPRESS_JS_FILTERS = (
+    'compressor.filters.closure.ClosureCompilerFilter',
+)
+COMPRESS_CLOSURE_COMPILER_BINARY = 'closure-compiler'
+
 # Import all local settings
 from local_settings import *
