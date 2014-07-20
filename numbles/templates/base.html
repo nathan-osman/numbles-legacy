@@ -12,6 +12,7 @@
             <link href="{% static "css/bootstrap-datetimepicker.css" %}" rel="stylesheet">
             <link href="{% static "css/sb-admin.css" %}" rel="stylesheet">
             <link href="{% static "css/morris.css" %}" rel="stylesheet">
+            <link href="{% static "css/select2.css" %}" rel="stylesheet">
             <link href="{% static "css/overrides.css" %}" rel="stylesheet">
         {% endcompress %}
 
@@ -46,9 +47,11 @@
             <script src="{% static "js/sb-admin.js" %}"></script>
             <script src="{% static "js/raphael.js" %}"></script>
             <script src="{% static "js/morris.js" %}"></script>
+            <script src="{% static "js/select2.js" %}"></script>
             <script>
                 $(function() {
                     $('.date').datetimepicker();
+                    $('select').removeClass('form-control').css('display', 'block').select2();
                 });
             </script>
         {% endcompress %}
