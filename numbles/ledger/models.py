@@ -39,11 +39,16 @@ class Total(models.Model, UpdateMixin):
     UPDATE_FIELD = 'balance'
     UPDATE_PARENT = None
 
-    user = models.OneToOneField(User,
-                                primary_key=True)
-    balance = models.DecimalField(max_digits=MAX_DIGITS,
-                                  decimal_places=DECIMAL_PLACES,
-                                  default=Decimal('0.00'))
+    user = models.OneToOneField(
+        User,
+        primary_key=True
+    )
+
+    balance = models.DecimalField(
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=Decimal('0.00')
+    )
 
     def __unicode__(self):
         return unicode(self.balance)
@@ -68,14 +73,23 @@ class Account(models.Model, UpdateMixin):
     UPDATE_PARENT = 'total'
 
     user = models.ForeignKey(User)
-    total = models.ForeignKey(Total, related_name='accounts')
 
-    balance = models.DecimalField(max_digits=MAX_DIGITS,
-                                  decimal_places=DECIMAL_PLACES,
-                                  default=Decimal('0.00'))
+    total = models.ForeignKey(
+        Total,
+        related_name='accounts'
+    )
 
-    name = models.CharField(max_length=40,
-                            help_text="Account name.")
+    balance = models.DecimalField(
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=Decimal('0.00')
+    )
+
+    name = models.CharField(
+        max_length=40,
+        help_text="Account name."
+    )
+
     include_in_balance = models.BooleanField(default=False)
 
     class Meta:
@@ -108,11 +122,17 @@ class Year(models.Model, UpdateMixin):
     UPDATE_PARENT = 'account'
 
     user = models.ForeignKey(User)
-    account = models.ForeignKey(Account, related_name='years')
 
-    balance = models.DecimalField(max_digits=MAX_DIGITS,
-                                  decimal_places=DECIMAL_PLACES,
-                                  default=Decimal('0.00'))
+    account = models.ForeignKey(
+        Account,
+        related_name='years'
+    )
+
+    balance = models.DecimalField(
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        default=Decimal('0.00')
+    )
 
     year = models.PositiveSmallIntegerField()
 
@@ -146,24 +166,43 @@ class Transaction(models.Model):
     """
 
     user = models.ForeignKey(User)
-    account = models.ForeignKey(Account, related_name='transactions')
-    year = models.ForeignKey(Year, related_name='transactions')
+
+    account = models.ForeignKey(
+        Account,
+        related_name='transactions'
+    )
+
+    year = models.ForeignKey(
+        Year,
+        related_name='transactions'
+    )
 
     date = models.DateTimeField(help_text="Date and time of the transaction.")
-    summary = models.CharField(max_length=100,
-                               help_text="Brief description of the transaction.")
-    description = models.TextField(blank=True,
-                                   help_text="Additional details or information.")
 
-    amount = models.DecimalField(max_digits=MAX_DIGITS,
-                                 decimal_places=DECIMAL_PLACES,
-                                 help_text="Amount of the transaction.")
+    summary = models.CharField(
+        max_length=100,
+        help_text="Brief description of the transaction."
+    )
+
+    description = models.TextField(
+        blank=True,
+        help_text="Additional details or information."
+    )
+
+    amount = models.DecimalField(
+        max_digits=MAX_DIGITS,
+        decimal_places=DECIMAL_PLACES,
+        help_text="Amount of the transaction."
+    )
+
     reconciled = models.BooleanField(default=False)
 
     # This is used by transactions between accounts
-    linked = models.ForeignKey('self',
-                               null=True,
-                               blank=True)
+    linked = models.ForeignKey(
+        'self',
+        null=True,
+        blank=True
+    )
 
     class Meta:
         ordering = ('date',)
