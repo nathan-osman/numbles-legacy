@@ -14,7 +14,7 @@
                 </a>
             </td>
             <td class="text-right">
-                {% with account.transactions.all.0 as transaction %}
+                {% with account.transactions.all.last as transaction %}
                     {% if transaction %}
                         {{ transaction.date|timesince }} ago
                     {% else %}
