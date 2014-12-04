@@ -111,12 +111,12 @@ body {
     float: right;
 }
 
-.fa.arrow:before {
-    content: "\f104";
+.glyphicon.arrow:before {
+    content: "\e080";
 }
 
-.active > a > .fa.arrow:before {
-    content: "\f107";
+.active > a > .glyphicon.arrow:before {
+    content: "\e114";
 }
 
 .nav-second-level li,
