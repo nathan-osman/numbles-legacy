@@ -32,9 +32,11 @@ class TransferBetweenAccountsForm(forms.Form):
     to_account = forms.ModelChoiceField(None)
 
     date = forms.DateTimeField()
-    amount = forms.DecimalField(max_digits=9,
-                                decimal_places=2,
-                                help_text="Amount to transfer.")
+    amount = forms.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        help_text="Amount to transfer.",
+    )
 
     def __init__(self, user, *args, **kwargs):
         super(TransferBetweenAccountsForm, self).__init__(*args, **kwargs)
@@ -43,7 +45,8 @@ class TransferBetweenAccountsForm(forms.Form):
 
     def clean(self):
         cleaned_data = super(TransferBetweenAccountsForm, self).clean()
-        if cleaned_data['from_account'] == cleaned_data['to_account']:
+        if 'from_account' in cleaned_data and 'to_account' in cleaned_data and \
+                cleaned_data['from_account'] == cleaned_data['to_account']:
             raise forms.ValidationError("You must select two different accounts.")
         return cleaned_data
 
