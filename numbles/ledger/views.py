@@ -59,6 +59,14 @@ def delete_account(request, id):
 
 
 @login_required
+def transactions(request):
+    return render(request, 'ledger/transactions.html', {
+        'title': 'Transactions',
+        'transactions': Transaction.objects.all(),
+    })
+
+
+@login_required
 def edit_transaction(request, id=None):
     transaction = id and get_object_or_404(Transaction, pk=id, user=request.user)
     if request.method == 'POST':

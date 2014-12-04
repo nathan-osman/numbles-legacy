@@ -8,7 +8,7 @@
         <th class="text-right">Amount</th>
         <th class="text-right">Balance</th>
     </tr>
-    {% for transaction in account.transactions.all %}
+    {% for transaction in transactions %}
         <tr>
             <td>{{ transaction.date }}</td>
             <td>
