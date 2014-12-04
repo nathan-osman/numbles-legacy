@@ -1,6 +1,4 @@
 Django>=1.6
-South>=0.7
+psycopg2
 django-widget-tweaks
-django_compressor
 pytz
-cssmin

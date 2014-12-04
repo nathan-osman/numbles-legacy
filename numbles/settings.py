@@ -31,18 +31,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Django helper applications
-    'compressor',
-    'south',
     'widget_tweaks',
     # Numbles applications
     'numbles.accounts',
     'numbles.ledger',
-)
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,16 +46,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'numbles.middleware.TimezoneMiddleware',
 )
-
-COMPRESS_OUTPUT_DIR = 'cache'
-COMPRESS_CSS_FILTERS = (
-    'compressor.filters.css_default.CssAbsoluteFilter',
-    'compressor.filters.cssmin.CSSMinFilter',
-)
-COMPRESS_JS_FILTERS = (
-    'compressor.filters.closure.ClosureCompilerFilter',
-)
-COMPRESS_CLOSURE_COMPILER_BINARY = 'closure-compiler'
 
 # Import all local settings
 from local_settings import *

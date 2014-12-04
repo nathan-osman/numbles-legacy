@@ -10,7 +10,7 @@ MAX_DIGITS = 9
 DECIMAL_PLACES = 2
 
 
-class UpdateMixin:
+class UpdateMixin(object):
 
     def update(self, update_parent=True):
         """
