@@ -10,6 +10,16 @@ MAX_DIGITS = 9
 DECIMAL_PLACES = 2
 
 
+def disable_for_fixture(fn):
+    """
+    Disable signal handler if fixture is being loaded.
+    """
+    def wrap(*args, **kwargs):
+        if not kwargs['raw']:
+            return fn(*args, **kwargs)
+    return wrap
+
+
 class UpdateMixin(object):
 
     def update(self, update_parent=True):
@@ -41,13 +51,13 @@ class Total(models.Model, UpdateMixin):
 
     user = models.OneToOneField(
         User,
-        primary_key=True
+        primary_key=True,
     )
 
     balance = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
-        default=Decimal('0.00')
+        default=Decimal('0.00'),
     )
 
     def __unicode__(self):
@@ -55,6 +65,7 @@ class Total(models.Model, UpdateMixin):
 
 
 @receiver(models.signals.post_save, sender=User)
+@disable_for_fixture
 def on_user_save(instance, created, **kwargs):
     """
     Create a Total instance whenever a user is created.
@@ -76,18 +87,18 @@ class Account(models.Model, UpdateMixin):
 
     total = models.ForeignKey(
         Total,
-        related_name='accounts'
+        related_name='accounts',
     )
 
     balance = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
-        default=Decimal('0.00')
+        default=Decimal('0.00'),
     )
 
     name = models.CharField(
         max_length=40,
-        help_text="Account name."
+        help_text="Account name.",
     )
 
     include_in_balance = models.BooleanField(default=False)
@@ -125,13 +136,13 @@ class Year(models.Model, UpdateMixin):
 
     account = models.ForeignKey(
         Account,
-        related_name='years'
+        related_name='years',
     )
 
     balance = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
-        default=Decimal('0.00')
+        default=Decimal('0.00'),
     )
 
     year = models.PositiveSmallIntegerField()
@@ -169,30 +180,30 @@ class Transaction(models.Model):
 
     account = models.ForeignKey(
         Account,
-        related_name='transactions'
+        related_name='transactions',
     )
 
     year = models.ForeignKey(
         Year,
-        related_name='transactions'
+        related_name='transactions',
     )
 
     date = models.DateTimeField(help_text="Date and time of the transaction.")
 
     summary = models.CharField(
         max_length=100,
-        help_text="Brief description of the transaction."
+        help_text="Brief description of the transaction.",
     )
 
     description = models.TextField(
         blank=True,
-        help_text="Additional details or information."
+        help_text="Additional details or information.",
     )
 
     amount = models.DecimalField(
         max_digits=MAX_DIGITS,
         decimal_places=DECIMAL_PLACES,
-        help_text="Amount of the transaction."
+        help_text="Amount of the transaction.",
     )
 
     reconciled = models.BooleanField(default=False)
@@ -201,7 +212,7 @@ class Transaction(models.Model):
     linked = models.ForeignKey(
         'self',
         null=True,
-        blank=True
+        blank=True,
     )
 
     class Meta:
@@ -228,6 +239,7 @@ def on_transaction_init(instance, **kwargs):
 
 
 @receiver(models.signals.pre_save, sender=Transaction)
+@disable_for_fixture
 def on_transaction_pre_save(instance, **kwargs):
     """
     Set the appropriate Year for the transaction.
@@ -235,11 +247,12 @@ def on_transaction_pre_save(instance, **kwargs):
     instance.year, _ = Year.objects.get_or_create(
         user=instance.user,
         account=instance.account,
-        year=instance.date.year
+        year=instance.date.year,
     )
 
 
 @receiver(models.signals.post_save, sender=Transaction)
+@disable_for_fixture
 def on_transaction_post_save(instance, created, **kwargs):
     """
     Update the transaction's year and account balance.
