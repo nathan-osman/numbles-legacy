@@ -7,7 +7,6 @@ from numbles.ledger.models import Account, Year
 
 @login_required
 def index(request):
-    """Render the home page."""
     return render(request, 'index.html', {
         'title': 'Dashboard',
         'home': True,
