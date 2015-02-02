@@ -62,7 +62,7 @@ def delete_account(request, id):
 def transactions(request):
     return render(request, 'ledger/transactions.html', {
         'title': 'Transactions',
-        'transactions': Transaction.objects.filter(account__include_in_balance=True),
+        'transactions': Transaction.objects.filter(account__user=request.user, account__include_in_balance=True),
     })
 
 
