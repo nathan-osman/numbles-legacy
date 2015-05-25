@@ -16,12 +16,11 @@
         {% block extrahead %}{% endblock %}
     </head>
     <body class="skin-purple">
-        {# Hide the navbar for fullscreen pages #}
         {% if not fullscreen %}
             <div class="wrapper">
                 {% include "components/navbar.html" %}
                 {% include "components/sidebar.html" %}
-        {% endif %}
+
                 <div class="content-wrapper">
 
                     <!-- Page title -->
@@ -29,13 +28,16 @@
                         <h1>{{ title }}</h1>
                         {% include "components/breadcrumbs.html" %}
                     </div>
+        {% endif %}
 
                     <!-- Page content -->
                     <div class="content">
                         {% block content %}{% endblock %}
                     </div>
-                </div>
+
         {% if not fullscreen %}
+                </div>
+
                 {% include "components/footer.html" %}
             </div>
         {% endif %}
