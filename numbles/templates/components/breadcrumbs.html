@@ -1,6 +1,11 @@
 {% if not home %}
     <ol class="breadcrumb">
-        <li><a href="{% url "home" %}">Dashboard</a></li>
+        <li>
+            <a href="{% url "home" %}">
+                <i class="fa fa-dashboard"></i>
+                Dashboard
+            </a>
+        </li>
         {% for breadcrumb in breadcrumbs %}
             <li>
                 {% if breadcrumb|length == 2 %}

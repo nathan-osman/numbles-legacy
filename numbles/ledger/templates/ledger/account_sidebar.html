@@ -1,6 +1,9 @@
 {% for account in accounts %}
     <li>
-        <a href="{{ account.get_absolute_url }}">{{ account }}</a>
+        <a href="{{ account.get_absolute_url }}">
+            <i class="fa fa-bank"></i>
+            {{ account }}
+        </a>
     </li>
 {% endfor %}
 <li>

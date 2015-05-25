@@ -2,7 +2,10 @@
 
 <div class="box box-info">
     <div class="box-header with-border">
-        <h3 class="box-title">Accounts</h3>
+        <h3 class="box-title">
+            <i class="fa fa-bank"></i>
+            Accounts
+        </h3>
     </div>
     <div class="box-body">
         <div class="table-responsive">
@@ -45,9 +48,13 @@
         </div>
     </div>
     <div class="box-footer clearfix">
-        <a href="{% url "ledger:add_account" %}" class="btn btn-sm btn-info btn-flat pull-left">
+        <a href="{% url "ledger:add_account" %}" class="btn btn-sm btn-default btn-flat">
             <i class="fa fa-plus"></i>
             Add Account
+        </a>
+        <a href="{% url "ledger:transfer" %}" class="btn btn-sm btn-default btn-flat">
+            <i class="fa fa-refresh"></i>
+            Transfer Between Accounts
         </a>
     </div>
 </div>
