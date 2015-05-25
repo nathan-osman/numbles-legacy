@@ -1,13 +1,11 @@
-<ul class="nav nav-second-level">
-    {% for account in accounts %}
-        <li>
-            <a href="{{ account.get_absolute_url }}">{{ account }}</a>
-        </li>
-    {% endfor %}
+{% for account in accounts %}
     <li>
-        <a href="{% url "ledger:add_account" %}">
-            <i class="glyphicon glyphicon-plus"></i>
-            Add Account
-        </a>
+        <a href="{{ account.get_absolute_url }}">{{ account }}</a>
     </li>
-</ul>
+{% endfor %}
+<li>
+    <a href="{% url "ledger:add_account" %}">
+        <i class="fa fa-plus"></i>
+        Add Account
+    </a>
+</li>

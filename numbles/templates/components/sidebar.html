@@ -1,53 +1,58 @@
 {% load ledger %}
 
-<div class="navbar-default navbar-static-side">
-    <div class="sidebar-collapse">
-        <ul class="nav" id="side-menu">
-            <li class="sidebar-search">
-                <div class="input-group custom-search-form">
-                    <input type="text" class="form-control" placeholder="Find transaction...">
-                    <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
-                        <i class="glyphicon glyphicon-search"></i>
+<div class="main-sidebar">
+    <div class="sidebar">
+
+        <!-- Profile box -->
+        <div class="user-panel">
+            <div class="pull-left image">
+                <img src="http://placehold.it/100x100"
+                        class="img-circle"
+                        alt="Profile Image">
+            </div>
+            <div class="pull-left info">
+                <p>Nathan Osman</p>
+                <p class="text-muted">
+                    Balance:
+                    <strong>{{ user.total|currency }}</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- Search box -->
+        <form action="#" method="get" class="sidebar-form">
+            {% csrf_token %}
+            <div class="input-group">
+                <input type="text" name="q" class="form-control" placeholder="[not implemented]">
+                <span class="input-group-btn">
+                    <button type='submit' name='search' id='search-btn' class="btn btn-flat">
+                        <i class="fa fa-search"></i>
                     </button>
                 </span>
-                </div>
-            </li>
+            </div>
+        </form>
+
+        <!-- Transactions -->
+        <ul class="sidebar-menu">
+            <li class="header">Transactions</li>
             <li>
-                <a href="{% url "home" %}">
-                    <i class="glyphicon glyphicon-dashboard"></i>
-                    Dashboard
+                <a href="{% url "ledger:transfer" %}">
+                    <i class="fa fa-refresh"></i>
+                    Transfer Between Accounts
                 </a>
             </li>
             <li>
-                <a href="#">
-                    <i class="glyphicon glyphicon-th-list"></i>
-                    Transactions
-                    <span class="glyphicon arrow"></span>
+                <a href="{% url "ledger:add_transaction" %}">
+                    <i class="fa fa-plus"></i>
+                    Add Transaction
                 </a>
-                <ul class="nav nav-second-level">
-                    <li>
-                        <a href="{% url "ledger:transfer" %}">
-                            <i class="glyphicon glyphicon-transfer"></i>
-                            Transfer Between Accounts
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url "ledger:add_transaction" %}">
-                            <i class="glyphicon glyphicon-plus"></i>
-                            Add Transaction
-                        </a>
-                    </li>
-                </ul>
             </li>
-            <li>
-                <a href="#">
-                    <i class="glyphicon glyphicon-inbox"></i>
-                    Accounts
-                    <span class="glyphicon arrow"></span>
-                </a>
-                {% account_sidebar %}
-            </li>
+        </ul>
+
+        <!-- Accounts -->
+        <ul class="sidebar-menu">
+            <li class="header">Accounts</li>
+            {% account_sidebar %}
         </ul>
     </div>
 </div>

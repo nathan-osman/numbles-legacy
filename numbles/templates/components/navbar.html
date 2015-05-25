@@ -1,29 +1,28 @@
-{% load ledger %}
-
-<div class="navbar navbar-default navbar-fixed-top">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="{% url "home" %}">Numbles</a>
+<div class="main-header">
+    <a href="{% url "home" %}" class="logo">
+        <strong>Numbles</strong>
+    </a>
+    <div class="navbar navbar-static-top" role="navigation">
+        <a href="#" class="sidebar-toggle" data-toggle="offcanvas"></a>
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="{% url "accounts:profile" %}"
+                            data-toggle="control-sidebar"
+                            title="Profile">
+                        <i class="fa fa-cog"></i>
+                        Profile
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url "accounts:logout" %}"
+                            data-toggle="control-sidebar"
+                            title="Logout">
+                        <i class="fa fa-sign-out"></i>
+                        Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="navbar-collapse navbar-right">
-        <p class="navbar-text">
-            Current Balance: <strong>{{ user.total|currency }}</strong>
-            &nbsp;|&nbsp;
-            <a href="{% url "accounts:profile" %}">
-                <span class="glyphicon glyphicon-user"></span>
-                Profile
-            </a>
-            &nbsp;|&nbsp;
-            <a href="{% url "accounts:logout" %}">
-                <span class="glyphicon glyphicon-log-out"></span>
-                Logout
-            </a>
-        </p>
-    </div>
-    {% include "components/sidebar.html" %}
 </div>
