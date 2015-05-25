@@ -5,11 +5,11 @@
     <div class="row">
         <div class="col-sm-6">
             {% include "ledger/account_list.html" %}
+        </div>
+        <div class="col-sm-6">
             {% with box_title="Recent Transactions" balance_hidden="true" %}
                 {% include "ledger/transaction_list.html" %}
             {% endwith %}
-        </div>
-        <div class="col-sm-6">
         </div>
     </div>
 {% endblock %}
