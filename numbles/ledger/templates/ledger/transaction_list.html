@@ -1,36 +1,70 @@
 {% load ledger %}
 
-<table class="table table-bordered table-striped">
-    <tr>
-        <th>Date / Time</th>
-        <th>Summary</th>
-        <th class="text-center">Reconciled?</th>
-        <th class="text-right">Amount</th>
-        <th class="text-right">Balance</th>
-    </tr>
-    {% for transaction in transactions %}
-        <tr>
-            <td>{{ transaction.date }}</td>
-            <td>
-                <a href="{{ transaction.get_absolute_url }}">
-                    {{ transaction.summary }}
-                </a>
-            </td>
-            <td class="text-center">
-                {% if transaction.reconciled %}
-                    <span class="glyphicon glyphicon-ok text-success"></span>
-                {% else %}
-                    <span class="glyphicon glyphicon-remove"></span>
-                {% endif %}
-            </td>
-            <td class="text-right">{{ transaction.amount|currency }}</td>
-            <td class="text-right">{% accumulate "balance" transaction.amount %}</td>
-        </tr>
-    {% empty %}
-        <tr>
-            <td colspan="5" class="text-center text-muted">
-                No transactions match the search criteria.
-            </td>
-        </tr>
-    {% endfor %}
-</table>
+{% comment %}
+    Display a list of transactions according to the following variables:
+      * "box_title" - the title displayed in the info box
+      * "balance_forward" - initial value used for accumulating balance
+      * "balance_hidden" - true to hide the balance column
+    Any or all of these may be unset to obtain default behavior
+{% endcomment %}
+
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title">
+            <i class="fa fa-credit-card"></i>
+            {{ box_title|default:"Transactions" }}
+        </h3>
+    </div>
+    <div class="box-body">
+        <div class="table-responsive">
+            <table class="table no-margin">
+                <thead>
+                    <tr>
+                        <th>Date / Time</th>
+                        <th>Summary</th>
+                        <th class="text-center">Reconciled?</th>
+                        <th class="text-right">Amount</th>
+                        {% if not balance_hidden %}
+                            <th class="text-right">Balance</th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.date }}</td>
+                            <td>
+                                <a href="{{ transaction.get_absolute_url }}">
+                                    {{ transaction.summary }}
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                {% if transaction.reconciled %}
+                                    <span class="glyphicon glyphicon-ok text-success"></span>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right">{{ transaction.amount|currency }}</td>
+                            {% if not balance_hidden %}
+                                <td class="text-right">{% accumulate "balance" transaction.amount %}</td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                No transactions match the search criteria.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="box-footer clearfix">
+        <a href="{% url "ledger:add_transaction" %}" class="btn btn-sm btn-default btn-flat">
+            <i class="fa fa-plus"></i>
+            Add Transaction
+        </a>
+    </div>
+</div>
