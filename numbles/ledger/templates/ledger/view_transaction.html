@@ -3,81 +3,31 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-sm-6">
-            <table class="table table-bordered">
-                <tr>
-                    <th>Account:</th>
-                    <td>
-                        <a href="{{ transaction.account.get_absolute_url }}">
-                            {{ transaction.account }}
-                        </a>
-                    </td>
-                </tr>
-                <tr>
-                    <th>Amount:</th>
-                    <td>{{ transaction.amount|currency }}</td>
-                </tr>
-                <tr>
-                    <th>Date:</th>
-                    <td>
-                        {{ transaction.date }}
-                        <span class="text-muted">
-                            &mdash; {{ transaction.date|timesince }} ago
-                        </span>
-                    </td>
-                </tr>
-                {% if transaction.description %}
-                    <tr>
-                        <th>Description:</th>
-                        <td>{{ transaction.description|linebreaksbr }}</td>
-                    </tr>
-                {% endif %}
-                <tr>
-                    <th>Linked:</th>
-                    <td>
-                        {% if transaction.linked %}
-                            <a href="{{ transaction.linked.get_absolute_url }}">
-                                {{ transaction.linked }}
-                            </a>
-                        {% else %}
-                            <span class="text-muted">
-                                No linked transaction
-                            </span>
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <th>Reconciled:</th>
-                    <td>
-                        {% if transaction.reconciled %}
-                            <span class="text-success">Yes</span>
-                        {% else %}
-                            No
-                        {% endif %}
-                    </td>
-                </tr>
-            </table>
+        <div class="col-sm-8">
+            {% include "ledger/transaction_details.html" %}
         </div>
-        <div class="col-sm-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">Transaction Tools</h3>
+        <div class="col-sm-4">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">
+                        <i class="fa fa-wrench"></i>
+                        Tools
+                    </h3>
                 </div>
-                <div class="panel-body">
+                <div class="box-body">
                     <p class="text-muted">
                         Use the tools below to make changes to this transaction.
                     </p>
-                    <br>
-                    <p>
-                        <a href="{% url "ledger:edit_transaction" transaction.id %}" class="btn btn-primary">
-                            <span class="glyphicon glyphicon-edit"></span>
-                            Edit
-                        </a>
-                        <a href="{% url "ledger:delete_transaction" transaction.id %}" class="btn btn-danger">
-                            <span class="glyphicon glyphicon-trash"></span>
-                            Delete
-                        </a>
-                    </p>
+                </div>
+                <div class="box-footer">
+                    <a href="{% url "ledger:edit_transaction" transaction.id %}" class="btn btn-primary">
+                        <span class="fa fa-edit"></span>
+                        Edit
+                    </a>
+                    <a href="{% url "ledger:delete_transaction" transaction.id %}" class="btn btn-danger">
+                        <span class="fa fa-trash"></span>
+                        Delete
+                    </a>
                 </div>
             </div>
         </div>
