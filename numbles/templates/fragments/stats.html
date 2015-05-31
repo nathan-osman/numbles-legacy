@@ -15,7 +15,7 @@
     <div class="col-sm-4 col-xs-12">
         <div class="small-box bg-green">
             <div class="inner">
-                <h3>{{ user.total }}</h3>
+                <h3>{{ user.total|currency:False }}</h3>
                 <p>Current Balance</p>
             </div>
             <div class="icon">

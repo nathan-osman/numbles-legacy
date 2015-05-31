@@ -9,11 +9,11 @@ register = template.Library()
 
 
 @register.filter
-def currency(value):
-    if value > 0:
-        return mark_safe('<span class="text-success">$%s</span>' % value)
-    elif value == 0:
+def currency(value, color=True):
+    if value == 0 or not color:
         return mark_safe('$%s' % value)
+    elif value > 0:
+        return mark_safe('<span class="text-success">$%s</span>' % value)
     else:
         return mark_safe('<span class="text-danger">-$%s</span>' % abs(value))
 
