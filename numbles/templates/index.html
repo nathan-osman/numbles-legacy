@@ -7,7 +7,7 @@
             {% include "ledger/account_list.html" %}
         </div>
         <div class="col-sm-6">
-            {% with box_title="Recent Transactions" balance_hidden="true" %}
+            {% with box_title="Recent Transactions" hide_balance="true" %}
                 {% include "ledger/transaction_list.html" %}
             {% endwith %}
         </div>
