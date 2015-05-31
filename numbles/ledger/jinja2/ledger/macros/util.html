@@ -1,0 +1,16 @@
+{##
+ # Format a decimal value as currency
+ #   value - decimal to format
+ #   color - true to display values in color
+ #}
+{% macro currency(value, color=true) %}
+    {% if color and value < 0 %}
+        <span class="text-danger">
+    {% elif color and value > 0 %}
+        <span class="text-success">
+    {% endif %}
+    ${{ value }}
+    {% if color and value != 0 %}
+        </span>
+    {% endif %}
+{% endmacro %}

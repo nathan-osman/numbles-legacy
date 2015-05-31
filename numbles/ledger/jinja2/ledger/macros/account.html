@@ -1,0 +1,60 @@
+{% import 'ledger/macros/util.html' as util %}
+
+{##
+ # Display a list of accounts
+ #   accounts - list or QuerySet of accounts
+ #   title - text to display in the box header
+ #   fields - list of fields to display
+ #}
+{% macro list(accounts, title='Accounts', fields=('name', 'balance')) %}
+    <div class="box box-info">
+
+        {# Box header #}
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <span class="fa fa-bank"></span>
+                {{ title }}
+            </h3>
+        </div>
+
+        {# Box contents #}
+        <div class="box-body">
+            <div class="table-responsive">
+                <table class="table no-margin">
+                    <thead>
+                        <tr>
+                            {% for f in fields %}
+                                {% if f == 'name' %}
+                                    <th>Name</th>
+                                {% elif f == 'balance' %}
+                                    <th class="text-right">Balance</th>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in accounts %}
+                            <tr>
+                                {% for f in fields %}
+                                    {% if f == 'name' %}
+                                        <td>{{ a.name }}</td>
+                                    {% elif f == 'balance' %}
+                                        <td class="text-right">{{ util.currency(a.balance) }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        {# Box footer #}
+        <div class="box-footer clearfix">
+            <a href="{{ url('ledger:add_account') }}" class="btn btn-sm btn-default btn-flat">
+                <i class="fa fa-plus"></i>
+                Add Account
+            </a>
+        </div>
+    </div>
+{% endmacro %}
