@@ -1,0 +1,11 @@
+/**
+ * Global Style Declarations
+ * Copyright 2015 - Nathan Osman
+ */
+
+/* Assign a much more reasonable size to icons in .small-box */
+.small-box h3 { font-size: 32px; margin-bottom: 0; }
+.small-box p { margin-bottom: 0; }
+.small-box .icon { font-size: 48px; top: 0; }
+.small-box:hover .icon { font-size: 56px; }
+
