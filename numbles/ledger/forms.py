@@ -7,7 +7,7 @@ class EditAccountForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ('name', 'include_in_balance')
+        fields = ('name', 'active', 'include_in_balance')
 
 
 class DeleteAccountForm(forms.Form):

@@ -101,6 +101,7 @@ class Account(models.Model, UpdateMixin):
         help_text="Account name.",
     )
 
+    active = models.BooleanField(default=True)
     include_in_balance = models.BooleanField(default=False)
 
     class Meta:
