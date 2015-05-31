@@ -54,3 +54,24 @@ class TransferBetweenAccountsForm(forms.Form):
 class DeleteTransactionForm(forms.Form):
 
     confirm = forms.BooleanField(label="I confirm that I wish to delete this transaction (cannot be undone).")
+
+
+class SearchForm(forms.Form):
+    """
+    Search form displayed in the sidebar and on the search page.
+    """
+
+    query = forms.CharField()
+
+    min_amount = forms.DecimalField(
+        required=False,
+        max_digits=9,
+        decimal_places=2,
+        label="Minimum amount of transaction",
+    )
+    max_amount = forms.DecimalField(
+        required=False,
+        max_digits=9,
+        decimal_places=2,
+        label="Maximum amount of transaction",
+    )

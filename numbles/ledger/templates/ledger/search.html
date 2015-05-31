@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {% with box_title="Matching Transactions" hide_add="true" hide_balance="true" %}
+                {% include "ledger/transaction_list.html" %}
+            {% endwith %}
+        </div>
+    </div>
+{% endblock %}

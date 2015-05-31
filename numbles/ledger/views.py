@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 
 from numbles.ledger.forms import EditAccountForm, DeleteAccountForm, \
-    EditTransactionForm, TransferBetweenAccountsForm, DeleteTransactionForm
+    EditTransactionForm, TransferBetweenAccountsForm, DeleteTransactionForm, \
+    SearchForm
 from numbles.ledger.models import Account, Transaction
 
 
@@ -156,5 +158,27 @@ def delete_transaction(request, id):
             transaction.account,
             transaction,
         ],
+        'form': form,
+    })
+
+
+@login_required
+def search(request):
+    if request.method == 'POST':
+        form = SearchForm(data=request.POST)
+        if form.is_valid():
+            q = form.cleaned_data['query']
+            transactions = Transaction.objects.filter(
+                Q(summary__icontains=q) | Q(description__icontains=q),
+                user=request.user,
+            )
+            return render(request, 'ledger/search.html', {
+                'title': 'Search Results for "%s"' % q,
+                'transactions': transactions,
+            })
+    else:
+        form = SearchForm()
+    return render(request, 'form.html', {
+        'title': 'Search',
         'form': form,
     })

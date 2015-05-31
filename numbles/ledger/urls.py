@@ -14,4 +14,6 @@ urlpatterns = patterns('numbles.ledger.views',
     url(r'^transactions/(?P<id>\d+)/$', 'view_transaction', name='view_transaction'),
     url(r'^transactions/(?P<id>\d+)/edit/$', 'edit_transaction', name='edit_transaction'),
     url(r'^transactions/(?P<id>\d+)/delete/$', 'delete_transaction', name='delete_transaction'),
+
+    url(r'^search/$', 'search', name='search'),
 )
