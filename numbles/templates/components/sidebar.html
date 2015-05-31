@@ -21,10 +21,10 @@
         </div>
 
         <!-- Search box -->
-        <form action="#" method="get" class="sidebar-form">
+        <form action="{% url "ledger:search" %}" method="post" class="sidebar-form">
             {% csrf_token %}
             <div class="input-group">
-                <input type="text" name="q" class="form-control" placeholder="[not implemented]">
+                <input type="text" name="query" class="form-control" placeholder="Search...">
                 <span class="input-group-btn">
                     <button type='submit' name='search' id='search-btn' class="btn btn-flat">
                         <i class="fa fa-search"></i>
