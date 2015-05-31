@@ -1,8 +1,5 @@
 """
 Global settings for Numbles.
-
-Global settings that apply regardless of installation are contained
-in this file. Installation-specific settings are stored in local_settings.py.
 """
 
 # Determine the directory this file resides in so that an absolute
@@ -10,16 +7,19 @@ in this file. Installation-specific settings are stored in local_settings.py.
 import os.path
 PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+# Site-wide static files and templates are stored in the appropriately-named
+# directories in the project root
 STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, 'static'),)
 TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, 'templates'),)
 
+# Enable timezones (each user can specify a timezone)
 USE_TZ = True
 TIME_ZONE = 'UTC'
 
 ROOT_URLCONF = 'numbles.urls'
 WSGI_APPLICATION = 'numbles.wsgi.application'
 
-# After login, go to the home page
+# After login, redirect to the home page
 LOGIN_REDIRECT_URL = 'home'
 
 INSTALLED_APPS = (
@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'numbles.ledger',
 )
 
+# The list of middleware needs to be customized in order to activate timezones
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -47,6 +48,3 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'numbles.middleware.TimezoneMiddleware',
 )
-
-# Import all local settings
-from local_settings import *

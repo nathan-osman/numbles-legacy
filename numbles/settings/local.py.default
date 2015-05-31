@@ -1,18 +1,17 @@
 """
 Local settings for Numbles.
-
-Local settings that apply only to a specific installation. Global settings that
-apply to all installations go in settings.py.
 """
 
+# Enable DEBUG in order to view detailed error messages
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
-
-ALLOWED_HOSTS = ['example.org']
 
 # Enable the console email backend when running in debug mode
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Specify the domain name
+ALLOWED_HOSTS = ['example.org']
 
 # Database storage engine(s) for the project
 DATABASES = {
