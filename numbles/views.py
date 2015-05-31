@@ -14,4 +14,8 @@ def index(request):
         'transactions': Transaction.objects.filter(user=request.user).order_by('-date')[:6],
         'years': Year.objects.filter(user=request.user, account__include_in_balance=True)
             .values('year').annotate(sum=Sum('balance')),
+        'stats': {
+            'total_accounts': Account.objects.filter(user=request.user).count(),
+            'total_transactions': Transaction.objects.filter(user=request.user).count(),
+        }
     })
