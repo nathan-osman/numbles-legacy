@@ -43,6 +43,12 @@
                                     {% endif %}
                                 {% endfor %}
                             </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="{{ fields|length }}">
+                                    No accounts matched
+                                </td>
+                            </tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -52,7 +58,7 @@
         {# Box footer #}
         <div class="box-footer clearfix">
             <a href="{{ url('ledger:add_account') }}" class="btn btn-sm btn-default btn-flat">
-                <i class="fa fa-plus"></i>
+                <span class="fa fa-plus"></span>
                 Add Account
             </a>
         </div>
