@@ -9,7 +9,7 @@
     {% elif color and value > 0 %}
         <span class="text-success">
     {% endif %}
-    ${{ value }}
+    ${{ value|abs }}
     {% if color and value != 0 %}
         </span>
     {% endif %}

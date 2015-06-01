@@ -1,4 +1,5 @@
 {% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
 
 {##
  # Display a list of accounts
@@ -7,60 +8,41 @@
  #   fields - list of fields to display
  #}
 {% macro list(accounts, title='Accounts', fields=('name', 'balance')) %}
-    <div class="box box-info">
-
-        {# Box header #}
-        <div class="box-header with-border">
-            <h3 class="box-title">
-                <span class="fa fa-bank"></span>
-                {{ title }}
-            </h3>
-        </div>
-
-        {# Box contents #}
-        <div class="box-body">
-            <div class="table-responsive">
-                <table class="table no-margin">
-                    <thead>
+    {% set add = ui.button(title='Add Account', icon='plus', url=url('ledger:add_account')) %}
+    {% call ui.box(title=title, icon='bank', buttons=(add,)) %}
+        <div class="table-responsive">
+            <table class="table no-margin">
+                <thead>
+                    <tr>
+                        {% for f in fields %}
+                            {% if f == 'name' %}
+                                <th>Name</th>
+                            {% elif f == 'balance' %}
+                                <th class="text-right">Balance</th>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for a in accounts %}
                         <tr>
                             {% for f in fields %}
                                 {% if f == 'name' %}
-                                    <th>Name</th>
+                                    <td>{{ a.name }}</td>
                                 {% elif f == 'balance' %}
-                                    <th class="text-right">Balance</th>
+                                    <td class="text-right">{{ util.currency(a.balance) }}</td>
                                 {% endif %}
                             {% endfor %}
                         </tr>
-                    </thead>
-                    <tbody>
-                        {% for a in accounts %}
-                            <tr>
-                                {% for f in fields %}
-                                    {% if f == 'name' %}
-                                        <td>{{ a.name }}</td>
-                                    {% elif f == 'balance' %}
-                                        <td class="text-right">{{ util.currency(a.balance) }}</td>
-                                    {% endif %}
-                                {% endfor %}
-                            </tr>
-                        {% else %}
-                            <tr>
-                                <td colspan="{{ fields|length }}">
-                                    No accounts matched
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                    {% else %}
+                        <tr>
+                            <td colspan="{{ fields|length }}">
+                                No accounts matched
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
-
-        {# Box footer #}
-        <div class="box-footer clearfix">
-            <a href="{{ url('ledger:add_account') }}" class="btn btn-sm btn-default btn-flat">
-                <span class="fa fa-plus"></span>
-                Add Account
-            </a>
-        </div>
-    </div>
+    {% endcall %}
 {% endmacro %}

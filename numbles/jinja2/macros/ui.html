@@ -1,0 +1,45 @@
+{##
+ # Display a box
+ #   title - title displayed in the box header
+ #   icon - icon displayed in box header
+ #   buttons - list of buttons to display in the footer
+ #}
+{% macro box(title, icon, buttons=[]) %}
+    <div class="box box-info">
+
+        {# Box header #}
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <span class="fa fa-{{ icon }}"></span>
+                {{ title }}
+            </h3>
+        </div>
+
+        {# Box content #}
+        <div class="box-body">
+            {{ caller() }}
+        </div>
+
+        {# Box footer #}
+        {% if buttons|length %}
+            <div class="box-footer clearfix">
+                {% for b in buttons %}
+                    {{ b }}
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{##
+ # Display a push button
+ #   title - label displayed on the button
+ #   icon - icon displayed next to the label
+ #   url - target location for the button
+ #}
+{% macro button(title, icon, url) %}
+    <a href="{{ url }}" class="btn btn-sm btn-default btn-flat">
+        <span class="fa fa-{{ icon }}"></span>
+        {{ title }}
+    </a>
+{% endmacro %}
