@@ -7,7 +7,7 @@ from numbles.ledger.models import Account, Transaction, Year
 
 @login_required
 def index(request):
-    return render(request, 'index.html', {
+    return render(request, 'pages/index.html', {
         'title': 'Dashboard',
         'home': True,
         'accounts': Account.objects.filter(user=request.user),

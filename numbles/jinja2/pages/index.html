@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% import 'ledger/macros/account.html' as account %}
+{% import 'ledger/macros/transaction.html' as transaction %}
+
+{##
+ # Dashboard page presenting a summary of user information
+ #
+ # This page includes a list of active accounts, recent transactions, and
+ # various statistics about the user's account.
+ #}
+
+{% block content %}
+    {#{% include 'fragments/stats.html' %}#}
+    <div class="row">
+        <div class="col-sm-6">
+            {{ account.list(accounts, title='Active Accounts') }}
+        </div>
+        <div class="col-sm-6">
+            {{ transaction.list(transactions, title='Recent Transactions') }}
+        </div>
+    </div>
+{% endblock %}
