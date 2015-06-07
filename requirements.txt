@@ -1,5 +1,6 @@
-Django>=1.7
+Django>=1.8
 psycopg2
 django-archive
 django-widget-tweaks
+jinja2
 pytz
