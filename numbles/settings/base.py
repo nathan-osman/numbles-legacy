@@ -2,15 +2,26 @@
 Global settings for Numbles.
 """
 
-# Determine the directory this file resides in so that an absolute
-# path can be specified for the static files and templates
+# Determine the directory this file resides in so that an absolute path can be
+# specified for the static files and templates
 import os.path
-PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-# Site-wide static files and templates are stored in the appropriately-named
-# directories in the project root
+# Numbles uses the Jinja2 template engine, which is similar to Django templates
+# but offers more flexibility
+TEMPLATES = (
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': (os.path.join(PROJECT_ROOT, 'jinja2'),),
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'numbles.jinja2.environment',
+        },
+    },
+)
+
+# Include site-wide static files
 STATICFILES_DIRS = (os.path.join(PROJECT_ROOT, 'static'),)
-TEMPLATE_DIRS = (os.path.join(PROJECT_ROOT, 'templates'),)
 
 # Enable timezones (each user can specify a timezone)
 USE_TZ = True
