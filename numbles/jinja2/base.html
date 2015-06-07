@@ -18,8 +18,8 @@
            should not contain any content wrapper classes #}
         {% if not fullscreen %}
             <div class="wrapper">
-                {% include 'components/navbar.html' %}
-                {% include 'components/sidebar.html' %}
+                {% include 'fragments/navbar.html' %}
+                {% include 'fragments/sidebar.html' %}
                 <div class="content-wrapper">
                     <div class="content-header">
                         <h1>{{ title }}</h1>
@@ -30,7 +30,7 @@
                     </div>
         {% if not fullscreen %}
                 </div>
-                {% include 'components/footer.html' %}
+                {% include 'fragments/footer.html' %}
             </div>
         {% endif %}
 
