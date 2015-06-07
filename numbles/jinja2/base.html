@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>{{ title }} &middot; Numbles</title>
+
+        <link href="{{ static('css/bootstrap.min.css') }}" rel="stylesheet">
+        <link href="{{ static('css/AdminLTE.min.css') }}" rel="stylesheet">
+        <link href="{{ static('css/skin-purple.min.css') }}" rel="stylesheet">
+        <link href="{{ static('css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ static('css/global.css') }}" rel="stylesheet">
+    </head>
+    <body class="skin-purple">
+
+        {# The login form should not display the navbar, sidebar, or footer and
+           should not contain any content wrapper classes #}
+        {% if not fullscreen %}
+            <div class="wrapper">
+                {% include 'components/navbar.html' %}
+                {% include 'components/sidebar.html' %}
+                <div class="content-wrapper">
+                    <div class="content-header">
+                        <h1>{{ title }}</h1>
+                        {% include 'components/breadcrumbs.html' %}
+                    </div>
+        {% endif %}
+                    <div class="content">
+                        {% block content %}{% endblock %}
+                    </div>
+        {% if not fullscreen %}
+                </div>
+                {% include 'components/footer.html' %}
+            </div>
+        {% endif %}
+
+        <script src="{{ static('js/jquery.min.js') }}"></script>
+        <script src="{{ static('js/bootstrap.min.js') }}"></script>
+        <script src="{{ static('js/app.min.js') }}"></script>
+    </body>
+</html>
