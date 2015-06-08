@@ -1,0 +1,18 @@
+{##
+ # Search box
+ #
+ # The search box provides the user with an easy way to quickly find
+ # transactions and accounts. The results are displayed on the search page.
+ #}
+
+<form action="{{ url('ledger:search') }}" method="post" class="sidebar-form">
+    {{ csrf_input }}
+    <div class="input-group">
+        <input type="text" name="query" class="form-control" placeholder="Search...">
+        <span class="input-group-btn">
+            <button type='submit' name='search' id='search-btn' class="btn btn-flat">
+                <i class="fa fa-search"></i>
+            </button>
+        </span>
+    </div>
+</form>
