@@ -14,11 +14,24 @@
  #   field - form to render
  #}
 {% macro field(field) %}
-    <div class="form-group">
+    <div class="{% if field|widget_type == 'checkboxinput' %}checkbox{% else %}form-group{% endif %}{% if field.errors %} has-error has-feedback{% endif %}">
         <label for="id_{{ field.name }}" class="control-label">
+            {% if field|widget_type == "checkboxinput" %}{{ field }}{% endif %}
             {{ field.label }}
         </label>
-        {{ field|add_class('form-control') }}
+        {% if not field|widget_type == "checkboxinput" %}
+            {{ field|add_class('form-control') }}
+        {% endif %}
+        {% if field.errors %}
+            {% if not field|widget_type == "checkboxinput" %}
+                <span class="glyphicon glyphicon-exclamation-sign form-control-feedback"></span>
+                {% for error in field.errors %}
+                    <p class="help-block text-danger">
+                        <strong>{{ error }}</strong>
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endif%}
     </div>
 {% endmacro %}
 

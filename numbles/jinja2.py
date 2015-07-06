@@ -8,7 +8,7 @@ from hashlib import md5
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.urlresolvers import reverse
 from jinja2 import Environment
-from widget_tweaks.templatetags.widget_tweaks import add_class
+from widget_tweaks.templatetags.widget_tweaks import add_class, widget_type
 
 
 def environment(**kwargs):
@@ -18,6 +18,7 @@ def environment(**kwargs):
     env = Environment(**kwargs)
     env.filters.update({
         'add_class': add_class,
+        'widget_type': widget_type,
     })
     env.globals.update({
         'md5': lambda x: md5(x).hexdigest(),
