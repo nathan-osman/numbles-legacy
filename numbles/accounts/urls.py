@@ -15,7 +15,7 @@ def login_(request, **kwargs):
 
 
 urlpatterns = patterns('numbles.accounts.views',
-    url(r'^login/$', login_, {'template_name': 'accounts/login.html'}, name='login'),
+    url(r'^login/$', login_, {'template_name': 'accounts/pages/login.html'}, name='login'),
     url(r'^logout/$', logout, {'next_page':'accounts:login'}, name='logout'),
     url(r'^profile/$', 'profile', name='profile'),
 )
