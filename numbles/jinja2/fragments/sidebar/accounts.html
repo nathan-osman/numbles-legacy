@@ -1,0 +1,18 @@
+{##
+ # Account links
+ #
+ # The list of accounts provides an easy way to jump to the transaction list
+ # for an account.
+ #}
+
+<ul class="sidebar-menu">
+    <li class="header">Accounts</li>
+    {% for account in request.user.accounts.filter(active=True) %}
+        <li>
+            <a href="{{ account.get_absolute_url() }}">
+                <span class="fa fa-bank"></span>
+                {{ account }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
