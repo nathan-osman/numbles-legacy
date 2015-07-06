@@ -1,25 +1,22 @@
 {% extends 'base.html' %}
 
-{% import 'macros/form.html' as form_ %}
+{% import 'macros/form.html' as form_ with context %}
 {% import 'macros/ui.html' as ui %}
 
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4">
-                <form method="post">
-                    {{ csrf_input }}
+                {% call form_.form(form) %}
                     {% set login = form_.submit(title='Login', icon='sign-in') %}
                     {% call ui.box('Login', 'sign-in', [login]) %}
                         <p>
                             Please enter your login credentials to access Numbles.
                             <a href="#">Click here</a> if you've forgotten your password.
                         </p>
-                        {% for field in form %}
-                            {{ form_.field(field) }}
-                        {% endfor %}
+                        {{ form_.fields(form) }}
                     {% endcall %}
-                </form>
+                {% endcall %}
             </div>
         </div>
     </div>
