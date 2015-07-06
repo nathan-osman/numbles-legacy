@@ -23,7 +23,7 @@ def edit_account(request, id=None):
             return redirect(account)
     else:
         form = EditAccountForm(instance=account)
-    return render(request, 'form.html', {
+    return render(request, 'pages/form.html', {
         'title': 'Edit "%s"' % account if account else "Add Account",
         'breadcrumbs': [
             account,
@@ -51,7 +51,7 @@ def delete_account(request, id):
             return redirect('home')
     else:
         form = DeleteAccountForm()
-    return render(request, 'form.html', {
+    return render(request, 'pages/form.html', {
         'title': 'Delete "%s"' % account,
         'breadcrumbs': [
             account,
@@ -81,7 +81,7 @@ def edit_transaction(request, id=None):
     else:
         initial = {} if transaction else {'date': now()}
         form = EditTransactionForm(request.user, instance=transaction, initial=initial)
-    return render(request, 'form.html', {
+    return render(request, 'pages/form.html', {
         'title': 'Edit "%s"' % transaction if transaction else "Add Transaction",
         'breadcrumbs': [
             transaction.account,
@@ -124,7 +124,7 @@ def transfer(request):
         form = TransferBetweenAccountsForm(request.user, initial={
             'date': now(),
         })
-    return render(request, 'form.html', {
+    return render(request, 'pages/form.html', {
         'title': 'Transfer Between Accounts',
         'form': form,
     })
@@ -152,7 +152,7 @@ def delete_transaction(request, id):
             return redirect(transaction.account)
     else:
         form = DeleteTransactionForm()
-    return render(request, 'form.html', {
+    return render(request, 'pages/form.html', {
         'title': 'Delete "%s"' % transaction,
         'breadcrumbs': [
             transaction.account,
@@ -178,7 +178,7 @@ def search(request):
             })
     else:
         form = SearchForm()
-    return render(request, 'form.html', {
+    return render(request, 'pages/form.html', {
         'title': 'Search',
         'form': form,
     })
