@@ -3,6 +3,11 @@
  * Copyright 2015 - Nathan Osman
  */
 
+/* Ensure ALL pages have the grey BG */
+body {
+    background-color: #ecf0f5;
+}
+
 /* Assign a much more reasonable size to icons in .small-box */
 .small-box h3 { font-size: 32px; margin-bottom: 0; }
 .small-box p { margin-bottom: 0; }
