@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% import 'macros/form.html' as form_ with context %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-6">
+            {% call form_.form(form) %}
+                {{ form_.fields(form) }}
+                <br>
+                <p>
+                    {{ form_.submit('Submit', 'check') }}
+                </p>
+            {% endcall %}
+        </div>
+    </div>
+{% endblock %}
