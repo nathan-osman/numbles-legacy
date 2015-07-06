@@ -26,7 +26,7 @@ def profile(request):
                 'email': request.user.email,
             },
         )
-    return render(request, 'accounts/pages/profile.html', {
+    return render(request, 'pages/form.html', {
         'title': 'Edit Profile',
         'form': form,
     })
