@@ -17,7 +17,7 @@
             {{ account.list(accounts, title='Active Accounts') }}
         </div>
         <div class="col-sm-6">
-            {{ transaction.list(transactions, title='Recent Transactions') }}
+            {{ transaction.list(transactions, title='Recent Transactions', fields=('date', 'account', 'summary', 'amount')) }}
         </div>
     </div>
 {% endblock %}

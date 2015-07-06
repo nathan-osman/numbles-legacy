@@ -28,7 +28,11 @@
                         <tr>
                             {% for f in fields %}
                                 {% if f == 'name' %}
-                                    <td>{{ a.name }}</td>
+                                    <td>
+                                        <a href="{{ a.get_absolute_url() }}">
+                                            {{ a.name }}
+                                        </a>
+                                    </td>
                                 {% elif f == 'balance' %}
                                     <td class="text-right">{{ util.currency(a.balance) }}</td>
                                 {% endif %}

@@ -17,6 +17,8 @@
                         {% for f in fields %}
                             {% if f == 'date' %}
                                 <th>Date / Time</th>
+                            {% elif f == 'account' %}
+                                <th>Account</th>
                             {% elif f == 'summary' %}
                                 <th>Summary</th>
                             {% elif f == 'reconciled' %}
@@ -34,9 +36,19 @@
                         <tr>
                             {% for f in fields %}
                                 {% if f == 'date' %}
-                                    <td>{{ t.date }}</td>
+                                    <td>{{ t.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                {% elif f == 'account' %}
+                                    <td>
+                                        <a href="{{ t.account.get_absolute_url() }}">
+                                            {{ t.account }}
+                                        </a>
+                                    </td>
                                 {% elif f == 'summary' %}
-                                    <td>{{ t.summary }}</td>
+                                    <td>
+                                        <a href="{{ t.get_absolute_url() }}">
+                                            {{ t.summary }}
+                                        </a>
+                                    </td>
                                 {% elif f == 'reconciled' %}
                                     <td class="text-center">
                                         {% if t.reconciled %}
