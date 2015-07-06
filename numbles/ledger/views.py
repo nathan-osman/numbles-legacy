@@ -35,7 +35,7 @@ def edit_account(request, id=None):
 @login_required
 def view_account(request, id):
     account = get_object_or_404(Account, pk=id, user=request.user)
-    return render(request, 'ledger/view_account.html', {
+    return render(request, 'ledger/pages/account_view.html', {
         'title': account,
         'account': account,
     })
@@ -133,7 +133,7 @@ def transfer(request):
 @login_required
 def view_transaction(request, id):
     transaction = get_object_or_404(Transaction, pk=id, user=request.user)
-    return render(request, 'ledger/view_transaction.html', {
+    return render(request, 'ledger/pages/transaction_view.html', {
         'title': transaction,
         'breadcrumbs': [
             transaction.account,
