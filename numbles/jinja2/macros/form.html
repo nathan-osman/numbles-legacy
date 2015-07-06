@@ -1,0 +1,24 @@
+{##
+ # Render a form field
+ #   field - form to render
+ #}
+{% macro field(field) %}
+    <div class="form-group">
+        <label for="id_{{ field.name }}" class="control-label">
+            {{ field.label }}
+        </label>
+        {{ field|add_class('form-control') }}
+    </div>
+{% endmacro %}
+
+{##
+ # Display a submit button
+ #   title - text displayed on the button
+ #   icon - icon displayed next to the title
+ #}
+{% macro submit(title, icon) %}
+    <button type="submit" class="btn btn-sm btn-primary btn-flat">
+        <span class="fa fa-{{ icon }}"></span>
+        {{ title }}
+    </button>
+{% endmacro %}
