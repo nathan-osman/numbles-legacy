@@ -83,7 +83,10 @@ class Account(models.Model, UpdateMixin):
     UPDATE_FIELD = 'balance'
     UPDATE_PARENT = 'total'
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(
+        User,
+        related_name='accounts',
+    )
 
     total = models.ForeignKey(
         Total,
