@@ -11,6 +11,8 @@ def profile(request):
     if request.method == 'POST':
         form = EditProfileForm(instance=request.user.profile, data=request.POST)
         if form.is_valid():
+            request.user.first_name = form.cleaned_data['first_name']
+            request.user.last_name = form.cleaned_data['last_name']
             request.user.email = form.cleaned_data['email']
             request.user.save()
             form.save()
@@ -19,10 +21,12 @@ def profile(request):
         form = EditProfileForm(
             instance=request.user.profile,
             initial={
+                'first_name': request.user.first_name,
+                'last_name': request.user.last_name,
                 'email': request.user.email,
             },
         )
-    return render(request, 'form.html', {
+    return render(request, 'accounts/pages/profile.html', {
         'title': 'Edit Profile',
         'form': form,
     })
