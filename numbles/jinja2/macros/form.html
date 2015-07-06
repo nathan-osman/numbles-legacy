@@ -1,4 +1,15 @@
 {##
+ # Render a form
+ #   form - form to render
+ #}
+{% macro form(form) %}
+    <form method="post"{% if form.is_multipart() %} enctype="multipart/form-data"{% endif %}>
+        {{ csrf_input }}
+        {{ caller() }}
+    </form>
+{% endmacro %}
+
+{##
  # Render a form field
  #   field - form to render
  #}
@@ -9,6 +20,20 @@
         </label>
         {{ field|add_class('form-control') }}
     </div>
+{% endmacro %}
+
+{##
+ # Render fields in a form
+ #   form - form to render fields from
+ #   fields - list of fields to render (all by default)
+ #}
+{% macro fields(form, fields=[]) %}
+    {% if not fields %}
+        {% set fields = form %}
+    {% endif %}
+    {% for field_ in fields %}
+        {{ field(field_) }}
+    {% endfor %}
 {% endmacro %}
 
 {##
