@@ -1,0 +1,23 @@
+{##
+ # User box
+ #
+ # The user box shows the current user's Gravatar, their full name, and their
+ # current total balance.
+ #}
+
+{% import 'ledger/macros/util.html' as util %}
+
+<div class="user-panel">
+    <div class="pull-left image">
+        <img src="//gravatar.com/avatar/{{ md5(request.user.email) }}?d=identicon&amp;size=64"
+                class="img-circle"
+                alt="Profile Image">
+    </div>
+    <div class="pull-left info">
+        <p>{{ request.user.get_full_name() or request.user.username }}</p>
+        <p class="text-muted">
+            Balance:
+            <strong>{{ util.currency(request.user.total.balance) }}</strong>
+        </p>
+    </div>
+</div>
