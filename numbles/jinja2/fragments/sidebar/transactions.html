@@ -1,0 +1,22 @@
+{##
+ # Transaction links
+ #
+ # The list of links provided in this fragment provides the ability to add a
+ # new transaction or transfer money between accounts.
+ #}
+
+<ul class="sidebar-menu">
+    <li class="header">Transactions</li>
+    <li>
+        <a href="{{ url('ledger:transfer') }}">
+            <i class="fa fa-refresh"></i>
+            Transfer Between Accounts
+        </a>
+    </li>
+    <li>
+        <a href="{{ url('ledger:add_transaction') }}">
+            <i class="fa fa-plus"></i>
+            Add Transaction
+        </a>
+    </li>
+</ul>
