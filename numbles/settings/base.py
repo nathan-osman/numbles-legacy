@@ -8,7 +8,7 @@ import os.path
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 # Numbles uses the Jinja2 template engine, which is similar to Django templates
-# but offers more flexibility
+# but offers more flexibility - but we still need Django templates for the admin
 TEMPLATES = (
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
@@ -16,6 +16,21 @@ TEMPLATES = (
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'numbles.jinja2.environment',
+        },
+    },
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': (
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+            ),
         },
     },
 )
