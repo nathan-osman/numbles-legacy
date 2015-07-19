@@ -172,7 +172,7 @@ def search(request):
                 Q(summary__icontains=q) | Q(description__icontains=q),
                 user=request.user,
             )
-            return render(request, 'ledger/search.html', {
+            return render(request, 'ledger/pages/search.html', {
                 'title': 'Search Results for "%s"' % q,
                 'transactions': transactions,
             })
