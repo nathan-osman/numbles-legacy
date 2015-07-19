@@ -5,7 +5,7 @@
  #}
 {% macro currency(value, color=true) %}
     {% if color and value < 0 %}
-        <span class="text-danger">
+        <span class="text-danger">-
     {% elif color and value > 0 %}
         <span class="text-success">
     {% endif %}

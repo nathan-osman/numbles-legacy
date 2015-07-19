@@ -6,8 +6,9 @@
  #   transactions - list or QuerySet of transactions
  #   title - text to display in the box header
  #   fields - list of fields to display
+ #   balance - starting balance
  #}
-{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance')) %}
+{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), balance=0) %}
     {% set add = ui.button(title='Add Transaction', icon='plus', url=url('ledger:add_transaction')) %}
     {% call ui.box(title=title, icon='credit-card', buttons=(add,)) %}
         <div class="table-responsive">
@@ -32,6 +33,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% set accumulator = [balance] %}
                     {% for t in transactions %}
                         <tr>
                             {% for f in fields %}
@@ -60,7 +62,9 @@
                                 {% elif f == 'amount' %}
                                     <td class="text-right">{{ util.currency(t.amount) }}</td>
                                 {% elif f == 'balance' %}
-                                    <td class="text-right">[TODO]</td>
+                                    {# Workaround to accumulate a value #}
+                                    {% if accumulator.append(accumulator.pop() + t.amount) %}{% endif %}
+                                    <td class="text-right">{{ util.currency(accumulator[-1]) }}</td>
                                 {% endif %}
                             {% endfor %}
                         </tr>
