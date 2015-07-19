@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 
 {% import 'ledger/macros/transaction.html' as transaction %}
+{% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-6">
             {{ transaction.list(account.transactions.all(), title='Transactions') }}
+        </div>
+        <div class="col-md-6">
+            {% set edit = ui.button(title='Edit Account', icon='pencil', url=url('ledger:edit_account', kwargs={'id': account.id})) %}
+            {% set delete = ui.button(title='Delete Account', icon='trash', url=url('ledger:delete_account', kwargs={'id': account.id})) %}
+            {% call ui.box(title='Account Details', icon='info-circle', buttons=(edit, delete)) %}
+                <p>Account balance:</p>
+                <h3>{{ util.currency(account.balance) }}
+            {% endcall %}
         </div>
     </div>
 {% endblock %}
