@@ -12,7 +12,7 @@
         <div class="col-md-6">
             {% set edit = ui.button(title='Edit Account', icon='pencil', url=url('ledger:edit_account', kwargs={'id': account.id})) %}
             {% set delete = ui.button(title='Delete Account', icon='trash', url=url('ledger:delete_account', kwargs={'id': account.id})) %}
-            {% call ui.box(title='Account Details', icon='info-circle', buttons=(edit, delete)) %}
+            {% call ui.box(title='Account Tools', icon='gears', buttons=(edit, delete)) %}
                 <p>Account balance:</p>
                 <h3>{{ util.currency(account.balance) }}
             {% endcall %}

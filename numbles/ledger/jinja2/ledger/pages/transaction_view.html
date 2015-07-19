@@ -1,2 +1,64 @@
 {% extends 'base.html' %}
 
+{% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {% set edit = ui.button(title='Edit Transaction', icon='pencil', url=url('ledger:edit_transaction', kwargs={'id': transaction.id})) %}
+            {% set delete = ui.button(title='Delete Transaction', icon='trash', url=url('ledger:delete_transaction', kwargs={'id': transaction.id})) %}
+            {% call ui.box(title='Transaction Details', icon='info-circle', buttons=(edit, delete)) %}
+                <p>Details for the transaction are displayed below.</p>
+                <table class="table no-margin">
+                    <tr>
+                        <th>Account:</th>
+                        <td>
+                            <a href="{{ transaction.account.get_absolute_url() }}">
+                                {{ transaction.account }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Amount:</th>
+                        <td>{{ util.currency(transaction.amount) }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date:</th>
+                        <td>{{ transaction.date }}</td>
+                    </tr>
+                    {% if transaction.description %}
+                        <tr>
+                            <th>Description:</th>
+                            <td>{{ transaction.description }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Linked:</th>
+                        <td>
+                            {% if transaction.linked %}
+                                <a href="{{ transaction.linked.get_absolute_url() }}">
+                                    {{ transaction.linked }}
+                                </a>
+                            {% else %}
+                                <span class="text-muted">
+                                    No linked transaction
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Reconciled:</th>
+                        <td>
+                            {% if transaction.reconciled %}
+                                <span class="text-success">Yes</span>
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+            {% endcall %}
+        </div>
+    </div>
+{% endblock %}
