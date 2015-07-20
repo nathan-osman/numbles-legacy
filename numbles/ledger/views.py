@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 
@@ -57,14 +57,6 @@ def delete_account(request, id):
             account,
         ],
         'form': form,
-    })
-
-
-@login_required
-def transactions(request):
-    return render(request, 'ledger/transactions.html', {
-        'title': 'Transactions',
-        'transactions': Transaction.objects.filter(account__user=request.user, account__include_in_balance=True),
     })
 
 
@@ -159,6 +151,18 @@ def delete_transaction(request, id):
             transaction,
         ],
         'form': form,
+    })
+
+
+@login_required
+def view_year(request, year):
+    # Sum the balance of all previous years and use that as the initial value
+    balance = request.user.years.filter(year__lt=year).aggregate(sum=Sum('balance'))
+    transactions = request.user.transactions.filter(year__year=year)
+    return render(request, 'ledger/pages/view_year.html', {
+        'title': 'Year: %s' % year,
+        'transactions': transactions,
+        'balance': balance['sum'] or 0,
     })
 
 

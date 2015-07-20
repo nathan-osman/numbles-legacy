@@ -136,7 +136,10 @@ class Year(models.Model, UpdateMixin):
     UPDATE_FIELD = 'amount'
     UPDATE_PARENT = 'account'
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(
+        User,
+        related_name='years',
+    )
 
     account = models.ForeignKey(
         Account,
@@ -180,7 +183,10 @@ class Transaction(models.Model):
     An amount transferred from or to an account.
     """
 
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(
+        User,
+        related_name='transactions',
+    )
 
     account = models.ForeignKey(
         Account,
