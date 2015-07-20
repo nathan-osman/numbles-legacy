@@ -38,7 +38,7 @@
                         <tr>
                             {% for f in fields %}
                                 {% if f == 'date' %}
-                                    <td>{{ t.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                    <td>{{ localtime(t.date) }}</td>
                                 {% elif f == 'account' %}
                                     <td>
                                         <a href="{{ t.account.get_absolute_url() }}">

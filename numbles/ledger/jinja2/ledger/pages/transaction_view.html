@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <th>Date:</th>
-                        <td>{{ transaction.date }}</td>
+                        <td>{{ localtime(transaction.date) }}</td>
                     </tr>
                     {% if transaction.description %}
                         <tr>
