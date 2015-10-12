@@ -5,9 +5,12 @@
 {% import 'macros/ui.html' as ui %}
 
 {% block content %}
+    <h4>Monthly Income</h4>
+    <div id="container" style="width:100%; height:200px;"></div>
+    <br>
     <div class="row">
         <div class="col-md-6">
-            {{ transaction.list(account.transactions.all(), title='Transactions') }}
+            {{ transaction.list(account.transactions.order_by('-date')[:10], title='Recent Transactions', fields=('date', 'summary', 'amount')) }}
         </div>
         <div class="col-md-6">
             {% set edit = ui.button(title='Edit Account', icon='pencil', url=url('ledger:edit_account', kwargs={'id': account.id})) %}
@@ -18,4 +21,91 @@
             {% endcall %}
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+
+            // Build an array of totals for the months
+            var totals = [
+                {% for t in totals %}
+                    {{ t }},
+                {% endfor %}
+            ];
+
+            // List of month names
+            var monthNames = [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
+            ];
+
+            // Generate the list of names for the previous 12 months
+            function monthList() {
+                months = [];
+                for(var i = {{ month }}; i < 12; ++i) {
+                    months.push(i);
+                }
+                for(var i = 0; i < {{ month }}; ++i) {
+                    months.push(i);
+                }
+                return months;
+            }
+
+            // Format a currency value
+            function formatCurrency(val) {
+                return ((val < 0) ? '-' : '') + '$' + Math.abs(val);
+            }
+
+            // Display the chart
+            $('#container').highcharts({
+                chart: {
+                    type: 'column'
+                },
+                credits: {
+                    enabled: false
+                },
+                title: {
+                    text: 'Income by Month'
+                },
+                xAxis: {
+                    categories: $.map(monthList(), function(i) {
+                        return monthNames[i];
+                    }),
+                    showFirstLabel: false
+                },
+                yAxis: {
+                    labels: {
+                        formatter: function() {
+                            return formatCurrency(this.value);
+                        }
+                    },
+                    title: {
+                        text: 'Amount'
+                    }
+                },
+                series: [{
+                    data: $.map(monthList(), function(i) {
+                        return totals[i];
+                    }),
+                    showInLegend: false
+                }],
+                tooltip: {
+                    pointFormatter: function() {
+                        return formatCurrency(this.y);
+                    }
+                }
+            });
+        });
+    </script>
 {% endblock %}
