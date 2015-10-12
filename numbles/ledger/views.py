@@ -40,7 +40,7 @@ def view_account(request, id):
     # Create a map of [1-indexed month] => [total for the month]
     months = dict([(m, 0) for m in range(1, 13)])
     # Add the total of all transactions in the last year to the correct month
-    for t in account.transactions.filter(date__gt=n - timedelta(days=365), date__lte=n):
+    for t in account.transactions.filter(date__gt=n - timedelta(days=365 - n.day), date__lte=n):
         months[t.date.month] += t.amount
     return render(request, 'ledger/pages/account_view.html', {
         'title': account,
