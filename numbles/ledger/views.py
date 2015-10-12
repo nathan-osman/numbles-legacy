@@ -1,9 +1,9 @@
-from datetime import timedelta
+from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.timezone import now
+from django.utils.timezone import make_aware, now
 
 from numbles.ledger.forms import EditAccountForm, DeleteAccountForm, \
     EditTransactionForm, TransferBetweenAccountsForm, DeleteTransactionForm, \
@@ -36,11 +36,12 @@ def edit_account(request, id=None):
 @login_required
 def view_account(request, id):
     account = get_object_or_404(Account, pk=id, user=request.user)
+    # Calculate the first day of the month one year ago
     n = now()
+    start = make_aware(datetime(n.year - 1, (n.month) % 12 + 1, 1))
     # Create a map of [1-indexed month] => [total for the month]
     months = dict([(m, 0) for m in range(1, 13)])
-    # Add the total of all transactions in the last year to the correct month
-    for t in account.transactions.filter(date__gt=n - timedelta(days=365 - n.day), date__lte=n):
+    for t in account.transactions.filter(date__gt=start, date__lte=n):
         months[t.date.month] += t.amount
     return render(request, 'ledger/pages/account_view.html', {
         'title': account,
