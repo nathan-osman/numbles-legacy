@@ -49,7 +49,7 @@ class Migration(migrations.Migration):
                 ('reconciled', models.BooleanField(default=False)),
                 ('account', models.ForeignKey(related_name='transactions', to='ledger.Account')),
                 ('linked', models.ForeignKey(blank=True, to='ledger.Transaction', null=True)),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='transactions', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('date',),
@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('balance', models.DecimalField(default=Decimal('0.00'), max_digits=9, decimal_places=2)),
                 ('year', models.PositiveSmallIntegerField()),
                 ('account', models.ForeignKey(related_name='years', to='ledger.Account')),
-                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(related_name='years', to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'ordering': ('year',),
@@ -85,7 +85,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='account',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='accounts', to=settings.AUTH_USER_MODEL),
             preserve_default=True,
         ),
     ]
