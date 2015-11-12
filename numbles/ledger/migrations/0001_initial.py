@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('balance', models.DecimalField(default=Decimal('0.00'), max_digits=9, decimal_places=2)),
-                ('name', models.CharField(help_text=b'Account name.', max_length=40)),
+                ('name', models.CharField(help_text=b'Account name', max_length=40)),
                 ('include_in_balance', models.BooleanField(default=False)),
             ],
             options={
@@ -42,10 +42,10 @@ class Migration(migrations.Migration):
             name='Transaction',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('date', models.DateTimeField(help_text=b'Date and time of the transaction.')),
-                ('summary', models.CharField(help_text=b'Brief description of the transaction.', max_length=100)),
-                ('description', models.TextField(help_text=b'Additional details or information.', blank=True)),
-                ('amount', models.DecimalField(help_text=b'Amount of the transaction.', max_digits=9, decimal_places=2)),
+                ('date', models.DateTimeField(help_text=b'Date and time of the transaction')),
+                ('summary', models.CharField(help_text=b'Brief description of the transaction', max_length=100)),
+                ('description', models.TextField(help_text=b'Additional details or information', blank=True)),
+                ('amount', models.DecimalField(help_text=b'Amount of the transaction', max_digits=9, decimal_places=2)),
                 ('reconciled', models.BooleanField(default=False)),
                 ('account', models.ForeignKey(related_name='transactions', to='ledger.Account')),
                 ('linked', models.ForeignKey(blank=True, to='ledger.Transaction', null=True)),
