@@ -19,7 +19,6 @@ def edit_account(request, id=None):
         if form.is_valid():
             account = form.save(commit=False)
             account.user = request.user
-            account.total = request.user.total
             account.save()
             return redirect(account)
     else:
