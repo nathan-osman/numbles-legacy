@@ -14,10 +14,10 @@
     {#{% include 'fragments/stats.html' %}#}
     <div class="row">
         <div class="col-sm-6">
-            {{ account.list(accounts, title='Active Accounts') }}
+            {{ account.list(request.user.accounts.all(), title='Active Accounts') }}
         </div>
         <div class="col-sm-6">
-            {{ transaction.list(transactions, title='Recent Transactions', fields=('date', 'account', 'summary', 'amount')) }}
+            {{ transaction.list(request.user.transactions.all().order_by('-date')[:6], title='Recent Transactions', fields=('date', 'account', 'summary', 'amount')) }}
         </div>
     </div>
 {% endblock %}
