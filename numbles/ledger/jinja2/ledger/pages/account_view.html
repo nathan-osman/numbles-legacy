@@ -10,7 +10,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            {{ transaction.list(account.transactions.order_by('-date'), title='Recent Transactions', fields=('date', 'summary', 'amount')) }}
+            {{ transaction.list(account.transactions.order_by('-date')[:6], title='Recent Transactions', fields=('date', 'summary', 'amount'), account=account) }}
         </div>
         <div class="col-md-6">
             {% set edit = ui.button(title='Edit Account', icon='pencil', url=url('ledger:edit_account', kwargs={'id': account.id})) %}
