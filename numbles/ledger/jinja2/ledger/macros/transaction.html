@@ -6,13 +6,15 @@
  #   transactions - list or QuerySet of transactions
  #   title - text to display in the box header
  #   fields - list of fields to display
+ #   buttons - list of buttons to display
  #   balance - starting balance
- #   account - account used for initializing New Transaction button
  #}
-{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), balance=0, account=none) %}
-    {% set suffix = "?account={}".format(account.id) if account else "" %}
-    {% set new = ui.button(title='New Transaction', icon='plus', url=url('ledger:new_transaction')+suffix) %}
-    {% call ui.box(title=title, icon='credit-card', buttons=(new,)) %}
+{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=none, balance=0) %}
+    {% if buttons is none %}
+        {% set new = ui.button(title='New Transaction', icon='plus', url=url('ledger:new_transaction')) %}
+        {% set buttons = (new,) %}
+    {% endif %}
+    {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>
