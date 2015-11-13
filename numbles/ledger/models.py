@@ -182,3 +182,19 @@ def on_transaction_delete(instance, **kwargs):
     Remove the transaction balance from the account.
     """
     instance.account.adjust_balance(-instance.amount)
+
+
+class Attachment(models.Model):
+    """
+    A file attachment for a transaction.
+    """
+
+    transaction = models.ForeignKey(Transaction, related_name='attachments')
+    summary = models.CharField(max_length=100, help_text="Brief description of the attachment")
+    file = models.FileField(upload_to='attachments')
+
+    class Meta:
+        ordering = ('summary',)
+
+    def __unicode__(self):
+        return self.summary

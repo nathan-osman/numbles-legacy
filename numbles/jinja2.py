@@ -4,6 +4,7 @@ Customize the Jinja2 environment
 
 from __future__ import absolute_import
 from hashlib import md5
+from os.path import basename
 
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.urlresolvers import reverse
@@ -23,6 +24,7 @@ def environment(**kwargs):
         'widget_type': widget_type,
     })
     env.globals.update({
+        'basename': basename,
         'linebreaksbr': linebreaksbr,
         'localtime': lambda x: template_localtime(x).strftime('%Y-%m-%d %H:%M:%S'),
         'md5': lambda x: md5(x).hexdigest(),
