@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% import 'ledger/macros/transaction.html' as transaction %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ transaction.list(transactions, balance=balance) }}
+        </div>
+    </div>
+{% endblock %}

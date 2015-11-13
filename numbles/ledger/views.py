@@ -1,13 +1,14 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.utils.timezone import now
-
-from numbles.ledger.models import Account, Transaction
+from django.utils.timezone import make_aware, now
 
 from numbles.ledger.forms import DeleteAccountForm, DeleteTransactionForm, \
     EditAccountForm, EditTransactionForm, FindTransactionForm, TransferForm
+from numbles.ledger.models import Account, Transaction
 
 
 @login_required
@@ -41,11 +42,9 @@ def view_account(request, id):
     account = get_object_or_404(Account, pk=id, user=request.user)
     months, n = [], now()
     for m in range(n.month + 1, 13):
-        q = Transaction.month(n.year - 1, m, account=account)
-        months.append((m, Transaction.sum(q)))
+        months.append((m, Transaction.month(n.year - 1, m, account=account).sum()))
     for m in range(1, n.month + 1):
-        q = Transaction.month(n.year, m, account=account)
-        months.append((m, Transaction.sum(q)))
+        months.append((m, Transaction.month(n.year, m, account=account).sum()))
     return render(request, 'ledger/pages/view_account.html', {
         'title': account,
         'account': account,
@@ -201,4 +200,12 @@ def view_month(request, year, month):
     """
     View transactions for a specific month.
     """
-    pass
+    year, month = int(year), int(month)
+    transactions = Transaction.month(year, month, user=request.user)
+    start = make_aware(datetime(year, month, 1))
+    balance = Transaction.objects.filter(user=request.user, date__lt=start).sum()
+    return render(request, 'ledger/pages/view_month.html', {
+        'title': start.strftime('%B %Y'),
+        'transactions': transactions,
+        'balance': balance,
+    })

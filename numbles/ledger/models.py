@@ -14,7 +14,8 @@ DECIMAL_PLACES = 2
 
 class UpdateMixin(object):
     """
-    Empty class that exists for migration purposes.
+    Empty class that exists for legacy purposes.
+    (TODO: remove this when old migrations are no longer needed.)
     """
 
 
@@ -54,6 +55,19 @@ class Account(models.Model):
         return ('ledger:view_account', (), {'id': self.id})
 
 
+class TransactionQuerySet(models.QuerySet):
+    """
+    Provides custom methods for transaction queries.
+    """
+
+    def sum(self):
+        """
+        Calculate the sum of transactions in the query set.
+        """
+        return self.aggregate(sum=models.Sum('amount'))['sum'] or Decimal('0.00')
+    sum.queryset_only = True
+
+
 class Transaction(models.Model):
     """
     An amount transferred to or from an account.
@@ -76,6 +90,8 @@ class Transaction(models.Model):
 
     linked = models.ForeignKey('self', null=True, blank=True)
 
+    objects = TransactionQuerySet.as_manager()
+
     class Meta:
         ordering = ('date',)
 
@@ -91,13 +107,6 @@ class Transaction(models.Model):
         start = make_aware(datetime(year, month, 1))
         end = make_aware(datetime(year + month / 12, month % 12 + 1, 1))
         return cls.objects.filter(date__gte=start, date__lt=end, **kwargs)
-
-    @classmethod
-    def sum(cls, q):
-        """
-        Calculate the sum of a queryset.
-        """
-        return q.aggregate(sum=models.Sum('amount'))['sum'] or Decimal('0.00')
 
     @models.permalink
     def get_absolute_url(self):
