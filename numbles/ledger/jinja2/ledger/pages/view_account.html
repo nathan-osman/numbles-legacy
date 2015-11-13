@@ -10,8 +10,7 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            {% set url_ = "{}?account={}".format(url('ledger:new_transaction'), account.id) %}
-            {% set new = ui.button(title='New Transaction', icon='plus', url=url_) %}
+            {% set new = ui.button(title='New Transaction', icon='plus', url="{}?account={}".format(url('ledger:new_transaction'), account.id)) %}
             {{ transaction.list(account.transactions.order_by('-date')[:6], title='Recent Transactions', fields=('date', 'summary', 'amount'), buttons=(new,)) }}
         </div>
         <div class="col-md-6">
@@ -32,7 +31,7 @@
             // Build an array of totals for the months
             var months = [
                 {% for m in months %}
-                    [{{ m[0] }}, {{ m[1] }}],
+                    [{{ m[0] }}, {{ m[1] }}, {{ m[2] }}],
                 {% endfor %}
             ];
 
@@ -70,7 +69,7 @@
                 },
                 xAxis: {
                     categories: $.map(months, function(m) {
-                        return monthNames[m[0] - 1];
+                        return monthNames[m[1] - 1] + ' ' + m[0];
                     })
                 },
                 yAxis: {
@@ -85,7 +84,7 @@
                 },
                 series: [{
                     data: $.map(months, function(m) {
-                        return m[1];
+                        return m[2];
                     }),
                     showInLegend: false
                 }],

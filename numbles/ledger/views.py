@@ -33,6 +33,18 @@ def edit_account(request, id=None):
     })
 
 
+def adjust_month(year, month, offset):
+    """
+    Given a year and month, add the specified offset and return a tuple in the
+    form (year, month). The algorithm is a bit complicated because month
+    indices begin at 1 instead of 0.
+    """
+    month += offset - 1
+    year += month / 12
+    month = month % 12 + 1
+    return (year, month)
+
+
 @login_required
 def view_account(request, id):
     """
@@ -41,13 +53,13 @@ def view_account(request, id):
     """
     account = get_object_or_404(Account, pk=id, user=request.user)
     months, n = [], now()
-    for m in range(n.month + 1, 13):
-        months.append((m, Transaction.month(n.year - 1, m, account=account).sum()))
-    for m in range(1, n.month + 1):
-        months.append((m, Transaction.month(n.year, m, account=account).sum()))
+    for o in reversed(range(0, -12, -1)):
+        y, m = adjust_month(n.year, n.month, o)
+        months.append((y, m, Transaction.month(y, m, account=account).sum()))
     return render(request, 'ledger/pages/view_account.html', {
         'title': account,
         'account': account,
+        'cur': (n.year, n.month),
         'months': months,
     })
 
@@ -193,18 +205,6 @@ def delete_transaction(request, id):
         'breadcrumbs': [transaction.account, transaction],
         'form': form,
     })
-
-
-def adjust_month(year, month, offset):
-    """
-    Given a year and month, add the specified offset and return a tuple in the
-    form (year, month). The algorithm is a bit complicated because month
-    indices begin at 1 instead of 0.
-    """
-    month += offset - 1
-    year += month / 12
-    month = month % 12 + 1
-    return (year, month)
 
 
 @login_required

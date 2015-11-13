@@ -2,6 +2,106 @@
 {% import 'macros/ui.html' as ui %}
 
 {##
+ # Display table header.
+ #   fields - list of fields to display
+ #}
+{% macro _header(fields) %}
+    <tr>
+        {% for f in fields %}
+            {% if f == 'date' %}
+                <th>Date / Time</th>
+            {% elif f == 'account' %}
+                <th>Account</th>
+            {% elif f == 'summary' %}
+                <th>Summary</th>
+            {% elif f == 'reconciled' %}
+                <th class="text-center">Reconciled?</th>
+            {% elif f == 'amount' %}
+                <th class="text-right">Amount</th>
+            {% elif f == 'balance' %}
+                <th class="text-right">Balance</th>
+            {% endif %}
+        {% endfor %}
+    </tr>
+{% endmacro %}
+
+{##
+ # Display balance forward row.
+ #   fields - list of fields to display
+ #   balance - starting balance
+ #}
+{% macro _balance(fields, balance) %}
+    {% if 'summary' in fields and 'balance' in fields %}
+        <tr>
+            {% for f in fields %}
+                {% if loop.first %}
+                    <td>Balance Forward</td>
+                {% elif f == 'balance' %}
+                    <td class="text-right">
+                        {{ util.currency(balance) }}
+                    </td>
+                {% else %}
+                    <td></td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% endif %}
+{% endmacro %}
+
+{##
+ # Display table data.
+ #   fields - list of fields to display
+ #   transactions - list or QuerySet of transactions
+ #   balance - starting balance
+ #}
+{% macro _data(fields, transactions, balance) %}
+    {% set accumulator = [balance] %}
+    {% for t in transactions %}
+        <tr>
+            {% for f in fields %}
+                {% if f == 'date' %}
+                    <td>{{ localtime(t.date) }}</td>
+                {% elif f == 'account' %}
+                    <td>
+                        <a href="{{ t.account.get_absolute_url() }}">
+                            {{ t.account }}
+                        </a>
+                    </td>
+                {% elif f == 'summary' %}
+                    <td>
+                        <a href="{{ t.get_absolute_url() }}">
+                            {{ t.summary }}
+                        </a>
+                    </td>
+                {% elif f == 'reconciled' %}
+                    <td class="text-center">
+                        {% if t.reconciled %}
+                            <span class="fa fa-check text-success"></span>
+                        {% else %}
+                            <span class="fa fa-times text-danger"></span>
+                        {% endif %}
+                    </td>
+                {% elif f == 'amount' %}
+                    <td class="text-right">{{ util.currency(t.amount) }}</td>
+                {% elif f == 'balance' %}
+                    {# Workaround to accumulate a value #}
+                    {% if accumulator.append(accumulator.pop() + t.amount) %}{% endif %}
+                    <td class="text-right">{{ util.currency(accumulator[-1]) }}</td>
+                {% endif %}
+            {% endfor %}
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="{{ fields|length }}">
+                <span class="text-muted">
+                    No transactions matched
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{##
  # Display a list of transactions
  #   transactions - list or QuerySet of transactions
  #   title - text to display in the box header
@@ -18,84 +118,11 @@
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>
-                    <tr>
-                        {% for f in fields %}
-                            {% if f == 'date' %}
-                                <th>Date / Time</th>
-                            {% elif f == 'account' %}
-                                <th>Account</th>
-                            {% elif f == 'summary' %}
-                                <th>Summary</th>
-                            {% elif f == 'reconciled' %}
-                                <th class="text-center">Reconciled?</th>
-                            {% elif f == 'amount' %}
-                                <th class="text-right">Amount</th>
-                            {% elif f == 'balance' %}
-                                <th class="text-right">Balance</th>
-                            {% endif %}
-                        {% endfor %}
-                    </tr>
+                    {{ _header(fields) }}
                 </thead>
                 <tbody>
-                    {% set accumulator = [balance] %}
-                    {% if 'summary' in fields and 'balance' in fields %}
-                        <tr>
-                            {% for f in fields %}
-                                {% if loop.first %}
-                                    <td>Balance Forward</td>
-                                {% elif f == 'balance' %}
-                                    <td class="text-right">
-                                        {{ util.currency(balance) }}
-                                    </td>
-                                {% else %}
-                                    <td></td>
-                                {% endif %}
-                            {% endfor %}
-                        </tr>
-                    {% endif %}
-                    {% for t in transactions %}
-                        <tr>
-                            {% for f in fields %}
-                                {% if f == 'date' %}
-                                    <td>{{ localtime(t.date) }}</td>
-                                {% elif f == 'account' %}
-                                    <td>
-                                        <a href="{{ t.account.get_absolute_url() }}">
-                                            {{ t.account }}
-                                        </a>
-                                    </td>
-                                {% elif f == 'summary' %}
-                                    <td>
-                                        <a href="{{ t.get_absolute_url() }}">
-                                            {{ t.summary }}
-                                        </a>
-                                    </td>
-                                {% elif f == 'reconciled' %}
-                                    <td class="text-center">
-                                        {% if t.reconciled %}
-                                            <span class="fa fa-check text-success"></span>
-                                        {% else %}
-                                            <span class="fa fa-times text-danger"></span>
-                                        {% endif %}
-                                    </td>
-                                {% elif f == 'amount' %}
-                                    <td class="text-right">{{ util.currency(t.amount) }}</td>
-                                {% elif f == 'balance' %}
-                                    {# Workaround to accumulate a value #}
-                                    {% if accumulator.append(accumulator.pop() + t.amount) %}{% endif %}
-                                    <td class="text-right">{{ util.currency(accumulator[-1]) }}</td>
-                                {% endif %}
-                            {% endfor %}
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="{{ fields|length }}">
-                                <span class="text-muted">
-                                    No transactions matched
-                                </span>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                    {{ _balance(fields, balance) }}
+                    {{ _data(fields, transactions, balance) }}
                 </tbody>
             </table>
         </div>
