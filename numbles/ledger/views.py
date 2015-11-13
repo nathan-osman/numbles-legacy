@@ -6,9 +6,9 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import make_aware, now
 
-from numbles.ledger.forms import DeleteAccountForm, DeleteTransactionForm, \
+from numbles.ledger.forms import AttachForm, DeleteForm, \
     EditAccountForm, EditTransactionForm, FindTransactionForm, TransferForm
-from numbles.ledger.models import Account, Transaction
+from numbles.ledger.models import Account, Attachment, Transaction
 
 
 @login_required
@@ -71,15 +71,35 @@ def delete_account(request, id):
     """
     account = get_object_or_404(Account, pk=id, user=request.user)
     if request.method == 'POST':
-        form = DeleteAccountForm(data=request.POST)
+        form = DeleteForm(data=request.POST)
         if form.is_valid():
             account.delete()
             return redirect('home')
     else:
-        form = DeleteAccountForm()
+        form = DeleteForm()
     return render(request, 'pages/form.html', {
         'title': "Delete {}".format(account),
         'breadcrumbs': [account],
+        'form': form,
+    })
+
+
+@login_required
+def delete_attachment(request, id):
+    """
+    Delete an attachment.
+    """
+    attachment = get_object_or_404(Attachment, pk=id, transaction__user=request.user)
+    if request.method == 'POST':
+        form = DeleteForm(data=request.POST)
+        if form.is_valid():
+            attachment.delete()
+            return redirect(attachment.transaction)
+    else:
+        form = DeleteForm()
+    return render(request, 'pages/form.html', {
+        'title': "Delete {}".format(attachment),
+        'breadcrumbs': [attachment.transaction.account, attachment.transaction],
         'form': form,
     })
 
@@ -195,18 +215,39 @@ def view_transaction(request, id):
 
 
 @login_required
+def attach(request, id):
+    """
+    Attach a file to a transaction.
+    """
+    transaction = get_object_or_404(Transaction, pk=id, user=request.user)
+    if request.method == 'POST':
+        form = AttachForm(data=request.POST, files=request.FILES)
+        if form.is_valid():
+            a = form.save(commit=False)
+            a.transaction = transaction
+            a.save()
+            return redirect(transaction)
+    else:
+        form = AttachForm()
+    return render(request, 'pages/form.html', {
+        'title': "Attach File to {}".format(transaction),
+        'form': form,
+    })
+
+
+@login_required
 def delete_transaction(request, id):
     """
     Delete a transaction.
     """
     transaction = get_object_or_404(Transaction, pk=id, user=request.user)
     if request.method == 'POST':
-        form = DeleteTransactionForm(data=request.POST)
+        form = DeleteForm(data=request.POST)
         if form.is_valid():
             transaction.delete()
             return redirect(transaction.account)
     else:
-        form = DeleteTransactionForm()
+        form = DeleteForm()
     return render(request, 'pages/form.html', {
         'title': "Delete {}".format(transaction),
         'breadcrumbs': [transaction.account, transaction],

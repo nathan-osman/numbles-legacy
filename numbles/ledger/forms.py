@@ -1,6 +1,6 @@
 from django import forms
 
-from numbles.ledger.models import Account, Transaction
+from numbles.ledger.models import Account, Attachment, Transaction
 
 
 class EditAccountForm(forms.ModelForm):
@@ -10,9 +10,9 @@ class EditAccountForm(forms.ModelForm):
         fields = ('name', 'active', 'include_in_balance')
 
 
-class DeleteAccountForm(forms.Form):
+class DeleteForm(forms.Form):
 
-    confirm = forms.BooleanField(label="I confirm that I wish to delete this account (cannot be undone).")
+    confirm = forms.BooleanField(label="I confirm that I wish to delete this object (cannot be undone).")
 
 
 class EditTransactionForm(forms.ModelForm):
@@ -65,6 +65,8 @@ class TransferForm(forms.Form):
         return cleaned_data
 
 
-class DeleteTransactionForm(forms.Form):
+class AttachForm(forms.ModelForm):
 
-    confirm = forms.BooleanField(label="I confirm that I wish to delete this transaction (cannot be undone).")
+    class Meta:
+        model = Attachment
+        fields = ('summary', 'file')
