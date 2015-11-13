@@ -17,10 +17,7 @@
         <p>{{ request.user.get_full_name() or request.user.username }}</p>
         <p class="text-muted">
             Balance:
-            [TODO]
-            {#
-            <strong>{{ util.currency(request.user.total.balance) }}</strong>
-            #}
+            <strong>{{ util.currency(request.user.accounts.filter(include_in_balance=true).sum()) }}</strong>
         </p>
     </div>
 </div>

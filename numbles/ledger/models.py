@@ -19,6 +19,19 @@ class UpdateMixin(object):
     """
 
 
+class AccountQuerySet(models.QuerySet):
+    """
+    Provides custom methods for account queries.
+    """
+
+    def sum(self):
+        """
+        Calculate the sum of account balances in the query set.
+        """
+        return self.aggregate(sum=models.Sum('balance'))['sum'] or Decimal('0.00')
+    sum.queryset_only = True
+
+
 class Account(models.Model):
     """
     A distinct set of transactions, typically associated with a physical
@@ -36,6 +49,8 @@ class Account(models.Model):
 
     active = models.BooleanField(default=True)
     include_in_balance = models.BooleanField(default=False)
+
+    objects = AccountQuerySet.as_manager()
 
     class Meta:
         ordering = ('-balance', 'name')
