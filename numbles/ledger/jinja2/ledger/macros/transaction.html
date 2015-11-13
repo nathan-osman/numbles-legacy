@@ -60,7 +60,9 @@
         <tr>
             {% for f in fields %}
                 {% if f == 'date' %}
-                    <td>{{ localtime(t.date) }}</td>
+                    <td class="text-nowrap">
+                        {{ localtime(t.date) }}
+                    </td>
                 {% elif f == 'account' %}
                     <td>
                         <a href="{{ t.account.get_absolute_url() }}">
