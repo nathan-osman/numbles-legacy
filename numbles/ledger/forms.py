@@ -23,15 +23,19 @@ class EditTransactionForm(forms.ModelForm):
 
     def __init__(self, user, *args, **kwargs):
         super(EditTransactionForm, self).__init__(*args, **kwargs)
-        self.fields['account'].queryset = Account.objects.filter(user=user)
+        self.fields['account'].queryset = user.accounts.all()
 
 
 class FindTransactionForm(forms.Form):
     """
     Search form displayed in the sidebar and on the search page.
     """
-
+    account = forms.ModelChoiceField(None, required=False, empty_label="(Any)")
     query = forms.CharField()
+
+    def __init__(self, user, *args, **kwargs):
+        super(FindTransactionForm, self).__init__(*args, **kwargs)
+        self.fields['account'].queryset = user.accounts.all()
 
 
 class TransferForm(forms.Form):
@@ -48,8 +52,8 @@ class TransferForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         super(TransferForm, self).__init__(*args, **kwargs)
-        self.fields['from_account'].queryset = Account.objects.filter(user=user)
-        self.fields['to_account'].queryset = Account.objects.filter(user=user)
+        self.fields['from_account'].queryset = user.accounts.all()
+        self.fields['to_account'].queryset = user.accounts.all()
 
     def clean(self):
         cleaned_data = super(TransferForm, self).clean()

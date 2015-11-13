@@ -117,15 +117,19 @@ def find_transaction(request):
     """
     transactions = None
     if request.method == 'POST':
-        form = FindTransactionForm(data=request.POST)
+        form = FindTransactionForm(request.user, data=request.POST)
         if form.is_valid():
+            filters = {'user': request.user}
+            account = form.cleaned_data['account']
+            if account is not None:
+                filters['account'] = account
             q = form.cleaned_data['query']
             transactions = Transaction.objects.filter(
                 Q(summary__icontains=q) | Q(description__icontains=q),
-                user=request.user,
+                **filters
             )
     else:
-        form = FindTransactionForm()
+        form = FindTransactionForm(request.user)
     return render(request, 'ledger/pages/find_transaction.html', {
         'title': "Find Transaction",
         'form': form,
