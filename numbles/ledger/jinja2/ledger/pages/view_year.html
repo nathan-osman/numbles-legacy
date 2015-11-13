@@ -1,7 +1,0 @@
-{% extends 'base.html' %}
-
-{% import 'ledger/macros/transaction.html' as transaction %}
-
-{% block content %}
-    {{ transaction.list(transactions, fields=('date', 'account', 'summary', 'reconciled', 'amount', 'balance'), balance=balance) }}
-{% endblock %}

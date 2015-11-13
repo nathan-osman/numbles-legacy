@@ -46,7 +46,7 @@ def view_account(request, id):
     for m in range(1, n.month + 1):
         q = Transaction.month(n.year, m, account=account)
         months.append((m, Transaction.sum(q)))
-    return render(request, 'ledger/pages/account_view.html', {
+    return render(request, 'ledger/pages/view_account.html', {
         'title': account,
         'account': account,
         'months': months,
@@ -115,7 +115,7 @@ def find_transaction(request):
             )
     else:
         form = FindTransactionForm()
-    return render(request, 'pages/form.html', {
+    return render(request, 'ledger/pages/find_transaction.html', {
         'title': "Find Transaction",
         'form': form,
         'transactions': transactions,
@@ -169,7 +169,7 @@ def view_transaction(request, id):
     View transaction information.
     """
     transaction = get_object_or_404(Transaction, pk=id, user=request.user)
-    return render(request, 'ledger/pages/transaction_view.html', {
+    return render(request, 'ledger/pages/view_transaction.html', {
         'title': transaction,
         'breadcrumbs': [transaction.account],
         'transaction': transaction,
