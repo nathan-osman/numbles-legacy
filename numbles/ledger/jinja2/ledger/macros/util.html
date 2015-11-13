@@ -1,5 +1,5 @@
 {##
- # Format a decimal value as currency
+ # Format a decimal value as currency.
  #   value - decimal to format
  #   color - true to display values in color
  #}
@@ -13,4 +13,14 @@
     {% if color and value != 0 %}
         </span>
     {% endif %}
+{% endmacro %}
+
+{##
+ # Display a tag.
+ #   tag_ - tag to display
+ #}
+{% macro tag(tag) %}
+    <span class="tag" style="background-color: {{ tag.color }}">
+        {{ tag }}
+    </span>
 {% endmacro %}

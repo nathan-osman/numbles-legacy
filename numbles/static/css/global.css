@@ -13,3 +13,6 @@ body {
 .small-box p { margin-bottom: 0; }
 .small-box .icon { font-size: 48px; top: 0; }
 .small-box:hover .icon { font-size: 56px; }
+
+/* Make tags look fancy */
+.tag { color: white; padding: 0 8px; }

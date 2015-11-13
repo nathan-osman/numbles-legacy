@@ -57,6 +57,18 @@
                             {% endif %}
                         </td>
                     </tr>
+                    <tr>
+                        <th>Tags:</th>
+                        <td>
+                            {% for t in transaction.tags.all() %}
+                                {{ util.tag(t) }}
+                            {% else %}
+                                <span class="text-muted">
+                                    No tags
+                                </span>
+                            {% endfor %}
+                        </td>
+                    </tr>
                 </table>
             {% endcall %}
         </div>

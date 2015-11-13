@@ -70,6 +70,31 @@ class Account(models.Model):
         return ('ledger:view_account', (), {'id': self.id})
 
 
+class Tag(models.Model):
+    """
+    Category or "grouping" for transactions.
+    """
+
+    COLORS = (
+        ('#773333', "Red"),
+        ('#337733', "Green"),
+        ('#333377', "Blue"),
+        ('#777733', "Yellow"),
+        ('#773377', "Magenta"),
+        ('#337777', "Cyan"),
+    )
+
+    user = models.ForeignKey(User, related_name='tags')
+    name = models.CharField(max_length=20, help_text="Descriptive name")
+    color = models.CharField(max_length=7, choices=COLORS, help_text="Background color")
+
+    class Meta:
+        ordering = ('name',)
+
+    def __unicode__(self):
+        return self.name
+
+
 class TransactionQuerySet(models.QuerySet):
     """
     Provides custom methods for transaction queries.
@@ -102,6 +127,7 @@ class Transaction(models.Model):
     )
 
     reconciled = models.BooleanField(default=False)
+    tags = models.ManyToManyField(Tag, related_name='transactions')
 
     linked = models.ForeignKey('self', null=True, blank=True)
 
