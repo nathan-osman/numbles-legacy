@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
 {% import 'ledger/macros/transaction.html' as transaction %}
+{% import 'macros/form.html' as form_ with context %}
+{% import 'macros/ui.html' as ui %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-6">
-            {{ transaction.list(transactions, title='Transactions', fields=('date', 'account', 'summary', 'amount')) }}
+            {% call form_.form(form) %}
+                {% set submit = form_.submit(title='Submit', icon='check') %}
+                {% call ui.box(title='Filter', icon='filter', buttons=(submit,)) %}
+                    {{ form_.fields(form) }}
+                {% endcall %}
+            {% endcall %}
+            {{ transaction.list(transactions, title='Matched Transactions', fields=('date', 'account', 'summary', 'amount')) }}
         </div>
     </div>
 {% endblock %}
