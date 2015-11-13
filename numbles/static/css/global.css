@@ -15,4 +15,4 @@ body {
 .small-box:hover .icon { font-size: 56px; }
 
 /* Make tags look fancy */
-.tag { color: white; padding: 0 8px; }
+.tag { border-radius: 3px; color: white; margin-right: 4px; padding: 0 8px; }
