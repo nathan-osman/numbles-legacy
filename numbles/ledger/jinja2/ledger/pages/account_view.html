@@ -28,9 +28,9 @@
         $(function() {
 
             // Build an array of totals for the months
-            var totals = [
-                {% for t in totals %}
-                    {{ t }},
+            var months = [
+                {% for m in months %}
+                    [{{ m[0] }}, {{ m[1] }}],
                 {% endfor %}
             ];
 
@@ -50,18 +50,6 @@
                 'December'
             ];
 
-            // Generate the list of names for the previous 12 months
-            function monthList() {
-                months = [];
-                for(var i = {{ month }}; i < 12; ++i) {
-                    months.push(i);
-                }
-                for(var i = 0; i < {{ month }}; ++i) {
-                    months.push(i);
-                }
-                return months;
-            }
-
             // Format a currency value
             function formatCurrency(val) {
                 return ((val < 0) ? '-' : '') + '$' + Math.abs(val);
@@ -79,8 +67,8 @@
                     text: 'Income by Month'
                 },
                 xAxis: {
-                    categories: $.map(monthList(), function(i) {
-                        return monthNames[i];
+                    categories: $.map(months, function(m) {
+                        return monthNames[m[0] - 1];
                     })
                 },
                 yAxis: {
@@ -94,8 +82,8 @@
                     }
                 },
                 series: [{
-                    data: $.map(monthList(), function(i) {
-                        return totals[i];
+                    data: $.map(months, function(m) {
+                        return m[1];
                     }),
                     showInLegend: false
                 }],
