@@ -5,11 +5,11 @@
  #}
 {% macro currency(value, color=true) %}
     {% if color and value < 0 %}
-        <span class="text-danger">-
+        <span class="text-danger text-nowrap">-
     {% elif color and value > 0 %}
         <span class="text-success">
     {% endif %}
-    ${{ value|abs }}
+    {{ '${:,}'.format(value|abs) }}
     {% if color and value != 0 %}
         </span>
     {% endif %}
