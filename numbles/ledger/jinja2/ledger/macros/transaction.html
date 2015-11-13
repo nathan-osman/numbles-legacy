@@ -38,6 +38,21 @@
                 </thead>
                 <tbody>
                     {% set accumulator = [balance] %}
+                    {% if 'summary' in fields and 'balance' in fields %}
+                        <tr>
+                            {% for f in fields %}
+                                {% if f == 'summary' %}
+                                    <td>Balance Forward</td>
+                                {% elif f == 'balance' %}
+                                    <td class="text-right">
+                                        {{ util.currency(balance) }}
+                                    </td>
+                                {% else %}
+                                    <td></td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endif %}
                     {% for t in transactions %}
                         <tr>
                             {% for f in fields %}
