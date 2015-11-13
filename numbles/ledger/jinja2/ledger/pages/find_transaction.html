@@ -6,14 +6,18 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-4">
             {% call form_.form(form) %}
                 {% set submit = form_.submit(title='Submit', icon='check') %}
                 {% call ui.box(title='Filter', icon='filter', buttons=(submit,)) %}
                     {{ form_.fields(form) }}
                 {% endcall %}
             {% endcall %}
-            {{ transaction.list(transactions, title='Matched Transactions', fields=('date', 'account', 'summary', 'amount')) }}
         </div>
+        {% if transactions %}
+            <div class="col-md-8">
+                {{ transaction.list(transactions, title='Matched Transactions', fields=('date', 'account', 'summary', 'amount')) }}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
