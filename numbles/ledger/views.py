@@ -123,6 +123,9 @@ def find_transaction(request):
             account = form.cleaned_data['account']
             if account is not None:
                 filters['account'] = account
+            tag = form.cleaned_data['tag']
+            if tag is not None:
+                filters['tags'] = tag
             q = form.cleaned_data['query']
             transactions = Transaction.objects.filter(
                 Q(summary__icontains=q) | Q(description__icontains=q),
