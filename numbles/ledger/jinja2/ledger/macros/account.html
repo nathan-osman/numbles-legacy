@@ -8,8 +8,8 @@
  #   fields - list of fields to display
  #}
 {% macro list(accounts, title='Accounts', fields=('name', 'balance')) %}
-    {% set add = ui.button(title='Add Account', icon='plus', url=url('ledger:add_account')) %}
-    {% call ui.box(title=title, icon='bank', buttons=(add,)) %}
+    {% set new = ui.button(title='New Account', icon='plus', url=url('ledger:new_account')) %}
+    {% call ui.box(title=title, icon='bank', buttons=(new,)) %}
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>

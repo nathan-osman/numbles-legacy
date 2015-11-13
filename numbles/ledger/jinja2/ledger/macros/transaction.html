@@ -9,8 +9,8 @@
  #   balance - starting balance
  #}
 {% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), balance=0) %}
-    {% set add = ui.button(title='Add Transaction', icon='plus', url=url('ledger:add_transaction')) %}
-    {% call ui.box(title=title, icon='credit-card', buttons=(add,)) %}
+    {% set new = ui.button(title='New Transaction', icon='plus', url=url('ledger:new_transaction')) %}
+    {% call ui.box(title=title, icon='credit-card', buttons=(new,)) %}
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>
