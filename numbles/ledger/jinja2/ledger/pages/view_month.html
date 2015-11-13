@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 
 {% import 'ledger/macros/transaction.html' as transaction %}
+{% import 'macros/ui.html' as ui %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-6">
-            {{ transaction.list(transactions, balance=balance) }}
+            {% set prev = ui.button(title='Previous', icon='arrow-left', url=url('ledger:view_month', args=prev_month)) %}
+            {% set next = ui.button(title='Next', icon='arrow-right', url=url('ledger:view_month', args=next_month), right=true, icon_right=true) %}
+            {{ transaction.list(transactions, buttons=(prev, next), balance=balance) }}
         </div>
     </div>
 {% endblock %}

@@ -195,6 +195,18 @@ def delete_transaction(request, id):
     })
 
 
+def adjust_month(year, month, offset):
+    """
+    Given a year and month, add the specified offset and return a tuple in the
+    form (year, month). The algorithm is a bit complicated because month
+    indices begin at 1 instead of 0.
+    """
+    month += offset - 1
+    year += month / 12
+    month = month % 12 + 1
+    return (year, month)
+
+
 @login_required
 def view_month(request, year, month):
     """
@@ -208,4 +220,6 @@ def view_month(request, year, month):
         'title': start.strftime('%B %Y'),
         'transactions': transactions,
         'balance': balance,
+        'prev_month': adjust_month(year, month, -1),
+        'next_month': adjust_month(year, month, 1),
     })
