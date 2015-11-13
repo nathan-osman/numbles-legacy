@@ -30,7 +30,7 @@
                     {% if transaction.description %}
                         <tr>
                             <th>Description:</th>
-                            <td>{{ transaction.description }}</td>
+                            <td>{{ linebreaksbr(transaction.description) }}</td>
                         </tr>
                     {% endif %}
                     <tr>
