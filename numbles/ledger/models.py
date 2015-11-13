@@ -1,8 +1,10 @@
+from datetime import datetime
 from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.db import models
 from django.dispatch import receiver
+from django.utils.timezone import make_aware
 
 
 # TODO: this should be a configurable setting
@@ -79,6 +81,23 @@ class Transaction(models.Model):
 
     def __unicode__(self):
         return self.summary
+
+    @classmethod
+    def month(cls, year, month, **kwargs):
+        """
+        Create a queryset for all transactions within the specified month.
+        Additional filters can be supplied in order to filter results.
+        """
+        start = make_aware(datetime(year, month, 1))
+        end = make_aware(datetime(year + month / 12, month % 12 + 1, 1))
+        return cls.objects.filter(date__gte=start, date__lt=end, **kwargs)
+
+    @classmethod
+    def sum(cls, q):
+        """
+        Calculate the sum of a queryset.
+        """
+        return q.aggregate(sum=models.Sum('amount'))['sum'] or Decimal('0.00')
 
     @models.permalink
     def get_absolute_url(self):

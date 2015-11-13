@@ -26,7 +26,15 @@ class EditTransactionForm(forms.ModelForm):
         self.fields['account'].queryset = Account.objects.filter(user=user)
 
 
-class TransferBetweenAccountsForm(forms.Form):
+class FindTransactionForm(forms.Form):
+    """
+    Search form displayed in the sidebar and on the search page.
+    """
+
+    query = forms.CharField()
+
+
+class TransferForm(forms.Form):
 
     from_account = forms.ModelChoiceField(None)
     to_account = forms.ModelChoiceField(None)
@@ -39,12 +47,12 @@ class TransferBetweenAccountsForm(forms.Form):
     )
 
     def __init__(self, user, *args, **kwargs):
-        super(TransferBetweenAccountsForm, self).__init__(*args, **kwargs)
+        super(TransferForm, self).__init__(*args, **kwargs)
         self.fields['from_account'].queryset = Account.objects.filter(user=user)
         self.fields['to_account'].queryset = Account.objects.filter(user=user)
 
     def clean(self):
-        cleaned_data = super(TransferBetweenAccountsForm, self).clean()
+        cleaned_data = super(TransferForm, self).clean()
         if 'from_account' in cleaned_data and 'to_account' in cleaned_data and \
                 cleaned_data['from_account'] == cleaned_data['to_account']:
             raise forms.ValidationError("You must select two different accounts.")
@@ -54,24 +62,3 @@ class TransferBetweenAccountsForm(forms.Form):
 class DeleteTransactionForm(forms.Form):
 
     confirm = forms.BooleanField(label="I confirm that I wish to delete this transaction (cannot be undone).")
-
-
-class SearchForm(forms.Form):
-    """
-    Search form displayed in the sidebar and on the search page.
-    """
-
-    query = forms.CharField()
-
-    min_amount = forms.DecimalField(
-        required=False,
-        max_digits=9,
-        decimal_places=2,
-        label="Minimum amount of transaction",
-    )
-    max_amount = forms.DecimalField(
-        required=False,
-        max_digits=9,
-        decimal_places=2,
-        label="Maximum amount of transaction",
-    )
