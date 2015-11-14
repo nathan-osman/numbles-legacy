@@ -6,7 +6,7 @@
  #}
 {% macro list(transaction) %}
     {% if transaction.attachments.count() %}
-        <table class="table table-condensed table-noborder table-striped">
+        <table class="table table-condensed table-striped">
             {% for a in transaction.attachments.all() %}
                 <tr>
                     <td>
@@ -27,5 +27,5 @@
         </span>
         <br><br>
     {% endif %}
-    {{ ui.button(title='Add attachment', icon='plus', url=url('ledger:attach', args=(transaction.id,))) }}
+    {{ ui.button(title='Add attachment', icon='plus', url=url('ledger:attach', args=(transaction.id,)), size='xs') }}
 {% endmacro %}
