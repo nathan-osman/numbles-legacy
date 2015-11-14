@@ -1,0 +1,31 @@
+{% import 'macros/ui.html' as ui %}
+
+{##
+ # Display a list of attachments.
+ #   transaction - transaction to display attachments for
+ #}
+{% macro list(transaction) %}
+    {% if transaction.attachments.count() %}
+        <table class="table table-condensed table-noborder table-striped">
+            {% for a in transaction.attachments.all() %}
+                <tr>
+                    <td>
+                        <a href="{{ a.file.url }}" target="_blank">
+                            <span class="fa fa-file"></span>
+                            {{ a.summary }} ({{ basename(a.file.name) }})
+                        </a>
+                    </td>
+                    <td class="text-right">
+                        {{ ui.button(title='Delete', icon='trash', url=url('ledger:delete_attachment', args=(a.id,)), size='xs') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span class="text-muted">
+            No attachments.
+        </span>
+        <br><br>
+    {% endif %}
+    {{ ui.button(title='Add attachment', icon='plus', url=url('ledger:attach', args=(transaction.id,))) }}
+{% endmacro %}

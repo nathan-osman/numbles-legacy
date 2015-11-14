@@ -73,24 +73,7 @@
                     <tr>
                         <th>Attachments:</th>
                         <td>
-                            {% for a in transaction.attachments.all()  %}
-                                <a href="{{ a.file.url }}" target="_blank">
-                                    <span class="fa fa-file"></span>
-                                    {{ a.summary }} ({{ basename(a.file.name) }})
-                                </a>
-                                &mdash;
-                                <a href="{{ url('ledger:delete_attachment', args=(a.id,)) }}">
-                                    [delete]
-                                </a>
-                                <br>
-                            {% else %}
-                                <span class="text-muted">
-                                    No attachments
-                                </span>
-                                <br>
-                            {% endfor %}
-                            <br>
-                            {{ ui.button(title='Add attachment', icon='plus', url=url('ledger:attach', args=(transaction.id,))) }}
+                            {{ attachment.list(transaction) }}
                         </td>
                     </tr>
                 </table>
