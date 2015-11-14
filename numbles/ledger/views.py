@@ -77,10 +77,11 @@ def delete_account(request, id):
             return redirect('home')
     else:
         form = DeleteForm()
-    return render(request, 'pages/form.html', {
+    return render(request, 'ledger/pages/delete.html', {
         'title': "Delete {}".format(account),
         'breadcrumbs': [account],
         'form': form,
+        'related': account.transactions.all(),
     })
 
 
@@ -248,10 +249,11 @@ def delete_transaction(request, id):
             return redirect(transaction.account)
     else:
         form = DeleteForm()
-    return render(request, 'pages/form.html', {
+    return render(request, 'ledger/pages/delete.html', {
         'title': "Delete {}".format(transaction),
         'breadcrumbs': [transaction.account, transaction],
         'form': form,
+        'related': (transaction.linked,) if transaction.linked else (),
     })
 
 

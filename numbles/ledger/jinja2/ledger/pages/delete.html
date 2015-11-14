@@ -1,0 +1,31 @@
+{% extends 'pages/form.html' %}
+
+{% block content %}
+    {% if related|count %}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="alert alert-danger">
+                    <p>
+                        <strong>Warning!</strong>
+                        The following related objects will also be deleted:
+                    </p>
+                    <br>
+                    <ul>
+                        {% for o in related[:4] %}
+                            <li>
+                                <a href="{{ o.get_absolute_url() }}">
+                                    {{ o }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                        {% if related|count > 4 %}
+                            <li>...</li>
+                            <li>&amp; {{ related|count - 4 }} more</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    {{ super() }}
+{% endblock %}
