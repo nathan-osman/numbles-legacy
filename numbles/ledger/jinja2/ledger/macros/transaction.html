@@ -4,23 +4,41 @@
 {##
  # Display table header.
  #   fields - list of fields to display
+ #   request - enable sorting
  #}
-{% macro _header(fields) %}
+{% macro _header(fields, request) %}
     <tr>
         {% for f in fields %}
-            {% if f == 'date' %}
-                <th>Date / Time</th>
-            {% elif f == 'account' %}
-                <th>Account</th>
-            {% elif f == 'summary' %}
-                <th>Summary</th>
-            {% elif f == 'reconciled' %}
-                <th class="text-center">Reconciled?</th>
-            {% elif f == 'amount' %}
-                <th class="text-right">Amount</th>
-            {% elif f == 'balance' %}
-                <th class="text-right">Balance</th>
+            {% if f == 'reconciled' %}
+                <th class="text-center">
+            {% elif f in ('date', 'account', 'summary') %}
+                <th>
+            {% elif f in ('amount', 'balance') %}
+                <th class="text-right">
             {% endif %}
+            {% if request is not none %}
+                <a href="{{ request.path }}?{{ qs(request, sort=f) }}">
+            {% endif %}
+            {% if f == 'date' %}
+                Date / Time
+            {% elif f == 'account' %}
+                Account
+            {% elif f == 'summary' %}
+                Summary
+            {% elif f == 'reconciled' %}
+                Reconciled?
+            {% elif f == 'amount' %}
+                Amount
+            {% elif f == 'balance' %}
+                Balance
+            {% endif %}
+            {% if request is not none %}
+                {% if f == request.GET.get('sort', '') %}
+                    <span class="fa fa-sort"></span>
+                {% endif %}
+                </a>
+            {% endif %}
+            </th>
         {% endfor %}
     </tr>
 {% endmacro %}
@@ -115,17 +133,24 @@
  #   fields - list of fields to display
  #   buttons - list of buttons to display
  #   balance - starting balance
+ #   request - enable sorting
  #}
-{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=0) %}
+{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=0, request=none) %}
     {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>
-                    {{ _header(fields) }}
+                    {{ _header(fields, request) }}
                 </thead>
                 <tbody>
                     {{ _balance(fields, balance) }}
-                    {{ _data(fields, transactions, balance) }}
+                    {% set t = transactions %}
+                    {% if request is not none %}
+                        {% if 'sort' in request.GET %}
+                            {% set t = transactions.order_by(request.GET['sort']) %}
+                        {% endif %}
+                    {% endif %}
+                    {{ _data(fields, t, balance) }}
                 </tbody>
             </table>
         </div>
