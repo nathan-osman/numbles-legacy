@@ -2,6 +2,7 @@
 
 {% import 'ledger/macros/account.html' as account %}
 {% import 'ledger/macros/transaction.html' as transaction %}
+{% import 'macros/ui.html' as ui %}
 
 {##
  # Dashboard page presenting a summary of user information
@@ -15,8 +16,10 @@
         <div class="col-sm-4">
             {{ account.list(request.user.accounts.all(), title='Active Accounts', fields=('name', 'active', 'balance')) }}
         </div>
-        <div class="col-sm-6">
-            {{ transaction.list(request.user.transactions.all().order_by('-date')[:6], title='Recent Transactions', fields=('date', 'account', 'summary', 'amount')) }}
+        <div class="col-sm-8">
+            {% set n = now() %}
+            {% set view = ui.button(title='View Transactions', icon='list', url=url('ledger:view_month', args=(n.year, n.month))) %}
+            {{ transaction.list(request.user.transactions.all().order_by('-date')[:6], title='Recent Transactions', fields=('date', 'account', 'summary', 'amount'), buttons=(transaction.new, view)) }}
         </div>
     </div>
 {% endblock %}
