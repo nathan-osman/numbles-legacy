@@ -7,7 +7,7 @@
 {% block content %}
     <div class="row">
         <div class="col-md-4">
-            {% call form_.form(form) %}
+            {% call form_.form(form, method='get') %}
                 {% set submit = form_.submit(title='Submit', icon='check') %}
                 {% call ui.box(title='Filter', icon='filter', buttons=(submit,)) %}
                     {{ form_.fields(form) }}
@@ -16,7 +16,7 @@
         </div>
         {% if transactions is not none %}
             <div class="col-md-8">
-                {{ transaction.list(transactions, title='Matched Transactions', fields=('date', 'account', 'summary', 'amount')) }}
+                {{ transaction.list(transactions, title='Matched Transactions', fields=('date', 'account', 'summary', 'amount'), request=request) }}
             </div>
         {% endif %}
     </div>

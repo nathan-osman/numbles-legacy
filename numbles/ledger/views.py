@@ -3,7 +3,6 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
-from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import make_aware, now
 
@@ -138,8 +137,8 @@ def find_transaction(request):
     Find a transaction.
     """
     transactions = None
-    if request.method == 'POST':
-        form = FindTransactionForm(request.user, data=request.POST)
+    if 'query' in request.GET:
+        form = FindTransactionForm(request.user, data=request.GET)
         if form.is_valid():
             filters = {'user': request.user}
             account = form.cleaned_data['account']
