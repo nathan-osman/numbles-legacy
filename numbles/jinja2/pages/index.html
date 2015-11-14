@@ -12,8 +12,8 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-sm-6">
-            {{ account.list(request.user.accounts.all(), title='Active Accounts') }}
+        <div class="col-sm-4">
+            {{ account.list(request.user.accounts.all(), title='Active Accounts', fields=('name', 'active', 'balance')) }}
         </div>
         <div class="col-sm-6">
             {{ transaction.list(request.user.transactions.all().order_by('-date')[:6], title='Recent Transactions', fields=('date', 'account', 'summary', 'amount')) }}

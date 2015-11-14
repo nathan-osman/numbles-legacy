@@ -17,6 +17,8 @@
                         {% for f in fields %}
                             {% if f == 'name' %}
                                 <th>Name</th>
+                            {% elif f == 'active' %}
+                                <th class="text-center">Active?</th>
                             {% elif f == 'balance' %}
                                 <th class="text-right">Balance</th>
                             {% endif %}
@@ -32,6 +34,14 @@
                                         <a href="{{ a.get_absolute_url() }}">
                                             {{ a.name }}
                                         </a>
+                                    </td>
+                                {% elif f == 'active' %}
+                                    <td class="text-center">
+                                        {% if a.active %}
+                                            <span class="fa fa-check text-success"></span>
+                                        {% else %}
+                                            <span class="fa fa-times text-danger"></span>
+                                        {% endif %}
                                     </td>
                                 {% elif f == 'balance' %}
                                     <td class="text-right">{{ util.currency(a.balance) }}</td>
