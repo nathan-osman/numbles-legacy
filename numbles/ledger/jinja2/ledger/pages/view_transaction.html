@@ -2,6 +2,7 @@
 
 {% import 'ledger/macros/attachment.html' as attachment %}
 {% import 'ledger/macros/util.html' as util %}
+{% import 'macros/form.html' as form_ with context %}
 {% import 'macros/ui.html' as ui %}
 
 {% block content %}
@@ -37,15 +38,20 @@
                     <tr>
                         <th>Linked:</th>
                         <td>
-                            {% if transaction.linked %}
-                                <a href="{{ transaction.linked.get_absolute_url() }}">
-                                    {{ transaction.linked }}
-                                </a>
-                            {% else %}
-                                <span class="text-muted">
-                                    No linked transaction
-                                </span>
-                            {% endif %}
+                            <div>
+                                {% if transaction.linked %}
+                                    {% call form_.form(action=url('ledger:unlink', args=(transaction.id,))) %}
+                                        {{ ui.button(title='Unlink', icon='chain-broken', size='xs', submit=true, right=true) }}
+                                    {% endcall %}
+                                    <a href="{{ transaction.linked.get_absolute_url() }}">
+                                        {{ transaction.linked }}
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted">
+                                        No linked transaction
+                                    </span>
+                                {% endif %}
+                            </div>
                         </td>
                     </tr>
                     <tr>

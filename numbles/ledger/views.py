@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 from django.utils.timezone import make_aware, now
 
 from numbles.ledger.forms import AttachForm, DeleteForm, \
@@ -215,6 +216,25 @@ def view_transaction(request, id):
         'breadcrumbs': [transaction.account],
         'transaction': transaction,
     })
+
+
+@login_required
+def link(request, id):
+    """
+    Link a transaction.
+    """
+
+
+@login_required
+@require_POST
+def unlink(request, id):
+    """
+    Unlink a transaction
+    """
+    transaction = get_object_or_404(Transaction, pk=id, user=request.user)
+    transaction.linked = None
+    transaction.save()
+    return redirect(transaction)
 
 
 @login_required
