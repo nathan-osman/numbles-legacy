@@ -14,7 +14,7 @@
                 {% endcall %}
             {% endcall %}
         </div>
-        {% if transactions %}
+        {% if transactions is not none %}
             <div class="col-md-8">
                 {{ transaction.list(transactions, title='Matched Transactions', fields=('date', 'account', 'summary', 'amount')) }}
             </div>

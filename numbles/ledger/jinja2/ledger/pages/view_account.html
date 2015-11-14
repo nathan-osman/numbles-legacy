@@ -9,17 +9,17 @@
         <div id="container" style="width:100%; height:200px;"></div>
     </div>
     <div class="row">
-        <div class="col-md-6">
-            {% set new = ui.button(title='New Transaction', icon='plus', url="{}?account={}".format(url('ledger:new_transaction'), account.id)) %}
-            {{ transaction.list(account.transactions.order_by('-date')[:6], title='Recent Transactions', fields=('date', 'summary', 'amount'), buttons=(new,)) }}
-        </div>
-        <div class="col-md-6">
-            {% set edit = ui.button(title='Edit Account', icon='pencil', url=url('ledger:edit_account', kwargs={'id': account.id})) %}
-            {% set delete = ui.button(title='Delete Account', icon='trash', url=url('ledger:delete_account', kwargs={'id': account.id})) %}
+        <div class="col-md-4">
+            {% set edit = ui.button(title='Edit', icon='pencil', url=url('ledger:edit_account', kwargs={'id': account.id})) %}
+            {% set delete = ui.button(title='Delete', icon='trash', url=url('ledger:delete_account', kwargs={'id': account.id})) %}
             {% call ui.box(title='Account Tools', icon='gears', buttons=(edit, delete)) %}
                 <p>Account balance:</p>
                 <h3>{{ util.currency(account.balance) }}
             {% endcall %}
+        </div>
+        <div class="col-md-8">
+            {% set new = ui.button(title='New Transaction', icon='plus', url="{}?account={}".format(url('ledger:new_transaction'), account.id)) %}
+            {{ transaction.list(account.transactions.order_by('-date')[:6], title='Recent Transactions', fields=('date', 'summary', 'amount'), buttons=(new,)) }}
         </div>
     </div>
 {% endblock %}
