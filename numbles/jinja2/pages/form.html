@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% import 'macros/form.html' as form_ with context %}
+{% import 'macros/ui.html' as ui %}
 
 {% block content %}
     <div class="row">
@@ -12,7 +13,7 @@
                 {{ form_.fields(form) }}
                 <br>
                 <p>
-                    {{ form_.submit('Submit', 'check') }}
+                    {{ ui.button(title='Submit', icon='check', submit=true) }}
                 </p>
             {% endcall %}
         </div>
