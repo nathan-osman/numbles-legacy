@@ -9,7 +9,7 @@
             {% if description %}
                 <p>{{ description }}</p>
             {% endif %}
-            {% call form_.form(form) %}
+            {% call form_.form(multipart=form.is_multipart()) %}
                 {{ form_.fields(form) }}
                 <br>
                 <p>

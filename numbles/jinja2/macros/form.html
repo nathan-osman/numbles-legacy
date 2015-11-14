@@ -1,10 +1,11 @@
 {##
  # Render a form
- #   form - form to render
+ #   action - HTTP action
  #   method - HTTP method
+ #   multipart - render a multipart form
  #}
-{% macro form(form, method='post') %}
-    <form method="{{ method }}"{% if form.is_multipart() %} enctype="multipart/form-data"{% endif %}>
+{% macro form(action='', method='post', multipart=false) %}
+    <form action="{{ action }}" method="{{ method }}"{% if multipart %} enctype="multipart/form-data"{% endif %}>
         {% if method == 'post' %}
             {{ csrf_input }}
         {% endif %}
