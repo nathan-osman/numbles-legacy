@@ -6,8 +6,10 @@
 {% block content %}
     <div class="row">
         <div class="col-md-9">
-            {% set prev = ui.button(title='Previous', icon='arrow-left', url=url('ledger:view_month', args=prev_month)) %}
-            {% set next = ui.button(title='Next', icon='arrow-right', url=url('ledger:view_month', args=next_month), right=true, icon_right=true) %}
+            {% set prev_url = '{}?{}'.format(url('ledger:view_month', args=prev_month), qs(request)) %}
+            {% set prev = ui.button(title='Previous', icon='arrow-left', url=prev_url) %}
+            {% set next_url = '{}?{}'.format(url('ledger:view_month', args=next_month), qs(request)) %}
+            {% set next = ui.button(title='Next', icon='arrow-right', url=next_url, right=true, icon_right=true) %}
             {{ transaction.list(transactions, fields=('date', 'account', 'summary', 'reconciled', 'amount', 'balance'), buttons=(prev, next), balance=balance) }}
         </div>
     </div>

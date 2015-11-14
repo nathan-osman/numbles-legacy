@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from django.db.models import Q
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import make_aware, now
 
@@ -263,20 +264,32 @@ def view_month(request, year, month):
     View transactions for a specific month.
     """
     year, month = int(year), int(month)
+    start = make_aware(datetime(year, month, 1))
+    title = start.strftime('%B %Y')
+    filters = {
+        'user': request.user,
+        'account__include_in_balance': True,
+    }
+    if 'account' in request.GET:
+        try:
+            id = int(request.GET['account'])
+        except ValueError:
+            pass
+        else:
+            account = get_object_or_404(Account, pk=id, user=request.user)
+            filters['account'] = account
+            title = "{} - {}".format(title, account)
     transactions = Transaction.month(
         year,
         month,
-        user=request.user,
-        account__include_in_balance=True,
+        **filters
     )
-    start = make_aware(datetime(year, month, 1))
     balance = Transaction.objects.filter(
-        user=request.user,
-        account__include_in_balance=True,
-        date__lt=start
+        date__lt=start,
+        **filters
     ).sum()
     return render(request, 'ledger/pages/view_month.html', {
-        'title': start.strftime('%B %Y'),
+        'title': title,
         'transactions': transactions,
         'balance': balance,
         'prev_month': adjust_month(year, month, -1),
