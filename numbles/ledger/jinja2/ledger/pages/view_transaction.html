@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
 
+{% import 'ledger/macros/attachment.html' as attachment %}
 {% import 'ledger/macros/util.html' as util %}
 {% import 'macros/ui.html' as ui %}
 
 {% block content %}
     <div class="row">
         <div class="col-md-6">
-            {% set edit = ui.button(title='Edit Transaction', icon='pencil', url=url('ledger:edit_transaction', kwargs={'id': transaction.id})) %}
-            {% set delete = ui.button(title='Delete Transaction', icon='trash', url=url('ledger:delete_transaction', kwargs={'id': transaction.id})) %}
+            {% set edit = ui.button(title='Edit', icon='pencil', url=url('ledger:edit_transaction', kwargs={'id': transaction.id})) %}
+            {% set delete = ui.button(title='Delete', icon='trash', url=url('ledger:delete_transaction', kwargs={'id': transaction.id})) %}
             {% call ui.box(title='Transaction Details', icon='info-circle', buttons=(edit, delete)) %}
                 <p>Details for the transaction are displayed below.</p>
                 <table class="table no-margin">

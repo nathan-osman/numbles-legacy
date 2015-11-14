@@ -36,11 +36,12 @@
  #   title - label displayed on the button
  #   icon - icon displayed next to the label
  #   url - target location for the button
+ #   size - button size
  #   right - float the button to the right
  #   icon_right - display the icon to the right of the title
  #}
-{% macro button(title, icon, url, right=false, icon_right=false) %}
-    {% set classes = 'btn btn-sm btn-default btn-flat' %}
+{% macro button(title, icon, url, size='sm', right=false, icon_right=false) %}
+    {% set classes = 'btn btn-' + size + ' btn-default btn-flat' %}
     {% if right %}
         {% set classes = classes + ' pull-right' %}
     {% endif %}
