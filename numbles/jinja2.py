@@ -20,7 +20,10 @@ def qs(request, **kwargs):
     and/or modifications.
     """
     get = request.GET.copy()
-    get.update(kwargs)
+    # TODO: is there an alternative to update that
+    # replaces items instead of adding to them?
+    for k, v in kwargs.items():
+        get[k] = v
     return get.urlencode()
 
 
