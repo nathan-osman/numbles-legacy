@@ -1,0 +1,19 @@
+{% if not home %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ url('home') }}">
+                Dashboard
+            </a>
+        </li>
+        {% for b in breadcrumbs %}
+            <li>
+                <a href="{{ b.get_absolute_url() }}">
+                    {{ b }}
+                </a>
+            </li>
+        {% endfor %}
+        <li class="active">
+            {{ title }}
+        </li>
+    </ol>
+{% endif %}

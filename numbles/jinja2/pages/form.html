@@ -5,6 +5,9 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-6">
+            {% if description %}
+                <p>{{ description }}</p>
+            {% endif %}
             {% call form_.form(form) %}
                 {{ form_.fields(form) }}
                 <br>

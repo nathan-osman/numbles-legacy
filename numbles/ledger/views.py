@@ -27,7 +27,7 @@ def edit_account(request, id=None):
     else:
         form = EditAccountForm(instance=account)
     return render(request, 'pages/form.html', {
-        'title': "Edit {}".format(account) if account else "New Account",
+        'title': "{} Account".format("Edit" if account else "New"),
         'breadcrumbs': [account] if account else [],
         'form': form,
     })
@@ -78,7 +78,8 @@ def delete_account(request, id):
     else:
         form = DeleteForm()
     return render(request, 'ledger/pages/delete.html', {
-        'title': "Delete {}".format(account),
+        'title': "Delete Account",
+        'description': "You are about to delete {}.".format(account),
         'breadcrumbs': [account],
         'form': form,
         'related': account.transactions.all(),
@@ -98,8 +99,9 @@ def delete_attachment(request, id):
             return redirect(attachment.transaction)
     else:
         form = DeleteForm()
-    return render(request, 'pages/form.html', {
-        'title': "Delete {}".format(attachment),
+    return render(request, 'ledger/pages/delete.html', {
+        'title': "Delete Attachment",
+        'description': "You are about to delete {}.".format(attachment),
         'breadcrumbs': [attachment.transaction.account, attachment.transaction],
         'form': form,
     })
@@ -125,7 +127,7 @@ def edit_transaction(request, id=None):
             initial['date'] = now()
         form = EditTransactionForm(request.user, instance=transaction, initial=initial)
     return render(request, 'pages/form.html', {
-        'title': "Edit {}".format(transaction) if transaction else "New Transaction",
+        'title': "{} Transaction".format("Edit" if transaction else "New"),
         'breadcrumbs': [transaction.account, transaction] if transaction else [],
         'form': form,
     })
@@ -231,7 +233,9 @@ def attach(request, id):
     else:
         form = AttachForm()
     return render(request, 'pages/form.html', {
-        'title': "Attach File to {}".format(transaction),
+        'title': "Attach File",
+        'description': "You are about to attach a file to {}.".format(transaction),
+        'breadcrumbs': [transaction.account, transaction],
         'form': form,
     })
 
@@ -250,7 +254,8 @@ def delete_transaction(request, id):
     else:
         form = DeleteForm()
     return render(request, 'ledger/pages/delete.html', {
-        'title': "Delete {}".format(transaction),
+        'title': "Delete Transaction",
+        'description': "You are about to delete {}.".format(transaction),
         'breadcrumbs': [transaction.account, transaction],
         'form': form,
         'related': (transaction.linked,) if transaction.linked else (),
