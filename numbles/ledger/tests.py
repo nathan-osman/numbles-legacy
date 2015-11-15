@@ -1,48 +1,31 @@
-from datetime import datetime
 from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.test import TestCase
-from pytz import timezone
+from django.utils.timezone import now
 
 from numbles.ledger.models import Account, Transaction
 
 
-class UtilMixin:
-    """
-    Provide a set of helper methods for generating "dummy" data.
-    """
-
-    def create_user(self, **kwargs):
-        self._n = getattr(self, '_n', 0) + 1
-        kwargs.setdefault('username', 'test{}'.format(self._n))
-        kwargs.setdefault('email', 'test@test.com')
-        kwargs.setdefault('password', 'test')
-        return User.objects.create_user(**kwargs)
-
-    def create_account(self, user, **kwargs):
-        kwargs.setdefault('user', user)
-        kwargs.setdefault('name', 'Test')
-        return Account.objects.create(**kwargs)
-
-    def create_transaction(self, user, **kwargs):
-        kwargs.setdefault('user', user)
-        kwargs.setdefault('date', datetime(2000, 1, 1, tzinfo=timezone('UTC')))
-        kwargs.setdefault('summary', 'Test')
-        kwargs.setdefault('amount', Decimal('12.99'))
-        t = Transaction()
-        for k, v in kwargs.items():
-            setattr(t, k, v)
-        t.save()
-        return t
-
-
-class TestAccountUpdate(UtilMixin, TestCase):
+class TestAccountUpdate(TestCase):
 
     def create_transaction_chain(self):
-        u = self.create_user()
-        a = self.create_account(u)
-        t = self.create_transaction(u, account=a)
+        u = User.objects.create_user(
+            username='test',
+            email='test@test.com',
+            password='test',
+        )
+        a = Account.objects.create(
+            user=u,
+            name='Test',
+        )
+        t = Transaction()
+        t.user = u
+        t.account = a
+        t.date = now()
+        t.summary = 'Test'
+        t.amount = Decimal('12.99')
+        t.save()
         return u, a, t
 
     def test_new(self):
@@ -59,3 +42,14 @@ class TestAccountUpdate(UtilMixin, TestCase):
         u, a, t = self.create_transaction_chain()
         t.delete()
         self.assertEqual(a.balance, Decimal('0.00'))
+
+    def test_change(self):
+        u, a1, t = self.create_transaction_chain()
+        a2 = Account.objects.create(
+            user=u,
+            name='Test2',
+        )
+        t.account = a2
+        t.save()
+        self.assertEqual(a1.balance, Decimal('0.00'))
+        self.assertEqual(a2.balance, t.amount)
