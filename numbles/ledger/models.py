@@ -172,8 +172,10 @@ def on_transaction_save(instance, created, **kwargs):
         if instance.original_account is not None:
             instance.original_account.adjust_balance(-instance.original_amount)
         instance.account.adjust_balance(instance.amount)
+        instance.original_account = instance.account
     else:
         instance.account.adjust_balance(instance.amount - instance.original_amount)
+    instance.original_amount = instance.amount
 
 
 @receiver(models.signals.post_delete, sender=Transaction)
