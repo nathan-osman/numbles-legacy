@@ -2,21 +2,19 @@
 
 A Django-based web application for managing personal finances.
 
+### Screenshot
+
+[![Preview](http://i.stack.imgur.com/6gmbb.jpg)](http://i.stack.imgur.com/8uObu.png)
+
 ### Requirements
 
 In order to use Numbles, you will need the following applications installed:
 
  - [Python 2.7+](http://python.org)
- - [PostgreSQL 9.1+](http://postgresql.org)
- - [Closure Compiler](https://developers.google.com/closure/compiler/)
  - [pip](https://pypi.python.org/pypi/pip)
+ - [PostgreSQL 9.1+](http://postgresql.org)
 
-You will need to adjust the `COMPRESS_CLOSURE_COMPILER_BINARY` setting if your
-environment does not provide a binary named `closure-compiler`.
-
-You will also need to install a number of Python packages.
-This can be done automatically by running the following command in the
-directory containing the source code for Numbles:
+You will also need to install a number of Python packages. This can be done automatically by running the following command in the directory containing the source code for Numbles:
 
     pip install -r requirements.txt
 
@@ -33,9 +31,8 @@ Please carefully follow the instructions below to install Numbles:
 
 3. Open `numbles/local_settings.py` and edit the settings as needed.
 
-4. Synchronize the database and perform all migrations:
+4. Perform database migrations:
 
-        ./manage.py syncdb --noinput
         ./manage.py migrate
 
 5. Create a superuser:
