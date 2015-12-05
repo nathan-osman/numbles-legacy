@@ -159,8 +159,8 @@ def on_transaction_init(instance, **kwargs):
     """
     Store the initial value of the transaction's account and amount.
     """
-    instance.original_account = getattr(instance, 'account', None)
-    instance.original_amount = getattr(instance, 'amount', None)
+    instance.original_account = instance.account if instance.id else None
+    instance.original_amount = instance.amount if instance.id else Decimal('0.00')
 
 
 @receiver(models.signals.post_save, sender=Transaction)
