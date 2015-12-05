@@ -13,6 +13,14 @@
         <a href="#" class="sidebar-toggle" data-toggle="offcanvas"></a>
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                {% if request.user.is_staff %}
+                    <li>
+                        <a href="{{ url('admin:index') }}" title="Admin">
+                            <i class="fa fa-dashboard"></i>
+                            Admin
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
                     <a href="{{ url('accounts:profile') }}" title="Profile">
                         <i class="fa fa-cog"></i>
