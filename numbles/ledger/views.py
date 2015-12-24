@@ -288,32 +288,20 @@ def view_month(request, year, month):
     View transactions for a specific month.
     """
     year, month = int(year), int(month)
-    start = make_aware(datetime(year, month, 1))
-    title = start.strftime('%B %Y')
-    filters = {
-        'user': request.user,
-        'account__include_in_balance': True,
-    }
-    if 'account' in request.GET:
-        try:
-            id = int(request.GET['account'])
-        except ValueError:
-            pass
-        else:
-            account = get_object_or_404(Account, pk=id, user=request.user)
-            filters['account'] = account
-            title = "{} - {}".format(title, account)
     transactions = Transaction.month(
         year,
         month,
-        **filters
+        user=request.user,
+        account__include_in_balance=True,
     )
+    start = make_aware(datetime(year, month, 1))
     balance = Transaction.objects.filter(
+        user=request.user,
+        account__include_in_balance=True,
         date__lt=start,
-        **filters
     ).sum()
     return render(request, 'ledger/pages/view_month.html', {
-        'title': title,
+        'title': start.strftime('%B %Y'),
         'transactions': transactions,
         'balance': balance,
         'prev_month': adjust_month(year, month, -1),
