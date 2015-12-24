@@ -8,6 +8,13 @@
 <ul class="sidebar-menu">
     <li class="header">Transactions</li>
     <li>
+        {% set n = now() %}
+        <a href="{{ url('ledger:view_month', args=(n.year, n.month)) }}">
+            <span class="fa fa-list"></span>
+            View Transactions
+        </a>
+    </li>
+    <li>
         <a href="{{ url('ledger:transfer') }}">
             <span class="fa fa-refresh"></span>
             Transfer Between Accounts
