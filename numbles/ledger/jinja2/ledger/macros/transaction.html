@@ -1,40 +1,46 @@
 {% import 'ledger/macros/util.html' as util %}
 {% import 'macros/ui.html' as ui %}
 
+{% set sort_fields = ('date', 'account', 'summary', 'reconciled', 'amount') %}
+{% set sort_orders = ('asc', 'desc') %}
+
+{% set def_sort_field = 'date' %}
+{% set def_sort_order = 'asc' %}
+
+{% set new = ui.button(title='New Transaction', icon='plus', url=url('ledger:new_transaction')) %}
+
 {##
  # Display table header.
  #   fields - list of fields to display
- #   request - enable sorting
+ #   request - request object
+ #   sortable - enable sorting
  #}
-{% macro _header(fields, request) %}
+{% macro _header(fields, request, sortable) %}
+    {% if sortable %}
+        {% set sf = param(request, 'sort', sort_fields, def_sort_field) %}
+        {% set so = param(request, 'order', sort_orders, def_sort_order) %}
+    {% endif %}
     <tr>
         {% for f in fields %}
             {% if f == 'reconciled' %}
                 <th class="text-center">
-            {% elif f in ('date', 'account', 'summary') %}
-                <th>
             {% elif f in ('amount', 'balance') %}
                 <th class="text-right">
+            {% else %}
+                <th>
             {% endif %}
-            {% if request is not none %}
-                <a href="{{ request.path }}?{{ qs(request, sort=f) }}">
+            {% if sortable and f in sort_fields %}
+                {% set o = 'desc' if sf == f and so == 'asc' else 'asc' %}
+                <a href="{{ request.path }}?{{ qs(request, sort=f, order=o) }}">
             {% endif %}
-            {% if f == 'date' %}
-                Date / Time
-            {% elif f == 'account' %}
-                Account
-            {% elif f == 'summary' %}
-                Summary
-            {% elif f == 'reconciled' %}
-                Reconciled?
-            {% elif f == 'amount' %}
-                Amount
-            {% elif f == 'balance' %}
-                Balance
-            {% endif %}
-            {% if request is not none %}
-                {% if f == request.GET.get('sort', '') %}
-                    <span class="fa fa-sort"></span>
+            {{ f|title }}
+            {% if sortable %}
+                {% if sf == f %}
+                    {% if so == 'asc' %}
+                        <span class="fa fa-sort-desc"></span>
+                    {% else %}
+                        <span class="fa fa-sort-asc"></span>
+                    {% endif %}
                 {% endif %}
                 </a>
             {% endif %}
@@ -77,7 +83,7 @@
             {% for f in fields %}
                 {% if f == 'date' %}
                     <td class="text-nowrap">
-                        {{ localtime(t.date) }}
+                        {{ localtime(t[f]) }}
                     </td>
                 {% elif f == 'account' %}
                     <td>
@@ -93,18 +99,24 @@
                     </td>
                 {% elif f == 'reconciled' %}
                     <td class="text-center">
-                        {% if t.reconciled %}
+                        {% if t[f] %}
                             <span class="fa fa-check text-success"></span>
                         {% else %}
                             <span class="fa fa-times text-danger"></span>
                         {% endif %}
                     </td>
                 {% elif f == 'amount' %}
-                    <td class="text-right">{{ util.currency(t.amount) }}</td>
+                    <td class="text-right">
+                        {{ util.currency(t.amount) }}
+                    </td>
                 {% elif f == 'balance' %}
-                    {# Workaround to accumulate a value #}
+                    {# Special workaround to accumulate a value #}
                     {% if accumulator.append(accumulator.pop() + t.amount) %}{% endif %}
-                    <td class="text-right">{{ util.currency(accumulator[-1]) }}</td>
+                    <td class="text-right">
+                        {{ util.currency(accumulator[-1]) }}
+                    </td>
+                {% else %}
+                    <td>{{ t[f] }}</td>
                 {% endif %}
             {% endfor %}
         </tr>
@@ -120,37 +132,35 @@
 {% endmacro %}
 
 {##
- # Default buttons.
- #}
-{% set new = ui.button(title='New Transaction', icon='plus', url=url('ledger:new_transaction')) %}
-
-{##
  # Display a list of transactions
  #   transactions - list or QuerySet of transactions
  #   title - text to display in the box header
  #   fields - list of fields to display
  #   buttons - list of buttons to display
  #   balance - starting balance (none to hide balance forward)
- #   request - enable sorting
+ #   request - required for sorting
+ #   sortable - enable sorting
  #}
-{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=none, request=none) %}
+{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=none, request=none, sortable=false) %}
+    {% if sortable %}
+        {% set sf = param(request, 'sort', sort_fields, def_sort_field) %}
+        {% set so = param(request, 'order', sort_orders, def_sort_order) %}
+        {% if so == 'desc' %}
+            {% set sf = "-{}".format(sf) %}
+        {% endif %}
+        {% set transactions = transactions.order_by(sf) %}
+    {% endif %}
     {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>
-                    {{ _header(fields, request) }}
+                    {{ _header(fields, request, sortable) }}
                 </thead>
                 <tbody>
                     {% if balance is not none %}
                         {{ _balance(fields, balance) }}
                     {% endif %}
-                    {% set t = transactions %}
-                    {% if request is not none %}
-                        {% if 'sort' in request.GET %}
-                            {% set t = transactions.order_by(request.GET['sort']) %}
-                        {% endif %}
-                    {% endif %}
-                    {{ _data(fields, t, balance) }}
+                    {{ _data(fields, transactions, balance) }}
                 </tbody>
             </table>
         </div>

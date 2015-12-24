@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-9">
             {% set new = ui.button(title='New Transaction', icon='plus', url="{}?account={}".format(url('ledger:new_transaction'), account.id)) %}
-            {{ transaction.list(account.transactions.all(), buttons=(new,)) }}
+            {{ transaction.list(account.transactions.all(), buttons=(new,), request=request, sortable=true) }}
         </div>
     </div>
 {% endblock %}
