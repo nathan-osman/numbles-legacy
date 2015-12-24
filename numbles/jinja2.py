@@ -14,14 +14,21 @@ from jinja2 import Environment
 from widget_tweaks.templatetags.widget_tweaks import add_class, widget_type
 
 
+def param(request, key, valid, default=None):
+    """
+    Retrieve the current sort field from the query string. Only the provided
+    fields are accepted.
+    """
+    value = request.GET.get(key, default)
+    return value if value in valid else default
+
+
 def qs(request, **kwargs):
     """
     Output the query string for the current page with the specified additions
     and/or modifications.
     """
     get = request.GET.copy()
-    # TODO: is there an alternative to update that
-    # replaces items instead of adding to them?
     for k, v in kwargs.items():
         get[k] = v
     return get.urlencode()
@@ -42,6 +49,7 @@ def environment(**kwargs):
         'localtime': lambda x: template_localtime(x).strftime('%Y-%m-%d %H:%M:%S'),
         'md5': lambda x: md5(x).hexdigest(),
         'now': now,
+        'param': param,
         'qs': qs,
         'static': staticfiles_storage.url,
         'url': reverse,
