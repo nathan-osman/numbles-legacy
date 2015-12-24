@@ -49,21 +49,19 @@
  #   balance - starting balance
  #}
 {% macro _balance(fields, balance) %}
-    {% if 'summary' in fields and 'balance' in fields %}
-        <tr>
-            {% for f in fields %}
-                {% if loop.first %}
-                    <td>Balance Forward</td>
-                {% elif f == 'balance' %}
-                    <td class="text-right">
-                        {{ util.currency(balance) }}
-                    </td>
-                {% else %}
-                    <td></td>
-                {% endif %}
-            {% endfor %}
-        </tr>
-    {% endif %}
+    <tr>
+        {% for f in fields %}
+            {% if loop.first %}
+                <td>Balance Forward</td>
+            {% elif f == 'balance' %}
+                <td class="text-right">
+                    {{ util.currency(balance) }}
+                </td>
+            {% else %}
+                <td></td>
+            {% endif %}
+        {% endfor %}
+    </tr>
 {% endmacro %}
 
 {##
@@ -73,7 +71,7 @@
  #   balance - starting balance
  #}
 {% macro _data(fields, transactions, balance) %}
-    {% set accumulator = [balance] %}
+    {% set accumulator = [balance or 0] %}
     {% for t in transactions %}
         <tr>
             {% for f in fields %}
@@ -132,10 +130,10 @@
  #   title - text to display in the box header
  #   fields - list of fields to display
  #   buttons - list of buttons to display
- #   balance - starting balance
+ #   balance - starting balance (none to hide balance forward)
  #   request - enable sorting
  #}
-{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=0, request=none) %}
+{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=none, request=none) %}
     {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
             <table class="table no-margin">
@@ -143,7 +141,9 @@
                     {{ _header(fields, request) }}
                 </thead>
                 <tbody>
-                    {{ _balance(fields, balance) }}
+                    {% if balance is not none %}
+                        {{ _balance(fields, balance) }}
+                    {% endif %}
                     {% set t = transactions %}
                     {% if request is not none %}
                         {% if 'sort' in request.GET %}
