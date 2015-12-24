@@ -19,9 +19,7 @@
         </div>
         <div class="col-md-8">
             {% set new = ui.button(title='New Transaction', icon='plus', url="{}?account={}".format(url('ledger:new_transaction'), account.id)) %}
-            {% set n = now() %}
-            {% set view_url = url('ledger:view_month', args=(n.year, n.month)) + '?account={}'.format(account.id) %}
-            {% set view = ui.button(title='View Transactions', icon='list', url=view_url) %}
+            {% set view = ui.button(title='View Transactions', icon='list', url=url('ledger:view_transactions', kwargs={'id': account.id})) %}
             {{ transaction.list(account.transactions.order_by('-date')[:6], title='Recent Transactions', fields=('date', 'summary', 'amount'), buttons=(new, view)) }}
         </div>
     </div>
