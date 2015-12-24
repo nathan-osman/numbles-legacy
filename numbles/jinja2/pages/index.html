@@ -14,7 +14,7 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-4">
-            {{ account.list(request.user.accounts.all(), title='Active Accounts', fields=('name', 'active', 'balance')) }}
+            {{ account.list(request.user.accounts.all(), title='Accounts', fields=('name', 'active', 'balance')) }}
         </div>
         <div class="col-sm-8">
             {% set n = now() %}
