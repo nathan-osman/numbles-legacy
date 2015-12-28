@@ -19,7 +19,7 @@ class EditTransactionForm(forms.ModelForm):
 
     class Meta:
         model = Transaction
-        fields = ('account', 'date', 'summary', 'description', 'amount', 'reconciled')
+        fields = ('account', 'date', 'summary', 'description', 'amount', 'reconciled', 'tags')
 
     def __init__(self, user, *args, **kwargs):
         super(EditTransactionForm, self).__init__(*args, **kwargs)

@@ -28,6 +28,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='transaction',
             name='tags',
-            field=models.ManyToManyField(related_name='transactions', to='ledger.Tag'),
+            field=models.ManyToManyField(related_name='transactions', to='ledger.Tag', blank=True),
         ),
     ]

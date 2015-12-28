@@ -122,6 +122,7 @@ def delete_attachment(request, id):
 
 
 @login_required
+@transaction.atomic
 def edit_transaction(request, id=None):
     """
     Create or edit a transaction.
@@ -133,6 +134,7 @@ def edit_transaction(request, id=None):
             transaction = form.save(commit=False)
             transaction.user = request.user
             transaction.save()
+            form.save_m2m()
             return redirect(transaction)
     else:
         initial = {}
