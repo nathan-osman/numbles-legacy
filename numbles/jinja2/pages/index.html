@@ -2,6 +2,7 @@
 
 {% import 'ledger/macros/account.html' as account %}
 {% import 'ledger/macros/transaction.html' as transaction %}
+{% import 'ledger/macros/util.html' as util %}
 {% import 'macros/ui.html' as ui %}
 
 {##
@@ -12,6 +13,36 @@
  #}
 
 {% block content %}
+    {% set n = now() %}
+    {% set t = n - timedelta(30) %}
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-green">
+                    <i class="fa fa-plus-circle"></i>
+                </span>
+                <div class="info-box-content">
+                    <span class="info-box-text">30 Day In</span>
+                    <span class="info-box-number">
+                        {{ util.currency(request.user.transactions.filter(amount__gt=0, date__gt=t, date__lte=n).sum()) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-red">
+                    <i class="fa fa-minus-circle"></i>
+                </span>
+                <div class="info-box-content">
+                    <span class="info-box-text">30 Day Out</span>
+                    <span class="info-box-number">
+                        {{ util.currency(request.user.transactions.filter(amount__lt=0, date__gt=t, date__lte=n).sum()) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-4">
             {{ account.list(request.user.accounts.all(), title='Accounts', fields=('name', 'active', 'balance')) }}

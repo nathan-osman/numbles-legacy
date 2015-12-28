@@ -3,6 +3,7 @@ Customize the Jinja2 environment
 """
 
 from __future__ import absolute_import
+from datetime import timedelta
 from hashlib import md5
 from os.path import basename
 
@@ -52,6 +53,7 @@ def environment(**kwargs):
         'param': param,
         'qs': qs,
         'static': staticfiles_storage.url,
+        'timedelta': timedelta,
         'url': reverse,
     })
     return env
