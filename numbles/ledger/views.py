@@ -7,9 +7,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.utils.timezone import make_aware, now
 
-from numbles.ledger.forms import AttachForm, DeleteForm, \
-    EditAccountForm, EditTransactionForm, FindTransactionForm, TransferForm
-from numbles.ledger.models import Account, Attachment, Transaction
+from numbles.ledger.forms import AttachForm, DeleteForm, EditAccountForm, \
+    EditTagForm, EditTransactionForm, FindTransactionForm, TransferForm
+from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
 
 @login_required
@@ -117,6 +117,47 @@ def delete_attachment(request, id):
         'title': "Delete Attachment",
         'description': "You are about to delete {}.".format(attachment),
         'breadcrumbs': [attachment.transaction.account, attachment.transaction],
+        'form': form,
+    })
+
+
+@login_required
+def edit_tag(request, id=None):
+    """
+    Create or edit a tag.
+    """
+    tag = id and get_object_or_404(Tag, pk=id, user=request.user)
+    if request.method == 'POST':
+        form = EditTagForm(instance=tag, data=request.POST)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.user = request.user
+            tag.save()
+            return redirect('home')
+    else:
+        form = EditTagForm(instance=tag)
+    return render(request, 'pages/form.html', {
+        'title': "{} Tag".format("Edit" if tag else "New"),
+        'form': form,
+    })
+
+
+@login_required
+def delete_tag(request, id):
+    """
+    Delete a tag.
+    """
+    tag = get_object_or_404(Tag, pk=id, user=request.user)
+    if request.method == 'POST':
+        form = DeleteForm(data=request.POST)
+        if form.is_valid():
+            tag.delete()
+            return redirect('home')
+    else:
+        form = DeleteForm()
+    return render(request, 'ledger/pages/delete.html', {
+        'title': "Delete Tag",
+        'description': "You are about to remove the {} tag from all transactions and delete it.".format(tag),
         'form': form,
     })
 

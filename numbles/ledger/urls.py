@@ -10,6 +10,10 @@ urlpatterns = patterns('numbles.ledger.views',
 
     url(r'^attachments/(?P<id>\d+)/delete/$', 'delete_attachment', name='delete_attachment'),
 
+    url(r'^tags/new/$', 'edit_tag', name='new_tag'),
+    url(r'^tags/(?P<id>\d+)/edit/$', 'edit_tag', name='edit_tag'),
+    url(r'^tags/(?P<id>\d+)/delete/$', 'delete_tag', name='delete_tag'),
+
     url(r'^transactions/new/$', 'edit_transaction', name='new_transaction'),
     url(r'^transactions/find/$', 'find_transaction', name='find_transaction'),
     url(r'^transactions/transfer$', 'transfer', name='transfer'),

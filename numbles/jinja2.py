@@ -1,5 +1,5 @@
 """
-Customize the Jinja2 environment
+Customize the Jinja2 environment.
 """
 
 from __future__ import absolute_import

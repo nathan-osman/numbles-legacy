@@ -1,6 +1,6 @@
 from django import forms
 
-from numbles.ledger.models import Account, Attachment, Transaction
+from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
 
 class EditAccountForm(forms.ModelForm):
@@ -13,6 +13,13 @@ class EditAccountForm(forms.ModelForm):
 class DeleteForm(forms.Form):
 
     confirm = forms.BooleanField(label="I confirm that I wish to delete this object (cannot be undone).")
+
+
+class EditTagForm(forms.ModelForm):
+
+    class Meta:
+        model = Tag
+        fields = ('name', 'color')
 
 
 class EditTransactionForm(forms.ModelForm):
