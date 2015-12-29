@@ -17,10 +17,10 @@
 
 {##
  # Display a tag.
- #   tag_ - tag to display
+ #   tag - tag to display
  #}
 {% macro tag(tag) %}
-    <span class="tag" style="background-color: {{ tag.color }}">
+    <a href="{{ url('ledger:find_transaction') }}?tag={{ tag.id }}" class="tag" style="background-color: {{ tag.color }}">
         {{ tag }}
-    </span>
+    </a>
 {% endmacro %}

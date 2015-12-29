@@ -196,23 +196,20 @@ def find_transaction(request):
     Find a transaction.
     """
     transactions = None
-    if 'query' in request.GET:
-        form = FindTransactionForm(request.user, data=request.GET)
-        if form.is_valid():
-            filters = {'user': request.user}
-            account = form.cleaned_data['account']
-            if account is not None:
-                filters['account'] = account
-            tag = form.cleaned_data['tag']
-            if tag is not None:
-                filters['tags'] = tag
-            q = form.cleaned_data['query']
-            transactions = Transaction.objects.filter(
-                Q(summary__icontains=q) | Q(description__icontains=q),
-                **filters
-            )
-    else:
-        form = FindTransactionForm(request.user)
+    form = FindTransactionForm(request.user, data=request.GET)
+    if form.is_valid():
+        filters = {'user': request.user}
+        account = form.cleaned_data['account']
+        if account is not None:
+            filters['account'] = account
+        tag = form.cleaned_data['tag']
+        if tag is not None:
+            filters['tags'] = tag
+        q = form.cleaned_data['query']
+        transactions = Transaction.objects.filter(
+            Q(summary__icontains=q) | Q(description__icontains=q),
+            **filters
+        )
     return render(request, 'ledger/pages/find_transaction.html', {
         'title': "Find Transaction",
         'form': form,
