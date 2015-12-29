@@ -133,7 +133,7 @@ def edit_tag(request, id=None):
             tag = form.save(commit=False)
             tag.user = request.user
             tag.save()
-            return redirect('home')
+            return redirect(tag)
     else:
         form = EditTagForm(instance=tag)
     return render(request, 'pages/form.html', {

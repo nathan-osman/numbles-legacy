@@ -2,6 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.dispatch import receiver
 from django.utils.timezone import make_aware
@@ -93,6 +94,9 @@ class Tag(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return '{}?tag={}'.format(reverse('ledger:find_transaction'), self.id)
 
 
 class TransactionQuerySet(models.QuerySet):
