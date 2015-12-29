@@ -37,7 +37,7 @@ class FindTransactionForm(forms.Form):
     """
     Search form displayed in the sidebar and on the search page.
     """
-    query = forms.CharField()
+    query = forms.CharField(required=False)
     account = forms.ModelChoiceField(None, required=False, empty_label="(All)")
     tag = forms.ModelChoiceField(None, required=False, empty_label="(All)")
 
