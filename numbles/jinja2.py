@@ -8,6 +8,7 @@ from hashlib import md5
 from os.path import basename
 
 from django.contrib.staticfiles.storage import staticfiles_storage
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import linebreaksbr
 from django.utils.timezone import now, template_localtime
@@ -15,17 +16,16 @@ from jinja2 import Environment
 from widget_tweaks.templatetags.widget_tweaks import add_class, widget_type
 
 
-def param(request, key, validator=None, default=None):
+def paginate(queryset, page):
     """
-    Retrieve a parameter from the query string. If the parameter exists, it is
-    validated. If the parameter does not exist or fails validation, the default
-    value is returned.
     """
-    if key in request.GET:
-        v = request.GET[key]
-        return v if validator is None or validator(v) else default
-    else:
-        return default
+    paginator = Paginator(queryset, 10)
+    try:
+        return paginator.page(page)
+    except PageNotAnInteger:
+        return paginator.page(1)
+    except EmptyPage:
+        return paginator.page(paginator.num_pages)
 
 
 def qs(request, **kwargs):
@@ -54,7 +54,7 @@ def environment(**kwargs):
         'localtime': lambda x: template_localtime(x).strftime('%Y-%m-%d %H:%M:%S'),
         'md5': lambda x: md5(x).hexdigest(),
         'now': now,
-        'param': param,
+        'paginate': paginate,
         'qs': qs,
         'static': staticfiles_storage.url,
         'timedelta': timedelta,
