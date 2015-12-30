@@ -15,13 +15,17 @@ from jinja2 import Environment
 from widget_tweaks.templatetags.widget_tweaks import add_class, widget_type
 
 
-def param(request, key, valid, default=None):
+def param(request, key, validator=None, default=None):
     """
-    Retrieve the current sort field from the query string. Only the provided
-    fields are accepted.
+    Retrieve a parameter from the query string. If the parameter exists, it is
+    validated. If the parameter does not exist or fails validation, the default
+    value is returned.
     """
-    value = request.GET.get(key, default)
-    return value if value in valid else default
+    if key in request.GET:
+        v = request.GET[key]
+        return v if validator is None or validator(v) else default
+    else:
+        return default
 
 
 def qs(request, **kwargs):

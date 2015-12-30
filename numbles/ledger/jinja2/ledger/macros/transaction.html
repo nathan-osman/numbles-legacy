@@ -17,8 +17,8 @@
  #}
 {% macro _header(fields, request, sortable) %}
     {% if sortable %}
-        {% set sf = param(request, 'sort', sort_fields, def_sort_field) %}
-        {% set so = param(request, 'order', sort_orders, def_sort_order) %}
+        {% set sf = param(request, 'sort', sort_fields.__contains__, def_sort_field) %}
+        {% set so = param(request, 'order', sort_orders.__contains__, def_sort_order) %}
     {% endif %}
     <tr>
         {% for f in fields %}
@@ -143,8 +143,8 @@
  #}
 {% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=none, request=none, sortable=false) %}
     {% if sortable %}
-        {% set sf = param(request, 'sort', sort_fields, def_sort_field) %}
-        {% set so = param(request, 'order', sort_orders, def_sort_order) %}
+        {% set sf = param(request, 'sort', sort_fields.__contains__, def_sort_field) %}
+        {% set so = param(request, 'order', sort_orders.__contains__, def_sort_order) %}
         {% if so == 'desc' %}
             {% set sf = "-{}".format(sf) %}
         {% endif %}
