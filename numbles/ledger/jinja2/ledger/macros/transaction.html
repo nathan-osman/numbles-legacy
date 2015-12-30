@@ -14,12 +14,10 @@
  #   fields - list of fields to display
  #   request - request object
  #   sortable - enable sorting
+ #   sf - sort field (if applicable)
+ #   so - sort order (if applicable)
  #}
-{% macro _header(fields, request, sortable) %}
-    {% if sortable %}
-        {% set sf = param(request, 'sort', sort_fields.__contains__, def_sort_field) %}
-        {% set so = param(request, 'order', sort_orders.__contains__, def_sort_order) %}
-    {% endif %}
+{% macro _header(fields, request, sortable, sf, so) %}
     <tr>
         {% for f in fields %}
             {% if f == 'reconciled' %}
@@ -138,23 +136,34 @@
  #   fields - list of fields to display
  #   buttons - list of buttons to display
  #   balance - starting balance (none to hide balance forward)
- #   request - required for sorting
+ #   request - required for sorting and/or pagination
  #   sortable - enable sorting
+ #   paginated - enable pagination
  #}
-{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=none, request=none, sortable=false) %}
+{% macro list(transactions, title='Transactions', fields=('date', 'summary', 'reconciled', 'amount', 'balance'), buttons=(new,), balance=none, request=none, sortable=false, paginated=false) %}
     {% if sortable %}
-        {% set sf = param(request, 'sort', sort_fields.__contains__, def_sort_field) %}
-        {% set so = param(request, 'order', sort_orders.__contains__, def_sort_order) %}
+        {% set sf = request.GET.get('sort', def_sort_field) %}
+        {% if sf not in sort_fields %}
+            {% set sf = def_sort_field %}
+        {% endif %}
+        {% set so = request.GET.get('order', def_sort_order) %}
+        {% if so not in sort_orders %}
+            {% set so = def_sort_order %}
+        {% endif %}
         {% if so == 'desc' %}
             {% set sf = "-{}".format(sf) %}
         {% endif %}
         {% set transactions = transactions.order_by(sf) %}
     {% endif %}
+    {% if paginated %}
+        {% set page = request.GET.get('page', 1) %}
+        {% set transactions = paginate(transactions, page) %}
+    {% endif %}
     {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
             <table class="table no-margin">
                 <thead>
-                    {{ _header(fields, request, sortable) }}
+                    {{ _header(fields, request, sortable, sf|d, so|d) }}
                 </thead>
                 <tbody>
                     {% if balance is not none %}
