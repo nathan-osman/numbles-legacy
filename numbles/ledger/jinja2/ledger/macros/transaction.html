@@ -158,6 +158,14 @@
     {% if paginated %}
         {% set page = request.GET.get('page', 1) %}
         {% set transactions = paginate(transactions, page) %}
+        {% set nav_buttons = [] %}
+        {% if transactions.has_previous() %}
+            {% do nav_buttons.append(ui.button(title='Previous Page', icon='arrow-left', url='{}?{}'.format(request.path, qs(request, page=transactions.previous_page_number())))) %}
+        {% endif %}
+        {% if transactions.has_next() %}
+            {% do nav_buttons.append(ui.button(title='Next Page', icon='arrow-right', url='{}?{}'.format(request.path, qs(request, page=transactions.next_page_number())), right=true, icon_right=true)) %}
+        {% endif %}
+        {% set buttons = nav_buttons + buttons|list %}
     {% endif %}
     {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
