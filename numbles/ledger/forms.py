@@ -31,6 +31,7 @@ class EditTransactionForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         super(EditTransactionForm, self).__init__(*args, **kwargs)
         self.fields['account'].queryset = user.accounts.all()
+        self.fields['tags'].queryset = user.tags.all()
 
 
 class FindTransactionForm(forms.Form):
