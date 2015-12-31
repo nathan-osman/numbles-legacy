@@ -150,10 +150,11 @@
         {% if so not in sort_orders %}
             {% set so = def_sort_order %}
         {% endif %}
-        {% if so == 'desc' %}
-            {% set sf = "-{}".format(sf) %}
+        {% if so == 'asc' %}
+            {% set transactions = transactions.order_by(sf) %}
+        {% else %}
+            {% set transactions = transactions.order_by("-{}".format(sf)) %}
         {% endif %}
-        {% set transactions = transactions.order_by(sf) %}
     {% endif %}
     {% if paginated %}
         {% set page = request.GET.get('page', 1) %}
