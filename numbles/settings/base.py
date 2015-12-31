@@ -16,6 +16,7 @@ TEMPLATES = (
         'APP_DIRS': True,
         'OPTIONS': {
             'environment': 'numbles.jinja2.environment',
+            'extensions': ('jinja2.ext.do',),
         },
     },
     {
