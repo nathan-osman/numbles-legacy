@@ -10,11 +10,7 @@
             {% set prev = ui.button(title='Previous', icon='arrow-left', url=prev_url) %}
             {% set next_url = '{}?{}'.format(url('ledger:view_month', args=next_month), qs(request)) %}
             {% set next = ui.button(title='Next', icon='arrow-right', url=next_url, right=true, icon_right=true) %}
-            {% if 'account' in request.GET %}
-                {% set fields = ('date', 'summary', 'reconciled', 'amount', 'balance') %}
-            {% else %}
-                {% set fields = ('date', 'account', 'summary', 'reconciled', 'amount', 'balance') %}
-            {% endif %}
+            {% set fields = ('date', 'account', 'summary', 'tags', 'reconciled', 'amount', 'balance') %}
             {{ transaction.list(transactions, fields=fields, buttons=(prev, next), balance=balance) }}
         </div>
     </div>

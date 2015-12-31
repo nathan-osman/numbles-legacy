@@ -95,6 +95,16 @@
                             {{ t.summary }}
                         </a>
                     </td>
+                {% elif f == 'tags' %}
+                    <td>
+                        {% for tag in t.tags.all() %}
+                            {{ util.tag(tag) }}
+                        {% else %}
+                            <span class="text-muted">
+                                none
+                            </span>
+                        {% endfor %}
+                    </td>
                 {% elif f == 'reconciled' %}
                     <td class="text-center">
                         {% if t[f] %}
