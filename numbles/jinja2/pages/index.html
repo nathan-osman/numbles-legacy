@@ -15,7 +15,22 @@
 {% block content %}
     {% set n = now() %}
     {% set t = n - timedelta(30) %}
+    {% set in30 = request.user.transactions.filter(account__include_in_balance=true, amount__gt=0, date__gt=t, date__lte=n).sum() %}
+    {% set out30 = request.user.transactions.filter(account__include_in_balance=true, amount__lt=0, date__gt=t, date__lte=n).sum() %}
     <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-purple">
+                    <i class="fa fa-money"></i>
+                </span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Balance</span>
+                    <span class="info-box-number">
+                        {{ util.currency(request.user.accounts.filter(include_in_balance=true).sum()) }}
+                    </span>
+                </div>
+            </div>
+        </div>
         <div class="col-md-3 col-sm-6 col-xs-12">
             <div class="info-box">
                 <span class="info-box-icon bg-green">
@@ -24,7 +39,7 @@
                 <div class="info-box-content">
                     <span class="info-box-text">30 Day In</span>
                     <span class="info-box-number">
-                        {{ util.currency(request.user.transactions.filter(amount__gt=0, date__gt=t, date__lte=n).sum()) }}
+                        {{ util.currency(in30) }}
                     </span>
                 </div>
             </div>
@@ -37,17 +52,30 @@
                 <div class="info-box-content">
                     <span class="info-box-text">30 Day Out</span>
                     <span class="info-box-number">
-                        {{ util.currency(request.user.transactions.filter(amount__lt=0, date__gt=t, date__lte=n).sum()) }}
+                        {{ util.currency(out30) }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box">
+                <span class="info-box-icon bg-aqua">
+                    <i class="fa fa-line-chart"></i>
+                </span>
+                <div class="info-box-content">
+                    <span class="info-box-text">30 Day Net</span>
+                    <span class="info-box-number">
+                        {{ util.currency(in30 + out30) }}
                     </span>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-4">
+        <div class="col-md-4 col-sm-12">
             {{ account.list(request.user.accounts.all(), title='Accounts', fields=('name', 'active', 'balance')) }}
         </div>
-        <div class="col-sm-8">
+        <div class="col-md-8 col-sm-12">
             {% set n = now() %}
             {% set view = ui.button(title='View Transactions', icon='list', url=url('ledger:view_month', args=(n.year, n.month))) %}
             {{ transaction.list(request.user.transactions.all().order_by('-date')[:6], title='Recent Transactions', fields=('date', 'account', 'summary', 'amount'), buttons=(transaction.new, view)) }}
