@@ -19,7 +19,7 @@ from widget_tweaks.templatetags.widget_tweaks import add_class, widget_type
 def paginate(queryset, page):
     """
     """
-    paginator = Paginator(queryset, 10)
+    paginator = Paginator(queryset, 15)
     try:
         return paginator.page(page)
     except PageNotAnInteger:

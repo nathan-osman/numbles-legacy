@@ -169,6 +169,9 @@
     {% if paginated %}
         {% set page = request.GET.get('page', 1) %}
         {% set transactions = paginate(transactions, page) %}
+        {% if transactions.paginator.num_pages > 1 %}
+            {% set title = '{} - Page {} of {}'.format(title, transactions.number, transactions.paginator.num_pages) %}
+        {% endif %}
         {% set buttons = [] %}
         {% if transactions.has_previous() %}
             {% do buttons.append(ui.button(title='Previous Page', icon='arrow-left', url='{}?{}'.format(request.path, qs(request, page=transactions.previous_page_number())))) %}
