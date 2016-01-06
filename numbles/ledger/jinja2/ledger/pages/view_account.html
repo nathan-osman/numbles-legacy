@@ -29,12 +29,8 @@
     <script>
         $(function() {
 
-            // Build an array of totals for the months
-            var months = [
-                {% for m in months %}
-                    [{{ m[0] }}, {{ m[1] }}, {{ m[2] }}],
-                {% endfor %}
-            ];
+            // Load the data passed from the view (in JSON)
+            var months = {{ months|safe }};
 
             // List of month names
             var monthNames = [
@@ -54,7 +50,7 @@
 
             // Format a currency value
             function formatCurrency(val) {
-                return ((val < 0) ? '-' : '') + '$' + Math.abs(val);
+                return ((val < 0) ? '-' : '') + '$' + Math.abs(val).toFixed(2);
             }
 
             // Display the chart
@@ -69,9 +65,12 @@
                     text: 'Income by Month'
                 },
                 xAxis: {
-                    categories: $.map(months, function(m) {
-                        return monthNames[m[1] - 1] + ' ' + m[0];
-                    })
+                    categories: months,
+                    labels: {
+                        formatter: function() {
+                            return monthNames[this.value.month - 1] + ' ' + this.value.year;
+                        }
+                    }
                 },
                 yAxis: {
                     labels: {
@@ -84,13 +83,21 @@
                     }
                 },
                 series: [{
+                    cursor: 'pointer',
                     data: $.map(months, function(m) {
-                        return m[2];
+                        return parseFloat(m.amount);
                     }),
+                    point: {
+                        events: {
+                            click: function() {
+                                location.href = this.category.url;
+                            }
+                        },
+                    },
                     showInLegend: false
                 }],
                 tooltip: {
-                    pointFormatter: function() {
+                    formatter: function() {
                         return formatCurrency(this.y);
                     }
                 }

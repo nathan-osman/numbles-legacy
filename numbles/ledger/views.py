@@ -1,6 +1,8 @@
 from datetime import datetime
+from json import dumps
 
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
@@ -56,12 +58,19 @@ def view_account(request, id):
     months, n = [], now()
     for o in reversed(range(0, -12, -1)):
         y, m = adjust_month(n.year, n.month, o)
-        months.append((y, m, Transaction.month(y, m, account=account).sum()))
+        months.append({
+            'url': reverse('ledger:view_month', kwargs={
+                'year': y,
+                'month': m,
+            }),
+            'year': y,
+            'month': m,
+            'amount': str(Transaction.month(y, m, account=account).sum()),
+        })
     return render(request, 'ledger/pages/view_account.html', {
         'title': account,
         'account': account,
-        'cur': (n.year, n.month),
-        'months': months,
+        'months': dumps(months),
     })
 
 

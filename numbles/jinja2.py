@@ -5,7 +5,6 @@ Customize the Jinja2 environment.
 from __future__ import absolute_import
 from datetime import timedelta
 from hashlib import md5
-from json import dumps
 from os.path import basename
 
 from django.contrib.staticfiles.storage import staticfiles_storage
@@ -13,7 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import linebreaksbr
 from django.utils.timezone import now, template_localtime
-from jinja2 import Environment, Markup
+from jinja2 import Environment
 from widget_tweaks.templatetags.widget_tweaks import add_class, widget_type
 
 
@@ -51,7 +50,6 @@ def environment(**kwargs):
     })
     env.globals.update({
         'basename': basename,
-        'json': lambda x: Markup(dumps(x)),
         'linebreaksbr': linebreaksbr,
         'localtime': lambda x: template_localtime(x).strftime('%Y-%m-%d %H:%M:%S'),
         'md5': lambda x: md5(x).hexdigest(),
