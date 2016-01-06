@@ -51,7 +51,9 @@
                     {% else %}
                         <tr>
                             <td colspan="{{ fields|length }}">
-                                No accounts matched
+                                <span class="text-muted">
+                                    No accounts matched
+                                </span>
                             </td>
                         </tr>
                     {% endfor %}
