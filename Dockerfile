@@ -21,7 +21,7 @@ CMD [ \
     "--http-socket", "0.0.0.0:80", \
     "--plugin", "python", \
     "--chdir", "/root", \
-    "--module", "numbles.wsgi", \
+    "--module", "numbles.wsgi" \
 ]
 
 # Set PYTHONPATH so that manage.py can find the script
