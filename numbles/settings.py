@@ -20,6 +20,7 @@ SITE_DOMAIN = os.environ.get('SITE_DOMAIN', 'numbles')
 
 # Ensure that the correct host is used
 ALLOWED_HOSTS = [SITE_DOMAIN]
+USE_X_FORWARDED_HOST = True
 
 ROOT_URLCONF = 'numbles.urls'
 WSGI_APPLICATION = 'numbles.wsgi.application'
