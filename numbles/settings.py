@@ -76,9 +76,9 @@ except OSError as e:
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'postgres',
+        'NAME': os.environ.get('NUMBLES_DB_NAME', 'postgres'),
+        'USER': os.environ.get('NUMBLES_DB_USER', 'postgres'),
+        'HOST': os.environ.get('NUMBLES_DB_HOST', 'postgres'),
     },
 }
 
@@ -92,7 +92,7 @@ if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 else:
     EMAIL_BACKEND = 'pyhectane.django.HectaneBackend'
-    HECTANE_HOST = 'hectane'
+    HECTANE_HOST = os.environ.get('NUMBLES_EMAIL_HOST', 'hectane')
 
 # Error messages
 ADMIN_EMAIL = os.environ.get('SITE_ADMIN', None)
