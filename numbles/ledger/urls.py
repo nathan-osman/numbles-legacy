@@ -1,28 +1,30 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns('numbles.ledger.views',
+from . import views
 
-    url(r'^accounts/new/$', 'edit_account', name='new_account'),
-    url(r'^accounts/(?P<id>\d+)/$', 'view_account', name='view_account'),
-    url(r'^accounts/(?P<id>\d+)/edit/$', 'edit_account', name='edit_account'),
-    url(r'^accounts/(?P<id>\d+)/delete/$', 'delete_account', name='delete_account'),
-    url(r'^accounts/(?P<id>\d+)/transactions/$', 'view_transactions', name='view_transactions'),
 
-    url(r'^attachments/(?P<id>\d+)/delete/$', 'delete_attachment', name='delete_attachment'),
+urlpatterns = [
+    url(r'^accounts/new/$', views.edit_account, name='new_account'),
+    url(r'^accounts/(?P<id>\d+)/$', views.view_account, name='view_account'),
+    url(r'^accounts/(?P<id>\d+)/edit/$', views.edit_account, name='edit_account'),
+    url(r'^accounts/(?P<id>\d+)/delete/$', views.delete_account, name='delete_account'),
+    url(r'^accounts/(?P<id>\d+)/transactions/$', views.view_transactions, name='view_transactions'),
 
-    url(r'^tags/new/$', 'edit_tag', name='new_tag'),
-    url(r'^tags/(?P<id>\d+)/edit/$', 'edit_tag', name='edit_tag'),
-    url(r'^tags/(?P<id>\d+)/delete/$', 'delete_tag', name='delete_tag'),
+    url(r'^attachments/(?P<id>\d+)/delete/$', views.delete_attachment, name='delete_attachment'),
 
-    url(r'^transactions/new/$', 'edit_transaction', name='new_transaction'),
-    url(r'^transactions/find/$', 'find_transaction', name='find_transaction'),
-    url(r'^transactions/transfer$', 'transfer', name='transfer'),
-    url(r'^transactions/(?P<id>\d+)/$', 'view_transaction', name='view_transaction'),
-    url(r'^transactions/(?P<id>\d+)/edit/$', 'edit_transaction', name='edit_transaction'),
-    # url(r'^transactions/(?P<id>\d+)/link/$', 'link', name='link'),
-    url(r'^transactions/(?P<id>\d+)/unlink/$', 'unlink', name='unlink'),
-    url(r'^transactions/(?P<id>\d+)/attach/$', 'attach', name='attach'),
-    url(r'^transactions/(?P<id>\d+)/delete/$', 'delete_transaction', name='delete_transaction'),
+    url(r'^tags/new/$', views.edit_tag, name='new_tag'),
+    url(r'^tags/(?P<id>\d+)/edit/$', views.edit_tag, name='edit_tag'),
+    url(r'^tags/(?P<id>\d+)/delete/$', views.delete_tag, name='delete_tag'),
 
-    url(r'^(?P<year>\d+)/(?P<month>\d+)/$', 'view_month', name='view_month'),
-)
+    url(r'^transactions/new/$', views.edit_transaction, name='new_transaction'),
+    url(r'^transactions/find/$', views.find_transaction, name='find_transaction'),
+    url(r'^transactions/transfer$', views.transfer, name='transfer'),
+    url(r'^transactions/(?P<id>\d+)/$', views.view_transaction, name='view_transaction'),
+    url(r'^transactions/(?P<id>\d+)/edit/$', views.edit_transaction, name='edit_transaction'),
+    # url(r'^transactions/(?P<id>\d+)/link/$', views.link, name='link'),
+    url(r'^transactions/(?P<id>\d+)/unlink/$', views.unlink, name='unlink'),
+    url(r'^transactions/(?P<id>\d+)/attach/$', views.attach, name='attach'),
+    url(r'^transactions/(?P<id>\d+)/delete/$', views.delete_transaction, name='delete_transaction'),
+
+    url(r'^(?P<year>\d+)/(?P<month>\d+)/$', views.view_month, name='view_month'),
+]

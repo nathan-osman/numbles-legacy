@@ -1,14 +1,13 @@
-from django.conf.urls import include, patterns, url
-
+from django.conf.urls import include, url
 from django.contrib import admin
-admin.autodiscover()
 
-urlpatterns = patterns('',
+from . import views
 
-    url(r'^$', 'numbles.views.index', name='home'),
+
+urlpatterns = [
+    url(r'^$', views.index, name='home'),
+    url(r'^admin/', admin.site.urls),
 
     url(r'^accounts/', include('numbles.accounts.urls', 'accounts')),
     url(r'^ledger/', include('numbles.ledger.urls', 'ledger')),
-
-    url(r'^admin/', include(admin.site.urls)),
-)
+]
