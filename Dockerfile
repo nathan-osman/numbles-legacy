@@ -26,7 +26,8 @@ CMD [ \
     "--plugin", "python", \
     "--chdir", "/root", \
     "--module", "numbles.wsgi", \
-    "--add-header", "Host: $SITE_DOMAIN" \
+    "--static-map", "/static=/data/static", \
+    "--static-map", "/media=/data/media" \
 ]
 
 # Expose port 80
