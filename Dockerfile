@@ -15,17 +15,19 @@ RUN pip install -r /root/requirements.txt
 COPY numbles /root/numbles
 COPY manage.py /usr/local/bin
 
+# Set a couple of important environment variables
+ENV PYTHONPATH=/root \
+    SITE_DOMAIN=numbles
+
 # Run the application through uWSGI
 CMD [ \
     "uwsgi", \
     "--http-socket", "0.0.0.0:80", \
     "--plugin", "python", \
     "--chdir", "/root", \
-    "--module", "numbles.wsgi" \
+    "--module", "numbles.wsgi", \
+    "--add-header", "Host: $SITE_DOMAIN" \
 ]
-
-# Set PYTHONPATH so that manage.py can find the script
-ENV PYTHONPATH=/root
 
 # Expose port 80
 EXPOSE 80

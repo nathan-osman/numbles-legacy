@@ -108,6 +108,15 @@ if ADMIN_EMAIL is not None:
 
 TEMPLATES = (
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': (os.path.join(PROJECT_ROOT, 'jinja2'),),
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'numbles.jinja2.environment',
+            'extensions': ('jinja2.ext.do',),
+        },
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': (
             os.path.join(PROJECT_ROOT, 'templates'),
