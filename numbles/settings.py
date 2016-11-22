@@ -16,7 +16,7 @@ DEBUG = bool(os.environ.get('DEBUG', False))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'DEBUG' if DEBUG else '')
 
 # Retrieve the domain name for the site
-SITE_DOMAIN = os.environ.get('SITE_DOMAIN', 'numbles')
+SITE_DOMAIN = os.environ.get('SITE_DOMAIN', 'localhost' if DEBUG else 'numbles')
 
 # Ensure that the correct host is used
 ALLOWED_HOSTS = [SITE_DOMAIN]
@@ -74,14 +74,22 @@ except OSError as e:
 # Database #
 ############
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('NUMBLES_DB_NAME', 'postgres'),
-        'USER': os.environ.get('NUMBLES_DB_USER', 'postgres'),
-        'HOST': os.environ.get('NUMBLES_DB_HOST', 'postgres'),
-    },
-}
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(DATA_ROOT, 'numbles.sqlite3'),
+        },
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('NUMBLES_DB_NAME', 'postgres'),
+            'USER': os.environ.get('NUMBLES_DB_USER', 'postgres'),
+            'HOST': os.environ.get('NUMBLES_DB_HOST', 'postgres'),
+        },
+    }
 
 #########
 # Email #
