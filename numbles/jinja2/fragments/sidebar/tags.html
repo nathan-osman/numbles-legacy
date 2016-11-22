@@ -1,0 +1,21 @@
+{##
+ # Tag links
+ #}
+
+<ul class="sidebar-menu">
+    <li class="header">Tags</li>
+    {% for tag in request.user.tags.all() %}
+        <li>
+            <a href="{{ tag.get_absolute_url() }}">
+                <span class="fa fa-tag"></span>
+                {{ tag }}
+            </a>
+        </li>
+    {% endfor %}
+    <li>
+        <a href="{{ url('ledger:new_tag') }}">
+            <span class="fa fa-plus"></span>
+            New Tag
+        </a>
+    </li>
+</ul>
