@@ -24,7 +24,7 @@
             {{ field.label }}
         </label>
         {% if not field|widget_type == "checkboxinput" %}
-            {{ field|add_class('form-control') }}
+            {{ field|add_class('form-control')|attr('style:width:100%') }}
         {% endif %}
         {% if field.errors %}
             {% if not field|widget_type == "checkboxinput" %}

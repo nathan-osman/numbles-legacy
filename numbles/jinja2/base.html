@@ -10,6 +10,8 @@
         <link href="{{ static('css/AdminLTE.min.css') }}" rel="stylesheet">
         <link href="{{ static('css/skin-purple.min.css') }}" rel="stylesheet">
         <link href="{{ static('css/font-awesome.min.css') }}" rel="stylesheet">
+        <link href="{{ static('css/select2.min.css') }}" rel="stylesheet">
+        <link href="{{ static('css/select2-bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ static('css/global.css') }}" rel="stylesheet">
 
         <link href="{{ static('img/favicon.ico') }}" rel="icon">
@@ -49,6 +51,14 @@
         <script src="{{ static('js/bootstrap.min.js') }}"></script>
         <script src="{{ static('js/highcharts.min.js') }}"></script>
         <script src="{{ static('js/app.min.js') }}"></script>
+        <script src="{{ static('js/select2.min.js') }}"></script>
+        <script>
+            $(function() {
+                $("select").select2({
+                    theme: "bootstrap"
+                });
+            });
+        </script>
 
         {% block scripts %}{% endblock %}
     </body>

@@ -13,7 +13,7 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import linebreaksbr
 from django.utils.timezone import now, template_localtime
 from jinja2 import Environment
-from widget_tweaks.templatetags.widget_tweaks import add_class, widget_type
+from widget_tweaks.templatetags.widget_tweaks import add_class, set_attr, widget_type
 
 
 def paginate(queryset, page):
@@ -46,6 +46,7 @@ def environment(**kwargs):
     env = Environment(**kwargs)
     env.filters.update({
         'add_class': add_class,
+        'attr': set_attr,
         'widget_type': widget_type,
     })
     env.globals.update({
