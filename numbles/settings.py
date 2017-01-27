@@ -164,6 +164,9 @@ STATIC_URL = '/static/'
 # Additional Settings #
 #######################
 
+ARCHIVE_DIRECTORY = os.path.join(DATA_ROOT, 'archives')
+ARCHIVE_FORMAT = 'gz'
+
 # The list of middleware needs to be customized in order to activate timezones
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
