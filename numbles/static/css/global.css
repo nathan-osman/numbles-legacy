@@ -16,3 +16,6 @@ body {
 
 /* Make tags look fancy */
 .tag { border-radius: 3px; color: white; margin-right: 4px; padding: 0 8px; }
+
+/* Correct the color of danger in help blocks */
+.help-block.text-danger { color: #a94442 }

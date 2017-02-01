@@ -14,6 +14,7 @@
                             Please enter your login credentials to access Numbles.
                             <a href="#">Click here</a> if you've forgotten your password.
                         </p>
+                        {{ form_.errors(form) }}
                         {{ form_.fields(form) }}
                     {% endcall %}
                 {% endcall %}

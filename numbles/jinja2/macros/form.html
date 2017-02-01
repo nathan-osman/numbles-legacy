@@ -52,3 +52,15 @@
         {{ field(field_) }}
     {% endfor %}
 {% endmacro %}
+
+{##
+ # Render form errors
+ #   form - form to render errors from
+ #}
+{% macro errors(form) %}
+    {% for error in form.non_field_errors() %}
+        <p class="help-block text-danger">
+            <strong>{{ error }}</strong>
+        </p>
+    {% endfor %}
+{% endmacro %}
