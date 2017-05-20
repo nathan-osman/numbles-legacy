@@ -25,9 +25,10 @@ class Invoice(models.Model):
     Invoice used for billing clients for work completed
     """
 
+    user = models.ForeignKey(User, related_name='invoices')
     client = models.ForeignKey(Client, related_name='invoices')
 
-    date = models.DateTimeField(help_text="Date and time of invoice issuance")
+    date = models.DateField(help_text="Date of invoice issuance")
     amount = models.DecimalField(
         max_digits=settings.MAX_DIGITS,
         decimal_places=settings.DECIMAL_PLACES,
@@ -35,7 +36,7 @@ class Invoice(models.Model):
     )
 
     def __unicode__(self):
-        return "{:02d}".format(self.id)
+        return "{:03d}".format(self.id)
 
 
 class Entry(models.Model):
@@ -52,6 +53,9 @@ class Entry(models.Model):
         decimal_places=settings.DECIMAL_PLACES,
         default=Decimal('0.00'),
     )
+
+    class Meta:
+        verbose_name_plural = "entries"
 
     def __unicode__(self):
         return self.invoice
