@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% import 'ledger/macros/attachment.html' as attachment %}
+{% import 'ledger/macros/links.html' as links %}
 {% import 'ledger/macros/util.html' as util %}
 {% import 'macros/form.html' as form_ with context %}
 {% import 'macros/ui.html' as ui %}
@@ -36,21 +37,10 @@
                         </tr>
                     {% endif %}
                     <tr>
-                        <th>Linked:</th>
+                        <th>Links:</th>
                         <td>
                             <div>
-                                {% if transaction.linked %}
-                                    {% call form_.form(action=url('ledger:unlink', args=(transaction.id,))) %}
-                                        {{ ui.button(title='Unlink', icon='chain-broken', size='xs', submit=true, right=true) }}
-                                    {% endcall %}
-                                    <a href="{{ transaction.linked.get_absolute_url() }}">
-                                        {{ transaction.linked }}
-                                    </a>
-                                {% else %}
-                                    <span class="text-muted">
-                                        No linked transaction
-                                    </span>
-                                {% endif %}
+                                {{ links.list(transaction) }}
                             </div>
                         </td>
                     </tr>

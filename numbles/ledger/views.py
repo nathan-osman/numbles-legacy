@@ -10,7 +10,8 @@ from django.views.decorators.http import require_POST
 from django.utils.timezone import make_aware, now
 
 from numbles.ledger.forms import AttachForm, DeleteForm, EditAccountForm, \
-    EditTagForm, EditTransactionForm, FindTransactionForm, TransferForm
+    EditTagForm, EditTransactionForm, FindTransactionForm, LinkForm, \
+    TransferForm
 from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
 
@@ -285,18 +286,44 @@ def link(request, id):
     """
     Link a transaction.
     """
+    transaction = get_object_or_404(Transaction, pk=id, user=request.user)
+    if request.method == 'POST':
+        form = LinkForm(data=request.POST)
+        if form.is_valid():
+            transaction.links.add(form.cleaned_data['transaction_id'])
+            transaction.save()
+            return redirect(transaction)
+    else:
+        form = LinkForm()
+    return render(request, "pages/form.html", {
+        'title': "Link Transaction",
+        'description': "Enter the ID of a transaction to link.",
+        'breadcrumbs': [transaction.account, transaction],
+        'form': form,
+    })
 
 
 @login_required
-@require_POST
-def unlink(request, id):
+def unlink(request, id, id2):
     """
     Unlink a transaction
     """
     transaction = get_object_or_404(Transaction, pk=id, user=request.user)
-    transaction.linked = None
-    transaction.save()
-    return redirect(transaction)
+    transaction2 = get_object_or_404(Transaction, pk=id2, user=request.user)
+    if request.method == 'POST':
+        form = DeleteForm(data=request.POST)
+        if form.is_valid():
+            transaction.links.remove(transaction2)
+            transaction.save()
+            return redirect(transaction)
+    else:
+        form = DeleteForm()
+    return render(request, 'ledger/pages/delete.html', {
+        'title': "Unlink Transaction",
+        'description': "You are about to unlink {}. Links will be removed in both directions.".format(transaction2),
+        'breadcrumbs': [transaction.account, transaction],
+        'form': form,
+    })
 
 
 @login_required

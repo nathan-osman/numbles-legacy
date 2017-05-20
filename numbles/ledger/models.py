@@ -132,8 +132,7 @@ class Transaction(models.Model):
 
     reconciled = models.BooleanField(default=False)
     tags = models.ManyToManyField(Tag, blank=True, related_name='transactions')
-
-    linked = models.ForeignKey('self', null=True, blank=True)
+    links = models.ManyToManyField('self')
 
     objects = TransactionQuerySet.as_manager()
 

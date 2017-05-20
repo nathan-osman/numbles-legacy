@@ -12,7 +12,7 @@ class EditAccountForm(forms.ModelForm):
 
 class DeleteForm(forms.Form):
 
-    confirm = forms.BooleanField(label="I confirm that I wish to delete this object (cannot be undone).")
+    confirm = forms.BooleanField(label="I confirm that I wish to do this (cannot be undone).")
 
 
 class EditTagForm(forms.ModelForm):
@@ -71,6 +71,15 @@ class TransferForm(forms.Form):
                 cleaned_data['from_account'] == cleaned_data['to_account']:
             raise forms.ValidationError("You must select two different accounts.")
         return cleaned_data
+
+
+class LinkForm(forms.Form):
+
+    transaction_id = forms.ModelChoiceField(
+        label="Transaction ID",
+        queryset=Transaction.objects.all(),
+        widget=forms.NumberInput(),
+    )
 
 
 class AttachForm(forms.ModelForm):

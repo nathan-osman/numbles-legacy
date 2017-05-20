@@ -1,0 +1,30 @@
+{% import 'macros/ui.html' as ui %}
+
+{##
+ # Display linked transactions for a transaction
+ #}
+{% macro list(transaction) %}
+    {% if transaction.links.count() %}
+        <table class="table table-condensed table-striped">
+            {% for t in transaction.links.all() %}
+                <tr>
+                    <td>
+                        <a href="{{ t.get_absolute_url() }}">
+                            <span class="fa fa-chain"></span>
+                            {{ t }}
+                        </a>
+                    </td>
+                    <td class="text-right">
+                        {{ ui.button(title='Delete', icon='trash', url=url('ledger:unlink', args=(transaction.id, t.id,)), size='xs') }}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <span class="text-muted">
+            No linked transactions.
+        </span>
+        <br><br>
+    {% endif %}
+    {{ ui.button(title='Add link', icon='plus', url=url('ledger:link', args=(transaction.id,)), size='xs') }}
+{% endmacro %}
