@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% import 'business/macros/invoice.html' as invoice %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ invoice.list(invoices) }}
+        </div>
+    </div>
+{% endblock %}

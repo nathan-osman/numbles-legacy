@@ -9,5 +9,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     url(r'^accounts/', include('numbles.accounts.urls', 'accounts')),
+    url(r'^business/', include('numbles.business.urls', 'business')),
     url(r'^ledger/', include('numbles.ledger.urls', 'ledger')),
 ]

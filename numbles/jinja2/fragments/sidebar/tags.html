@@ -3,8 +3,8 @@
  #}
 
 <ul class="sidebar-menu">
-    <li class="header">Tags</li>
-    {% for tag in request.user.tags.all() %}
+    <li class="header">Top Tags</li>
+    {% for tag in request.user.tags.all()[:5] %}
         <li>
             <a href="{{ tag.get_absolute_url() }}">
                 <span class="fa fa-tag"></span>

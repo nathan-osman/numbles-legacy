@@ -1,0 +1,47 @@
+{% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
+
+{% set new = ui.button(title='New Invoice', icon='plus', url='#') %}
+
+{% macro _header() %}
+    <th>Date</th>
+    <th>Number</th>
+    <th>Client</th>
+    <th class="text-right">Amount</th>
+{% endmacro %}
+
+{% macro _data(invoices) %}
+    {% for i in invoices %}
+        <tr>
+            <td>{{ i.date }}</td>
+            <td>{{ i }}</td>
+            <td>{{ i.client }}</td>
+            <td class="text-right">{{ util.currency(i.amount) }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">
+                <span class="text-muted">
+                    No invoices entered
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{##
+ # Display a table of invoices
+ #}
+{% macro list(invoices, title='Invoices', buttons=(new,)) %}
+    {# TODO: this will eventually need pagination #}
+    {% call ui.box(title=title, icon='file-pdf-o', buttons=buttons) %}
+        <table class="table no-margin">
+            <thead>
+                {{ _header() }}
+            </thead>
+            <tbody>
+                {{ _data(invoices) }}
+            </tbody>
+        </table>
+    {% endcall %}
+{% endmacro %}
