@@ -76,10 +76,14 @@ class TransferForm(forms.Form):
 class LinkForm(forms.Form):
 
     transaction_id = forms.ModelChoiceField(
+        queryset=None,
         label="Transaction ID",
-        queryset=Transaction.objects.all(),
         widget=forms.NumberInput(),
     )
+
+    def __init__(self, user, *args, **kwargs):
+        super(LinkForm, self).__init__(*args, **kwargs)
+        self.fields['transaction_id'].queryset = Transaction.objects.all()
 
 
 class AttachForm(forms.ModelForm):

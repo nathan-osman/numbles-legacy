@@ -288,13 +288,13 @@ def link(request, id):
     """
     transaction = get_object_or_404(Transaction, pk=id, user=request.user)
     if request.method == 'POST':
-        form = LinkForm(data=request.POST)
+        form = LinkForm(request.user, data=request.POST)
         if form.is_valid():
             transaction.links.add(form.cleaned_data['transaction_id'])
             transaction.save()
             return redirect(transaction)
     else:
-        form = LinkForm()
+        form = LinkForm(request.user)
     return render(request, "pages/form.html", {
         'title': "Link Transaction",
         'description': "Enter the ID of a transaction to link.",

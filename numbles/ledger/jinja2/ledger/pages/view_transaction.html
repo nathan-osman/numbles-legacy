@@ -15,6 +15,12 @@
                 <p>Details for the transaction are displayed below.</p>
                 <table class="table no-margin">
                     <tr>
+                        <th>ID:</th>
+                        <td>
+                            {{ transaction.id }}
+                        </td>
+                    </tr>
+                    <tr>
                         <th>Account:</th>
                         <td>
                             <a href="{{ transaction.account.get_absolute_url() }}">
