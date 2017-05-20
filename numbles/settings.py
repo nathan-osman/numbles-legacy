@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'django_archive',
     # Numbles applications
     'numbles.accounts',
+    'numbles.business',
     'numbles.ledger',
 )
 
@@ -166,6 +167,9 @@ STATIC_URL = '/static/'
 
 ARCHIVE_DIRECTORY = os.path.join(DATA_ROOT, 'archives')
 ARCHIVE_FORMAT = 'gz'
+
+MAX_DIGITS = 9
+DECIMAL_PLACES = 2
 
 # The list of middleware needs to be customized in order to activate timezones
 MIDDLEWARE_CLASSES = (

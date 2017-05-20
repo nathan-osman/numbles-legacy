@@ -1,16 +1,12 @@
 from datetime import datetime
 from decimal import Decimal
 
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.dispatch import receiver
 from django.utils.timezone import make_aware
-
-
-# TODO: this should be a configurable setting
-MAX_DIGITS = 9
-DECIMAL_PLACES = 2
 
 
 class UpdateMixin(object):
@@ -43,8 +39,8 @@ class Account(models.Model):
     name = models.CharField(max_length=40, help_text="Account name")
 
     balance = models.DecimalField(
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES,
+        max_digits=settings.MAX_DIGITS,
+        decimal_places=settings.DECIMAL_PLACES,
         default=Decimal('0.00'),
     )
 
@@ -125,8 +121,8 @@ class Transaction(models.Model):
     description = models.TextField(blank=True, help_text="Additional details or information")
 
     amount = models.DecimalField(
-        max_digits=MAX_DIGITS,
-        decimal_places=DECIMAL_PLACES,
+        max_digits=settings.MAX_DIGITS,
+        decimal_places=settings.DECIMAL_PLACES,
         help_text="Amount of the transaction",
     )
 
