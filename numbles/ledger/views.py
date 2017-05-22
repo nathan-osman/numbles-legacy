@@ -254,10 +254,11 @@ def transfer(request):
                 date=date,
                 summary="Transfer from {}".format(from_account),
                 amount=amount,
-                linked=from_transaction,
             )
             to_transaction.save()
-            from_transaction.linked = to_transaction
+            to_transaction.links.add(from_transaction)
+            to_transaction.save()
+            from_transaction.links.add(to_transaction)
             from_transaction.save()
             return redirect(to_transaction)
     else:
