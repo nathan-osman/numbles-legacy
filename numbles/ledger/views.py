@@ -368,7 +368,6 @@ def delete_transaction(request, id):
         'description': "You are about to delete {}.".format(transaction),
         'breadcrumbs': [transaction.account, transaction],
         'form': form,
-        'related': (transaction.linked,) if transaction.linked else (),
     })
 
 
