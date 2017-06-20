@@ -10,11 +10,6 @@ class EditAccountForm(forms.ModelForm):
         fields = ('name', 'active', 'include_in_balance')
 
 
-class DeleteForm(forms.Form):
-
-    confirm = forms.BooleanField(label="I confirm that I wish to do this (cannot be undone).")
-
-
 class EditTagForm(forms.ModelForm):
 
     class Meta:

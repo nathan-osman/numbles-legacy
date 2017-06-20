@@ -9,9 +9,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from django.utils.timezone import make_aware, now
 
-from numbles.ledger.forms import AttachForm, DeleteForm, EditAccountForm, \
-    EditTagForm, EditTransactionForm, FindTransactionForm, LinkForm, \
-    TransferForm
+from numbles.forms import DeleteForm
+from numbles.ledger.forms import AttachForm, EditAccountForm, EditTagForm, \
+    EditTransactionForm, FindTransactionForm, LinkForm, TransferForm
 from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
 
@@ -88,7 +88,7 @@ def delete_account(request, id):
             return redirect('home')
     else:
         form = DeleteForm()
-    return render(request, 'ledger/pages/delete.html', {
+    return render(request, 'pages/delete.html', {
         'title': "Delete Account",
         'description': "You are about to delete {}.".format(account),
         'breadcrumbs': [account],
@@ -123,7 +123,7 @@ def delete_attachment(request, id):
             return redirect(attachment.transaction)
     else:
         form = DeleteForm()
-    return render(request, 'ledger/pages/delete.html', {
+    return render(request, 'pages/delete.html', {
         'title': "Delete Attachment",
         'description': "You are about to delete {}.".format(attachment),
         'breadcrumbs': [attachment.transaction.account, attachment.transaction],
@@ -165,7 +165,7 @@ def delete_tag(request, id):
             return redirect('home')
     else:
         form = DeleteForm()
-    return render(request, 'ledger/pages/delete.html', {
+    return render(request, 'pages/delete.html', {
         'title': "Delete Tag",
         'description': "You are about to remove the {} tag from all transactions and delete it.".format(tag),
         'form': form,
@@ -319,7 +319,7 @@ def unlink(request, id, id2):
             return redirect(transaction)
     else:
         form = DeleteForm()
-    return render(request, 'ledger/pages/delete.html', {
+    return render(request, 'pages/delete.html', {
         'title': "Unlink Transaction",
         'description': "You are about to unlink {}. Links will be removed in both directions.".format(transaction2),
         'breadcrumbs': [transaction.account, transaction],
@@ -363,7 +363,7 @@ def delete_transaction(request, id):
             return redirect(transaction.account)
     else:
         form = DeleteForm()
-    return render(request, 'ledger/pages/delete.html', {
+    return render(request, 'pages/delete.html', {
         'title': "Delete Transaction",
         'description': "You are about to delete {}.".format(transaction),
         'breadcrumbs': [transaction.account, transaction],
