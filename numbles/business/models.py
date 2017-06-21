@@ -48,7 +48,7 @@ class Invoice(models.Model):
         ordering = ('-id',)
 
     def __unicode__(self):
-        return "{:03d}".format(self.id)
+        return "Invoice {:03d}".format(self.id)
 
     @models.permalink
     def get_absolute_url(self):

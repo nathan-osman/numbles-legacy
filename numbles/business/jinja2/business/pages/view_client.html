@@ -16,16 +16,39 @@
                         <td>{{ client.name }}</td>
                     </tr>
                     <tr>
+                        <th>Contact:</th>
+                        <td>
+                            {% if client.contact %}
+                                {{ client.contact }}
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    <tr>
                         <th>Email:</th>
                         <td>
-                            <a href="mailto:{{ client.email }}">
-                                {{ client.email }}
-                            </a>
+                            {% if client.email %}
+                                <a href="mailto:{{ client.email }}">
+                                    {{ client.email }}
+                                </a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
                         </td>
                     </tr>
                     <tr>
                         <th>Address:</th>
-                        <td>{{ linebreaksbr(client.address) }}</td>
+                        <td>
+                            {% if client.address %}
+                                {{ linebreaksbr(client.address) }}
+                                <br><br>
+                                <a href="http://maps.google.com/?q={{ client.address|urlencode }}">
+                                    View in map
+                                </a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 </table>
             {% endcall %}

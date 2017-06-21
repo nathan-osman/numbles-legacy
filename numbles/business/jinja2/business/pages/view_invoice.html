@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {% set edit = ui.button(title='Edit', icon='pencil', url=url('business:edit_invoice', kwargs={'id': invoice.id})) %}
+            {% set delete = ui.button(title='Delete', icon='trash', url=url('business:delete_invoice', kwargs={'id': invoice.id})) %}
+            {% call ui.box(title='Details', icon='file-pdf-o', buttons=(edit, delete)) %}
+                <p>Invoice details are displayed below.</p>
+                <table class="table no-margin">
+                    <tr>
+                        <th>Number:</th>
+                        <td>{{ invoice }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date:</th>
+                        <td>{{ invoice.date }}</td>
+                    </tr>
+                    <tr>
+                        <th>Client:</th>
+                        <td>
+                            <a href="{{ invoice.client.get_absolute_url() }}">
+                                {{ invoice.client }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Amount:</th>
+                        <td>{{ util.currency(invoice.amount, color=false) }}</td>
+                    </tr>
+                </table>
+            {% endcall %}
+        </div>
+    </div>
+{% endblock %}

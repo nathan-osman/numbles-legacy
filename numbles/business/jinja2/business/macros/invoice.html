@@ -13,7 +13,11 @@
 {% macro _data(invoices) %}
     {% for i in invoices %}
         <tr>
-            <td>{{ i }}</td>
+            <td>
+                <a href="{{ i.get_absolute_url() }}">
+                    {{ i }}
+                </a>
+            </td>
             <td>{{ i.date }}</td>
             <td>{{ i.client }}</td>
             <td class="text-right">{{ util.currency(i.amount) }}</td>

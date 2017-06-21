@@ -114,4 +114,25 @@ def edit_invoice(request, id=None):
 
 @login_required
 def view_invoice(request, id):
-    pass
+    invoice = get_object_or_404(Invoice, pk=id, user=request.user)
+    return render(request, 'business/pages/view_invoice.html', {
+        'title': invoice,
+        'invoice': invoice,
+    })
+
+
+@login_required
+def delete_invoice(request, id):
+    invoice = get_object_or_404(Invoice, pk=id, user=request.user)
+    if request.method == 'POST':
+        form = DeleteForm(data=request.POST)
+        if form.is_valid():
+            invoice.delete()
+            return redirect('business:view_invoices')
+    else:
+        form = DeleteForm()
+    return render(request, 'pages/delete.html', {
+        'title': "Delete Invoice",
+        'description': "You are about to delete {}".format(invoice),
+        'form': form,
+    })
