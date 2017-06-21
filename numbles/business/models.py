@@ -14,7 +14,12 @@ class Client(models.Model):
     user = models.ForeignKey(User, related_name='clients')
 
     name = models.CharField(max_length=40, help_text="Client business name")
-    address = models.TextField(help_text="Client business address")
+    contact = models.CharField(max_length=40, blank=True, help_text="Client contact name")
+    email = models.EmailField(max_length=200, blank=True, help_text="Client email address")
+    address = models.TextField(blank=True, help_text="Client business address")
+
+    class Meta:
+        ordering = ('name',)
 
     def __unicode__(self):
         return self.name
@@ -34,6 +39,9 @@ class Invoice(models.Model):
         decimal_places=settings.DECIMAL_PLACES,
         default=Decimal('0.00'),
     )
+
+    class Meta:
+        ordering = ('-id',)
 
     def __unicode__(self):
         return "{:03d}".format(self.id)
