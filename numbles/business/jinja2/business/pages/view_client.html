@@ -54,7 +54,8 @@
             {% endcall %}
         </div>
         <div class="col-md-6">
-            {{ invoice.list(client.invoices.all()) }}
+            {% set new = ui.button(title='New Invoice', icon='plus', url="{}?client={}".format(url('business:new_invoice'), client.id)) %}
+            {{ invoice.list(client.invoices.all(), buttons=(new,)) }}
         </div>
     </div>
 {% endblock %}

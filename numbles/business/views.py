@@ -95,6 +95,7 @@ def edit_invoice(request, id=None):
     else:
         initial = {}
         if not invoice:
+            initial['client'] = request.GET.get('client', None)
             initial['date'] = now()
         form = EditInvoiceForm(instance=invoice, initial=initial)
     return render(request, 'pages/form.html', {
@@ -139,7 +140,10 @@ def edit_entry(request, id=None):
             entry = form.save()
             return redirect(entry.invoice)
     else:
-        form = EditEntryForm(request.user, instance=entry)
+        initial = {}
+        if not entry:
+            initial['invoice'] = request.GET.get('invoice', None)
+        form = EditEntryForm(request.user, instance=entry, initial=initial)
     return render(request, 'pages/form.html', {
         'title': "{} Entry".format("Edit" if id else "New"),
         'breadcrumbs': [entry.invoice] if entry else [],

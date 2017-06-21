@@ -36,7 +36,8 @@
             {% endcall %}
         </div>
         <div class="col-md-6">
-            {{ entry.list(invoice.entries.all()) }}
+            {% set new = ui.button(title='New Entry', icon='plus', url="{}?invoice={}".format(url('business:new_entry'), invoice.id)) %}
+            {{ entry.list(invoice.entries.all(), buttons=(new,)) }}
         </div>
     </div>
 {% endblock %}
