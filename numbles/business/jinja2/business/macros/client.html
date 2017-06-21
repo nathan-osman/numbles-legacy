@@ -6,7 +6,6 @@
     <th>Name</th>
     <th>Contact</th>
     <th>Email</th>
-    <th>Address</th>
     <th>Invoices</th>
 {% endmacro %}
 
@@ -34,18 +33,11 @@
                     <span class="text-muted">None</span>
                 {% endif %}
             </td>
-            <td>
-                {% if c.address %}
-                    {{ c.address|truncate(20) }}
-                {% else %}
-                    <span class="text-muted">None</span>
-                {% endif %}
-            </td>
             <td>{{ c.invoices.count() }}</td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="5">
+            <td colspan="4">
                 <span class="text-muted">
                     No clients
                 </span>

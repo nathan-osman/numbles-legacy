@@ -42,7 +42,7 @@
                             {% if client.address %}
                                 {{ linebreaksbr(client.address) }}
                                 <br><br>
-                                <a href="http://maps.google.com/?q={{ client.address|urlencode }}">
+                                <a href="http://maps.google.com/?q={{ client.address|urlencode }}" target="_blank">
                                     View in map
                                 </a>
                             {% else %}
