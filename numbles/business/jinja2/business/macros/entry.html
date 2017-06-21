@@ -1,0 +1,47 @@
+{% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
+
+{% set new = ui.button(title='New Entry', icon='plus', url=url('business:new_entry')) %}
+
+{% macro _header() %}
+    <th>Description</th>
+    <th>Amount</th>
+    <th></th>
+{% endmacro %}
+
+{% macro _data(entries) %}
+    {% for e in entries %}
+        <tr>
+            <td>{{ e.description }}</td>
+            <td>{{ util.currency(e.amount, color=False) }}</td>
+            <td class="text-right">
+                {{ ui.button(title='Edit', icon='pencil', url=url('business:edit_entry', kwargs={'id': e.id})) }}
+                {{ ui.button(title='Delete', icon='trash', url=url('business:delete_entry', kwargs={'id': e.id})) }}
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="3">
+                <span class="text-muted">
+                    No entries
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{##
+ # Display a table of entries
+ #}
+{% macro list(entries, title='Entries', buttons=(new,)) %}
+    {% call ui.box(title=title, icon='list', buttons=buttons) %}
+        <table class="table no-margin">
+            <thead>
+                {{ _header() }}
+            </thead>
+            <tbody>
+                {{ _data(entries) }}
+            </tbody>
+        </table>
+    {% endcall %}
+{% endmacro %}

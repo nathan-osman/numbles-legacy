@@ -2,19 +2,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 
-from numbles.business.forms import EditClientForm, EditInvoiceForm
-from numbles.business.models import Client, Invoice
+from numbles.business.forms import EditClientForm, EditEntryForm, \
+    EditInvoiceForm
+from numbles.business.models import Client, Entry, Invoice
 from numbles.forms import DeleteForm
-
-
-@login_required
-def index(request):
-    """
-    Show a list of "current" data
-    """
-    return render(request, 'business/pages/index.html', {
-        'title': "Business",
-    })
 
 
 @login_required
@@ -134,5 +125,40 @@ def delete_invoice(request, id):
     return render(request, 'pages/delete.html', {
         'title': "Delete Invoice",
         'description': "You are about to delete {}".format(invoice),
+        'form': form,
+        'related': invoices.entries.all(),
+    })
+
+
+@login_required
+def edit_entry(request, id=None):
+    entry = id and get_object_or_404(Entry, pk=id, invoice__user=request.user)
+    if request.method == 'POST':
+        form = EditEntryForm(request.user, instance=entry, data=request.POST)
+        if form.is_valid():
+            entry = form.save()
+            return redirect(entry.invoice)
+    else:
+        form = EditEntryForm(request.user, instance=entry)
+    return render(request, 'pages/form.html', {
+        'title': "{} Entry".format("Edit" if id else "New"),
+        'breadcrumbs': [entry.invoice] if entry else [],
+        'form': form,
+    })
+
+
+@login_required
+def delete_entry(request, id):
+    entry = get_object_or_404(Entry, pk=id, invoice__user=request.user)
+    if request.method == 'POST':
+        form = DeleteForm(data=request.POST)
+        if form.is_valid():
+            entry.delete()
+            return redirect(entry.invoice)
+    else:
+        form = DeleteForm()
+    return render(request, 'pages/delete.html', {
+        'title': "Delete Entry",
+        'description': "You are about to delete {}".format(entry),
         'form': form,
     })

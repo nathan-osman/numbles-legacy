@@ -74,7 +74,7 @@ class Entry(models.Model):
         verbose_name_plural = "entries"
 
     def __unicode__(self):
-        return self.invoice
+        return self.description
 
 
 @receiver(models.signals.post_init, sender=Entry)

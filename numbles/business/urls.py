@@ -4,8 +4,6 @@ from . import views
 
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-
     url(r'^clients/$', views.view_clients, name='view_clients'),
     url(r'^clients/new/$', views.edit_client, name='new_client'),
     url(r'^clients/(?P<id>\d+)/$', views.view_client, name='view_client'),
@@ -17,4 +15,8 @@ urlpatterns = [
     url(r'^invoices/(?P<id>\d+)/$', views.view_invoice, name='view_invoice'),
     url(r'^invoices/(?P<id>\d+)/edit/$', views.edit_invoice, name="edit_invoice"),
     url(r'^invoices/(?P<id>\d+)/delete/$', views.delete_invoice, name="delete_invoice"),
+
+    url(r'^entries/new/$', views.edit_entry, name="new_entry"),
+    url(r'^entries/(?P<id>\d+)/edit/$', views.edit_entry, name="edit_entry"),
+    url(r'^entries/(?P<id>\d+)/delete/$', views.delete_entry, name="delete_entry"),
 ]

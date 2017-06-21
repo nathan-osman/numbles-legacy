@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 
+{% import 'business/macros/entry.html' as entry %}
 {% import 'ledger/macros/util.html' as util %}
 {% import 'macros/ui.html' as ui %}
 
@@ -33,6 +34,9 @@
                     </tr>
                 </table>
             {% endcall %}
+        </div>
+        <div class="col-md-6">
+            {{ entry.list(invoice.entries.all()) }}
         </div>
     </div>
 {% endblock %}
