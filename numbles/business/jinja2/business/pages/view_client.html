@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% import 'business/macros/invoice.html' as invoice %}
+{% import 'macros/ui.html' as ui %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {% set edit = ui.button(title='Edit', icon='pencil', url=url('business:edit_client', kwargs={'id': client.id})) %}
+            {% set delete = ui.button(title='Delete', icon='trash', url=url('business:delete_client', kwargs={'id': client.id})) %}
+            {% call ui.box(title='Client Information', icon='users', buttons=(edit, delete)) %}
+                <p>Detailed information for the client is displayed below.</p>
+                <table class="table no-margin">
+                    <tr>
+                        <th>Name:</th>
+                        <td>{{ client.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Email:</th>
+                        <td>
+                            <a href="mailto:{{ client.email }}">
+                                {{ client.email }}
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Address:</th>
+                        <td>{{ linebreaksbr(client.address) }}</td>
+                    </tr>
+                </table>
+            {% endcall %}
+        </div>
+        <div class="col-md-6">
+            {{ invoice.list(client.invoices.all()) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% import 'macros/ui.html' as ui %}
+
+{% set new = ui.button(title='New Client', icon='plus', url=url('business:new_client')) %}
+
+{% macro _header() %}
+    <th>Name</th>
+    <th>Contact</th>
+    <th>Email</th>
+    <th>Address</th>
+    <th>Invoices</th>
+{% endmacro %}
+
+{% macro _data(clients) %}
+    {% for c in clients %}
+        <tr>
+            <td>
+                <a href="{{ c.get_absolute_url() }}">
+                    {{ c.name }}
+                </a>
+            </td>
+            <td>
+                {% if c.contact %}
+                    {{ c.contact }}
+                {% else %}
+                    <span class="text-muted">None</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if c.email %}
+                    <a href="mailto:{{ c.email }}">
+                        {{ c.email }}
+                    </a>
+                {% else %}
+                    <span class="text-muted">None</span>
+                {% endif %}
+            </td>
+            <td>
+                {% if c.address %}
+                    {{ c.address|truncate(20) }}
+                {% else %}
+                    <span class="text-muted">None</span>
+                {% endif %}
+            </td>
+            <td>{{ c.invoices.count() }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">
+                <span class="text-muted">
+                    No clients
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{##
+ # Display a table of clients
+ #}
+{% macro list(clients, title='Clients', buttons=(new,)) %}
+    {% call ui.box(title=title, icon='users', buttons=buttons) %}
+        <table class="table no-margin">
+            <thead>
+                {{ _header() }}
+            </thead>
+            <tbody>
+                {{ _data(clients) }}
+            </tbody>
+        </table>
+    {% endcall %}
+{% endmacro %}

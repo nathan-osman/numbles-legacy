@@ -24,6 +24,10 @@ class Client(models.Model):
     def __unicode__(self):
         return self.name
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('business:view_client', (), {'id': self.id})
+
 
 class Invoice(models.Model):
     """
@@ -45,6 +49,10 @@ class Invoice(models.Model):
 
     def __unicode__(self):
         return "{:03d}".format(self.id)
+
+    @models.permalink
+    def get_absolute_url(self):
+        return ('business:view_invoice', (), {'id': self.id})
 
 
 class Entry(models.Model):

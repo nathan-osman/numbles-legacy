@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% import 'business/macros/client.html' as client %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ client.list(clients) }}
+        </div>
+    </div>
+{% endblock %}
