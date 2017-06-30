@@ -9,7 +9,8 @@
         <div class="col-md-6">
             {% set edit = ui.button(title='Edit', icon='pencil', url=url('business:edit_invoice', kwargs={'id': invoice.id})) %}
             {% set delete = ui.button(title='Delete', icon='trash', url=url('business:delete_invoice', kwargs={'id': invoice.id})) %}
-            {% call ui.box(title='Details', icon='file-pdf-o', buttons=(edit, delete)) %}
+            {% set pdf = ui.button(title='PDF', icon='file-pdf-o', url=url('business:pdf', kwargs={'id': invoice.id}), right=true) %}
+            {% call ui.box(title='Details', icon='file-pdf-o', buttons=(edit, delete, pdf)) %}
                 <p>Invoice details are displayed below.</p>
                 <table class="table no-margin">
                     <tr>

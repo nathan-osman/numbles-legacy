@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^invoices/(?P<id>\d+)/$', views.view_invoice, name='view_invoice'),
     url(r'^invoices/(?P<id>\d+)/edit/$', views.edit_invoice, name="edit_invoice"),
     url(r'^invoices/(?P<id>\d+)/delete/$', views.delete_invoice, name="delete_invoice"),
+    url(r'^invoices/(?P<id>\d+)/pdf/$', views.pdf, name="pdf"),
 
     url(r'^entries/new/$', views.edit_entry, name="new_entry"),
     url(r'^entries/(?P<id>\d+)/edit/$', views.edit_entry, name="edit_entry"),

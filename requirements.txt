@@ -5,3 +5,4 @@ django-widget-tweaks
 jinja2
 pyhectane
 pytz
+reportlab

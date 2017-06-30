@@ -1,10 +1,12 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
 
 from numbles.business.forms import EditClientForm, EditEntryForm, \
     EditInvoiceForm
 from numbles.business.models import Client, Entry, Invoice
+from numbles.business.pdf import InvoiceGenerator
 from numbles.forms import DeleteForm
 
 
@@ -129,6 +131,15 @@ def delete_invoice(request, id):
         'form': form,
         'related': invoices.entries.all(),
     })
+
+
+@login_required
+def pdf(request, id):
+    invoice = get_object_or_404(Invoice, pk=id, user=request.user)
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(unicode(invoice))
+    InvoiceGenerator(response, invoice).generate()
+    return response
 
 
 @login_required
