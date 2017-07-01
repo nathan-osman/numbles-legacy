@@ -137,7 +137,8 @@ def delete_invoice(request, id):
 def pdf(request, id):
     invoice = get_object_or_404(Invoice, pk=id, user=request.user)
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(unicode(invoice))
+    if 'download' in request.GET:
+        response['Content-Disposition'] = 'attachment; filename="{}.pdf"'.format(unicode(invoice))
     InvoiceGenerator(response, invoice).generate()
     return response
 

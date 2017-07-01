@@ -7,10 +7,11 @@
 {% block content %}
     <div class="row">
         <div class="col-md-6">
+            {% set pdf = ui.button(title='PDF', icon='file-pdf-o', url=url('business:pdf', kwargs={'id': invoice.id})) %}
+            {% set download = ui.button(title='Download', icon='download', url="{}?download".format(url('business:pdf', kwargs={'id': invoice.id}))) %}
             {% set edit = ui.button(title='Edit', icon='pencil', url=url('business:edit_invoice', kwargs={'id': invoice.id})) %}
             {% set delete = ui.button(title='Delete', icon='trash', url=url('business:delete_invoice', kwargs={'id': invoice.id})) %}
-            {% set pdf = ui.button(title='PDF', icon='file-pdf-o', url=url('business:pdf', kwargs={'id': invoice.id}), right=true) %}
-            {% call ui.box(title='Details', icon='file-pdf-o', buttons=(edit, delete, pdf)) %}
+            {% call ui.box(title='Details', icon='file-pdf-o', buttons=(pdf, download, edit, delete)) %}
                 <p>Invoice details are displayed below.</p>
                 <table class="table no-margin">
                     <tr>
