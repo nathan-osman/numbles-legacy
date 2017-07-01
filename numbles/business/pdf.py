@@ -60,8 +60,16 @@ class InvoiceGenerator:
 
     def _header_table(self):
         c = self._invoice.client
+        u = self._invoice.user
         data = (
-            ("Bill From:", "Me!", unicode(self._invoice)),
+            (
+                "Bill From:",
+                "{}\n{}".format(
+                    u.get_full_name() or u.username,
+                    u.profile.address.replace('\r', ''),
+                ),
+                unicode(self._invoice),
+            ),
             ("Bill To:", "{}\n{}\n\n{}\n{}".format(
                 c.name,
                 c.address.replace('\r', ''),
