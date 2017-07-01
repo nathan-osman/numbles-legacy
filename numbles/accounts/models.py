@@ -14,6 +14,11 @@ class Profile(models.Model):
         primary_key=True
     )
 
+    address = models.TextField(
+        blank=True,
+        help_text="Used for the business app",
+    )
+
     timezone = models.CharField(
         max_length=40,
         choices=[(t, t) for t in common_timezones],
