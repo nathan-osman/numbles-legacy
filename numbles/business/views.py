@@ -129,7 +129,7 @@ def delete_invoice(request, id):
         'title': "Delete Invoice",
         'description': "You are about to delete {}".format(invoice),
         'form': form,
-        'related': invoices.entries.all(),
+        'related': invoice.entries.all(),
     })
 
 

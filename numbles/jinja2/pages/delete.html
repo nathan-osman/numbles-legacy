@@ -13,9 +13,13 @@
                     <ul>
                         {% for o in related[:4] %}
                             <li>
-                                <a href="{{ o.get_absolute_url() }}">
+                                {% if o.get_absolute_url %}
+                                    <a href="{{ o.get_absolute_url() }}">
+                                        {{ o }}
+                                    </a>
+                                {% else %}
                                     {{ o }}
-                                </a>
+                                {% endif %}
                             </li>
                         {% endfor %}
                         {% if related|count > 4 %}
