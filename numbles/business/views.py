@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
@@ -97,6 +98,7 @@ def edit_invoice(request, id=None):
     else:
         initial = {}
         if not invoice:
+            initial['id'] = Invoice.objects.all().aggregate(m=Max('id'))['m'] + 1
             initial['client'] = request.GET.get('client', None)
             initial['date'] = now()
         form = EditInvoiceForm(instance=invoice, initial=initial)

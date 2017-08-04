@@ -34,6 +34,7 @@ class Invoice(models.Model):
     Invoice used for billing clients for work completed
     """
 
+    id = models.IntegerField(primary_key=True, verbose_name="ID")
     user = models.ForeignKey(User, related_name='invoices')
     client = models.ForeignKey(Client, related_name='invoices')
 
