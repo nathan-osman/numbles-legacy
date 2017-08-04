@@ -92,7 +92,7 @@ class Tag(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return '{}?tag={}'.format(reverse('ledger:find_transaction'), self.id)
+        return '{}?tag={}'.format(reverse('ledger:transactions'), self.id)
 
 
 class TransactionQuerySet(models.QuerySet):

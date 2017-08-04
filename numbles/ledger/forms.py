@@ -60,20 +60,6 @@ class EditTransactionForm(forms.ModelForm):
         self.fields['tags'].queryset = user.tags.all()
 
 
-class FindTransactionForm(forms.Form):
-    """
-    Search form displayed in the sidebar and on the search page.
-    """
-    query = forms.CharField(required=False)
-    account = forms.ModelChoiceField(None, required=False, empty_label="(All)")
-    tag = forms.ModelChoiceField(None, required=False, empty_label="(All)")
-
-    def __init__(self, user, *args, **kwargs):
-        super(FindTransactionForm, self).__init__(*args, **kwargs)
-        self.fields['account'].queryset = user.accounts.all()
-        self.fields['tag'].queryset = user.tags.all()
-
-
 class TransferForm(forms.Form):
 
     from_account = forms.ModelChoiceField(None)

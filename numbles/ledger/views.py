@@ -10,8 +10,7 @@ from django.utils.timezone import make_aware, now
 
 from numbles.forms import DeleteForm
 from numbles.ledger.forms import AttachForm, EditAccountForm, EditTagForm, \
-    TransactionForm, EditTransactionForm, FindTransactionForm, LinkForm, \
-    TransferForm
+    TransactionForm, EditTransactionForm, LinkForm, TransferForm
 from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
 
@@ -236,33 +235,6 @@ def edit_transaction(request, id=None):
         'title': "{} Transaction".format("Edit" if transaction else "New"),
         'breadcrumbs': [transaction.account, transaction] if transaction else [],
         'form': form,
-    })
-
-
-@login_required
-def find_transaction(request):
-    """
-    Find a transaction.
-    """
-    transactions = None
-    form = FindTransactionForm(request.user, data=request.GET)
-    if form.is_valid():
-        filters = {'user': request.user}
-        account = form.cleaned_data['account']
-        if account is not None:
-            filters['account'] = account
-        tag = form.cleaned_data['tag']
-        if tag is not None:
-            filters['tags'] = tag
-        q = form.cleaned_data['query']
-        transactions = Transaction.objects.filter(
-            Q(summary__icontains=q) | Q(description__icontains=q),
-            **filters
-        )
-    return render(request, 'ledger/pages/find_transaction.html', {
-        'title': "Find Transaction",
-        'form': form,
-        'transactions': transactions,
     })
 
 

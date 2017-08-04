@@ -18,7 +18,6 @@ urlpatterns = [
 
     url(r'^transactions/$', views.transactions, name='transactions'),
     url(r'^transactions/new/$', views.edit_transaction, name='new_transaction'),
-    url(r'^transactions/find/$', views.find_transaction, name='find_transaction'),
     url(r'^transactions/transfer$', views.transfer, name='transfer'),
     url(r'^transactions/(?P<id>\d+)/$', views.view_transaction, name='view_transaction'),
     url(r'^transactions/(?P<id>\d+)/edit/$', views.edit_transaction, name='edit_transaction'),
