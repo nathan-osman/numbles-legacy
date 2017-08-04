@@ -6,12 +6,12 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.decorators.http import require_POST
 from django.utils.timezone import make_aware, now
 
 from numbles.forms import DeleteForm
 from numbles.ledger.forms import AttachForm, EditAccountForm, EditTagForm, \
-    EditTransactionForm, FindTransactionForm, LinkForm, TransferForm
+    TransactionForm, EditTransactionForm, FindTransactionForm, LinkForm, \
+    TransferForm
 from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
 
@@ -168,6 +168,45 @@ def delete_tag(request, id):
     return render(request, 'pages/delete.html', {
         'title': "Delete Tag",
         'description': "You are about to remove the {} tag from all transactions and delete it.".format(tag),
+        'form': form,
+    })
+
+
+@login_required
+def transactions(request):
+    """
+    Fully customizable transaction list
+    """
+    t = Transaction.objects.filter(user=request.user)
+    form = TransactionForm(request.user, data=request.GET)
+    if form.is_valid():
+        date_from = form.cleaned_data['date_from']
+        if date_from is not None:
+            t = t.filter(date__gte=date_from)
+        date_to = form.cleaned_data['date_to']
+        if date_to is not None:
+            t = t.filter(date__lte=date_to)
+        q = form.cleaned_data['query']
+        if q is not None:
+            t = t.filter(Q(summary__icontains=q) | Q(description__icontains=q))
+        account = form.cleaned_data['account']
+        if account is not None:
+            t = t.filter(account=account)
+        tag = form.cleaned_data['tag']
+        if tag is not None:
+            t = t.filter(tags=tag)
+        reconciled = form.cleaned_data['reconciled']
+        if reconciled is not None:
+            t = t.filter(reconciled=reconciled)
+        amount_min = form.cleaned_data['amount_min']
+        if amount_min is not None:
+            t = t.filter(amount__gte=amount_min)
+        amount_max = form.cleaned_data['amount_max']
+        if amount_max is not None:
+            t = t.filter(amount__lte=amount_max)
+    return render(request, 'ledger/pages/transactions.html', {
+        'title': "Transactions",
+        'transactions': t,
         'form': form,
     })
 

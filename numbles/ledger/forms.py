@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 
 from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
@@ -15,6 +16,36 @@ class EditTagForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = ('name', 'color')
+
+
+class TransactionForm(forms.Form):
+    """
+    Form for filtering transactions
+    """
+
+    date_from = forms.DateTimeField(required=False)
+    date_to = forms.DateTimeField(required=False)
+    query = forms.CharField(required=False)
+    account = forms.ModelChoiceField(None, required=False, empty_label="(All)")
+    tag = forms.ModelChoiceField(None, required=False, empty_label="(All)")
+    reconciled = forms.NullBooleanField()
+    amount_min = forms.DecimalField(
+        required=False,
+        label="Amount minimum",
+        max_digits=settings.MAX_DIGITS,
+        decimal_places=settings.DECIMAL_PLACES,
+    )
+    amount_max = forms.DecimalField(
+        required=False,
+        label="Amount maximum",
+        max_digits=settings.MAX_DIGITS,
+        decimal_places=settings.DECIMAL_PLACES,
+    )
+
+    def __init__(self, user, *args, **kwargs):
+        super(TransactionForm, self).__init__(*args, **kwargs)
+        self.fields['account'].queryset = user.accounts.all()
+        self.fields['tag'].queryset = user.tags.all()
 
 
 class EditTransactionForm(forms.ModelForm):

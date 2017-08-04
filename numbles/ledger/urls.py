@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^tags/(?P<id>\d+)/edit/$', views.edit_tag, name='edit_tag'),
     url(r'^tags/(?P<id>\d+)/delete/$', views.delete_tag, name='delete_tag'),
 
+    url(r'^transactions/$', views.transactions, name='transactions'),
     url(r'^transactions/new/$', views.edit_transaction, name='new_transaction'),
     url(r'^transactions/find/$', views.find_transaction, name='find_transaction'),
     url(r'^transactions/transfer$', views.transfer, name='transfer'),
