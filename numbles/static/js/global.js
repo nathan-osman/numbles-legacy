@@ -3,9 +3,19 @@
  */
 
 (function() {
-
-    // On page load, find and bind all of the toggles
     $(function() {
+
+        // Initialize the select2 fields
+        $("select").select2({
+            theme: "bootstrap"
+        });
+
+        // Ensure select2 elements are cleared on form reset
+        $('button[type=reset').click(function() {
+            $("select", $(this).closest('form')).val(null).trigger('change');
+        });
+
+        // Bind all of the toggles
         $('.toggle').each(function() {
             var $this = $(this),
                 id = $this.data('id');
@@ -26,5 +36,4 @@
             });
         });
     });
-
 })();

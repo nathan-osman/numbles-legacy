@@ -37,17 +37,17 @@
  #   icon - icon displayed next to the label
  #   url - target location for the button
  #   size - button size
- #   submit - display a submit button instead of a link
+ #   type - display a button of the specified type instead of a link
  #   right - float the button to the right
  #   icon_right - display the icon to the right of the title
  #}
-{% macro button(title, icon, url, size='sm', submit=false, right=false, icon_right=false) %}
+{% macro button(title, icon, url, size='sm', type=none, right=false, icon_right=false) %}
     {% set classes = 'btn btn-' + size + ' btn-primary btn-flat' %}
     {% if right %}
         {% set classes = classes + ' pull-right' %}
     {% endif %}
-    {% if submit %}
-        <button type="submit" class="{{ classes }}">
+    {% if type %}
+        <button type="{{ type }}" class="{{ classes }}">
     {% else %}
         <a href="{{ url }}" class="{{ classes }}">
     {% endif %}
@@ -58,7 +58,7 @@
     {% if icon_right %}
         <span class="fa fa-{{ icon }}"></span>
     {% endif %}
-    {% if submit %}
+    {% if type %}
         </button>
     {% else %}
         </a>

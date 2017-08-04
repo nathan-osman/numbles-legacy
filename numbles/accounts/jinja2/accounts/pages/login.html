@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-sm-4 col-sm-offset-4">
                 {% call form_.form() %}
-                    {% set login = ui.button(title='Login', icon='sign-in', submit=true) %}
+                    {% set login = ui.button(title='Login', icon='sign-in', type='submit') %}
                     {% call ui.box('Login', 'sign-in', [login]) %}
                         <p>
                             Please enter your login credentials to access Numbles.

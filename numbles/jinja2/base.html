@@ -56,12 +56,6 @@
         <script src="{{ static('js/global.js') }}"></script>
         <script>
             var TOGGLE_URL = "{{ url('ledger:toggle_transaction') }}";
-
-            $(function() {
-                $("select").select2({
-                    theme: "bootstrap"
-                });
-            });
         </script>
 
         {% block scripts %}{% endblock %}

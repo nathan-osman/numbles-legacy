@@ -11,8 +11,9 @@
         </div>
         <div class="col-md-4">
             {% call form_.form(method='get') %}
-                {% set submit = ui.button(title='Submit', icon='check', submit=true) %}
-                {% call ui.box(title='Filter', icon='filter', buttons=(submit,)) %}
+                {% set submit = ui.button(title='Submit', icon='check', type='submit') %}
+                {% set reset = ui.button(title='Reset', icon='minus-circle', type='reset') %}
+                {% call ui.box(title='Filter', icon='filter', buttons=(submit, reset)) %}
                     {{ form_.fields(form) }}
                 {% endcall %}
             {% endcall %}
