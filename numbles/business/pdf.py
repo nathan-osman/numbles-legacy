@@ -85,7 +85,7 @@ class InvoiceGenerator:
             ('FONTSIZE', (2, 0), (2, 0), 16),
             ('SPAN', (2, 0), (3, 0)),
             ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-            ('VALIGN', (2, 0), (-1, -1), 'BOTTOM'),
+            ('VALIGN', (2, 1), (-1, -1), 'BOTTOM'),
         )
         colWidths = (
             inch,
@@ -143,5 +143,3 @@ class InvoiceGenerator:
             self._total_table(),
         ]
         self._doc.build(content, onFirstPage=self._draw_page, onLaterPages=self._draw_page)
-
-
