@@ -203,6 +203,12 @@ def transactions(request):
         amount_max = form.cleaned_data['amount_max']
         if amount_max is not None:
             t = t.filter(amount__lte=amount_max)
+        has_attachment = form.cleaned_data['has_attachment']
+        if has_attachment is not None:
+            if has_attachment:
+                t = t.filter(~Q(attachments=None))
+            else:
+                t = t.filter(attachments=None)
     return render(request, 'ledger/pages/transactions.html', {
         'title': "Transactions",
         'transactions': t,

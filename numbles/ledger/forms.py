@@ -41,6 +41,7 @@ class TransactionForm(forms.Form):
         max_digits=settings.MAX_DIGITS,
         decimal_places=settings.DECIMAL_PLACES,
     )
+    has_attachment = forms.NullBooleanField()
 
     def __init__(self, user, *args, **kwargs):
         super(TransactionForm, self).__init__(*args, **kwargs)
