@@ -69,6 +69,16 @@
 {% endmacro %}
 
 {##
+ # Display a toggle for the reconciled field of a transaction
+ #   transaction - transaction to toggle
+ #}
+{% macro _toggle(transaction) %}
+    <span title="click to toggle"
+          data-id="{{ transaction.id }}"
+          class="toggle fa {% if transaction['reconciled'] %}fa-check text-success{% else %}fa-times text-danger{% endif %}"></span>
+{% endmacro %}
+
+{##
  # Display table data.
  #   fields - list of fields to display
  #   transactions - list or QuerySet of transactions
@@ -107,11 +117,7 @@
                     </td>
                 {% elif f == 'reconciled' %}
                     <td class="text-center">
-                        {% if t[f] %}
-                            <span class="fa fa-check text-success"></span>
-                        {% else %}
-                            <span class="fa fa-times text-danger"></span>
-                        {% endif %}
+                        {{ _toggle(t) }}
                     </td>
                 {% elif f == 'amount' %}
                     <td class="text-right">

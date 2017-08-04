@@ -53,7 +53,10 @@
         <script src="{{ static('js/highcharts.min.js') }}"></script>
         <script src="{{ static('js/app.min.js') }}"></script>
         <script src="{{ static('js/select2.min.js') }}"></script>
+        <script src="{{ static('js/global.js') }}"></script>
         <script>
+            var TOGGLE_URL = "{{ url('ledger:toggle_transaction') }}";
+
             $(function() {
                 $("select").select2({
                     theme: "bootstrap"

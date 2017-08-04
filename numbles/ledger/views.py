@@ -5,12 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import make_aware, now
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_POST
 
 from numbles.forms import DeleteForm
 from numbles.ledger.forms import AttachForm, EditAccountForm, EditTagForm, \
-    TransactionForm, EditTransactionForm, LinkForm, TransferForm
+    EditTransactionForm, LinkForm, ToggleForm, TransactionForm, TransferForm
 from numbles.ledger.models import Account, Attachment, Tag, Transaction
 
 
@@ -386,6 +389,27 @@ def delete_transaction(request, id):
         'breadcrumbs': [transaction.account, transaction],
         'form': form,
     })
+
+
+@login_required
+@csrf_exempt
+@require_POST
+def toggle_transaction(request):
+    """
+    Toggle the reconciled status of a transaction
+    """
+    form = ToggleForm(request.user, data=request.POST)
+    if form.is_valid():
+        t = form.cleaned_data['transaction']
+        t.reconciled = not t.reconciled
+        t.save()
+        return JsonResponse({
+            'reconciled': t.reconciled,
+        })
+    else:
+        return JsonResponse({
+            'error': "invalid transaction",
+        })
 
 
 @login_required

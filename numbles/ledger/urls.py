@@ -26,5 +26,7 @@ urlpatterns = [
     url(r'^transactions/(?P<id>\d+)/attach/$', views.attach, name='attach'),
     url(r'^transactions/(?P<id>\d+)/delete/$', views.delete_transaction, name='delete_transaction'),
 
+    url(r'^transactions/toggle/$', views.toggle_transaction, name='toggle_transaction'),
+
     url(r'^(?P<year>\d+)/(?P<month>\d+)/$', views.view_month, name='view_month'),
 ]

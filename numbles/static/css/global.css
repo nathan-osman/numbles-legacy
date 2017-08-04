@@ -19,3 +19,6 @@ body {
 
 /* Correct the color of danger in help blocks */
 .help-block.text-danger { color: #a94442 }
+
+/* Toggle for reconciled */
+.toggle { cursor: pointer; }

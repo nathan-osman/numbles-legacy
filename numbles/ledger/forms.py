@@ -104,3 +104,12 @@ class AttachForm(forms.ModelForm):
     class Meta:
         model = Attachment
         fields = ('summary', 'file')
+
+
+class ToggleForm(forms.Form):
+
+    transaction = forms.ModelChoiceField(None)
+
+    def __init__(self, user, *args, **kwargs):
+        super(ToggleForm, self).__init__(*args, **kwargs)
+        self.fields['transaction'].queryset = user.transactions.all()
