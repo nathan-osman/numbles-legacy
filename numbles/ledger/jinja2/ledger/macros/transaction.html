@@ -21,11 +21,11 @@
     <tr>
         {% for f in fields %}
             {% if f == 'reconciled' %}
-                <th class="text-center">
+                <th data-col="{{ f }}" class="text-center">
             {% elif f in ('amount', 'balance') %}
-                <th class="text-right">
+                <th data-col="{{ f }}" class="text-right">
             {% else %}
-                <th>
+                <th data-col="{{ f }}">
             {% endif %}
             {% if sortable and f in sort_fields %}
                 {% set o = 'desc' if sf == f and so == 'asc' else 'asc' %}
@@ -56,13 +56,13 @@
     <tr>
         {% for f in fields %}
             {% if loop.first %}
-                <td>Balance Forward</td>
+                <td data-col="{{ f }}">Balance Forward</td>
             {% elif f == 'balance' %}
-                <td class="text-right">
+                <td data-col="{{ f }}" class="text-right">
                     {{ util.currency(balance) }}
                 </td>
             {% else %}
-                <td></td>
+                <td data-col="{{ f }}"></td>
             {% endif %}
         {% endfor %}
     </tr>
@@ -90,23 +90,23 @@
         <tr>
             {% for f in fields %}
                 {% if f == 'date' %}
-                    <td class="text-nowrap">
+                    <td data-col="{{ f }}" class="text-nowrap">
                         {{ localtime(t[f]) }}
                     </td>
                 {% elif f == 'account' %}
-                    <td>
+                    <td data-col="{{ f }}">
                         <a href="{{ t.account.get_absolute_url() }}">
                             {{ t.account }}
                         </a>
                     </td>
                 {% elif f == 'summary' %}
-                    <td>
+                    <td data-col="{{ f }}">
                         <a href="{{ t.get_absolute_url() }}">
                             {{ t.summary }}
                         </a>
                     </td>
                 {% elif f == 'tags' %}
-                    <td>
+                    <td data-col="{{ f }}">
                         {% for tag in t.tags.all() %}
                             {{ util.tag(tag) }}
                         {% else %}
@@ -116,21 +116,21 @@
                         {% endfor %}
                     </td>
                 {% elif f == 'reconciled' %}
-                    <td class="text-center">
+                    <td data-col="{{ f }}" class="text-center">
                         {{ _toggle(t) }}
                     </td>
                 {% elif f == 'amount' %}
-                    <td class="text-right">
+                    <td data-col="{{ f }}" class="text-right">
                         {{ util.currency(t.amount) }}
                     </td>
                 {% elif f == 'balance' %}
                     {# Special workaround to accumulate a value #}
                     {% if accumulator.append(accumulator.pop() + t.amount) %}{% endif %}
-                    <td class="text-right">
+                    <td data-col="{{ f }}" class="text-right">
                         {{ util.currency(accumulator[-1]) }}
                     </td>
                 {% else %}
-                    <td>{{ t[f] }}</td>
+                    <td data-col="{{ f }}">{{ t[f] }}</td>
                 {% endif %}
             {% endfor %}
         </tr>
@@ -188,7 +188,7 @@
     {% endif %}
     {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
-            <table class="table no-margin">
+            <table class="table no-margin transactions">
                 <thead>
                     {{ _header(fields, request, sortable, sf|d, so|d) }}
                 </thead>

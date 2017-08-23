@@ -6,10 +6,17 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-8">
-            {{ transaction.list(transactions, fields=('date', 'account', 'summary', 'tags', 'reconciled', 'amount'), request=request, sortable=true, paginated=true) }}
+        <div class="col-md-7">
+            {{ transaction.list(transactions, fields=('date', 'account', 'summary', 'tags', 'reconciled', 'amount', 'balance'), request=request, sortable=true, paginated=true) }}
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
+            {% call ui.box(title='View', icon='eye') %}
+                <div id="columns">
+                    Please enable JavaScript to select the columns to display.
+                </div>
+            {% endcall %}
+        </div>
+        <div class="col-md-3">
             {% call form_.form(method='get') %}
                 {% set submit = ui.button(title='Submit', icon='check', type='submit') %}
                 {% set reset = ui.button(title='Reset', icon='minus-circle', type='reset') %}
@@ -19,4 +26,41 @@
             {% endcall %}
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(function() {
+
+            // Remove the JS placeholder
+            $('#columns').empty();
+
+            // Create a checkbox for each column
+            $('.transactions th').each(function() {
+
+                var text = $(this).text(),
+                    col = $(this).data('col');
+                $('#columns').append(
+                    $('<div>')
+                    .addClass('checkbox')
+                    .append(
+                        $('<label>')
+                        .addClass('control-label')
+                        .append(
+                            $('<input>')
+                            .attr('type', 'checkbox')
+                            .prop('checked', true)
+                            .click(function() {
+                                $('[data-col=' + col + ']').toggle(
+                                    $(this).prop('checked')
+                                );
+                            })
+                        )
+                        .append(' ' + text)
+                    )
+                );
+            });
+
+        });
+    </script>
 {% endblock %}
