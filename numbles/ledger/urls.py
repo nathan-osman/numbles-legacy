@@ -8,7 +8,6 @@ urlpatterns = [
     url(r'^accounts/(?P<id>\d+)/$', views.view_account, name='view_account'),
     url(r'^accounts/(?P<id>\d+)/edit/$', views.edit_account, name='edit_account'),
     url(r'^accounts/(?P<id>\d+)/delete/$', views.delete_account, name='delete_account'),
-    url(r'^accounts/(?P<id>\d+)/transactions/$', views.view_transactions, name='view_transactions'),
 
     url(r'^attachments/(?P<id>\d+)/delete/$', views.delete_attachment, name='delete_attachment'),
 

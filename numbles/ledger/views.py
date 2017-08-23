@@ -100,19 +100,6 @@ def delete_account(request, id):
 
 
 @login_required
-def view_transactions(request, id):
-    """
-    Show all transactions for an account.
-    """
-    account = get_object_or_404(Account, pk=id, user=request.user)
-    return render(request, 'ledger/pages/view_transactions.html', {
-        'title': "View Transactions",
-        'breadcrumbs': [account],
-        'account': account,
-    })
-
-
-@login_required
 def delete_attachment(request, id):
     """
     Delete an attachment.
