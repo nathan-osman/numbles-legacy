@@ -197,7 +197,7 @@
                     {{ _header(fields, request, sortable, sf|d, so|d) }}
                 </thead>
                 <tbody>
-                    {% if balance != none or paginated and safeint(page, 1) > 1 %}
+                    {% if not balance is none or paginated and safeint(page, 1) > 1 %}
                         {% if balance is none %}
                             {% set end = page_transactions.start_index() %}
                             {% set prev_transactions = transactions[:end-1] %}

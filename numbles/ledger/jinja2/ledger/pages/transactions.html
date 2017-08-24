@@ -5,10 +5,17 @@
 {% import 'macros/form.html' as form_ with context %}
 {% import 'macros/ui.html' as ui %}
 
+{# Don't fetch account field if an account was set #}
+{% if request.GET.get('account', none) %}
+    {% set fields = ('date', 'summary', 'tags', 'reconciled', 'amount', 'balance') %}
+{% else %}
+    {% set fields = ('date', 'account', 'summary', 'tags', 'reconciled', 'amount', 'balance') %}
+{% endif %}
+
 {% block content %}
     <div class="row">
         <div class="col-md-7">
-            {{ transaction.list(transactions, fields=('date', 'account', 'summary', 'tags', 'reconciled', 'amount', 'balance'), request=request, sortable=true, paginated=true) }}
+            {{ transaction.list(transactions, fields=fields, request=request, sortable=true, paginated=true) }}
         </div>
         <div class="col-md-2">
             {% call ui.box(title='Stats', icon='calculator') %}
