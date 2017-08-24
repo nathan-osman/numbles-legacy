@@ -56,7 +56,9 @@
     <tr>
         {% for f in fields %}
             {% if loop.first %}
-                <td data-col="{{ f }}">Balance Forward</td>
+                <td data-col="{{ f }}">
+                    <span class="text-muted">Balance Forward</span>
+                </td>
             {% elif f == 'balance' %}
                 <td data-col="{{ f }}" class="text-right">
                     {{ util.currency(balance) }}
@@ -151,7 +153,7 @@
  #   title - text to display in the box header
  #   fields - list of fields to display
  #   buttons - list of buttons to display
- #   balance - starting balance (none to hide balance forward)
+ #   balance - starting balance (none to auto calculate for pagination)
  #   request - required for sorting and/or pagination
  #   sortable - enable sorting
  #   paginated - enable pagination
@@ -174,17 +176,19 @@
     {% endif %}
     {% if paginated %}
         {% set page = request.GET.get('page', 1) %}
-        {% set transactions = paginate(transactions, page) %}
-        {% if transactions.paginator.num_pages > 1 %}
-            {% set title = '{} - Page {} of {}'.format(title, transactions.number, transactions.paginator.num_pages) %}
+        {% set page_transactions = paginate(transactions, page) %}
+        {% if page_transactions.paginator.num_pages > 1 %}
+            {% set title = '{} - Page {} of {}'.format(title, page_transactions.number, page_transactions.paginator.num_pages) %}
         {% endif %}
         {% set buttons = [] %}
-        {% if transactions.has_previous() %}
-            {% do buttons.append(ui.button(title='Previous Page', icon='arrow-left', url='{}?{}'.format(request.path, qs(request, page=transactions.previous_page_number())))) %}
+        {% if page_transactions.has_previous() %}
+            {% do buttons.append(ui.button(title='Previous Page', icon='arrow-left', url='{}?{}'.format(request.path, qs(request, page=page_transactions.previous_page_number())))) %}
         {% endif %}
-        {% if transactions.has_next() %}
-            {% do buttons.append(ui.button(title='Next Page', icon='arrow-right', url='{}?{}'.format(request.path, qs(request, page=transactions.next_page_number())), right=true, icon_right=true)) %}
+        {% if page_transactions.has_next() %}
+            {% do buttons.append(ui.button(title='Next Page', icon='arrow-right', url='{}?{}'.format(request.path, qs(request, page=page_transactions.next_page_number())), right=true, icon_right=true)) %}
         {% endif %}
+    {% else %}
+        {% set page_transactions = transactions %}
     {% endif %}
     {% call ui.box(title=title, icon='credit-card', buttons=buttons) %}
         <div class="table-responsive">
@@ -193,10 +197,16 @@
                     {{ _header(fields, request, sortable, sf|d, so|d) }}
                 </thead>
                 <tbody>
-                    {% if balance is not none %}
+                    {% if balance != none or paginated and safeint(page, 1) > 1 %}
+                        {% if balance is none %}
+                            {% set end = page_transactions.start_index() %}
+                            {% set prev_transactions = transactions[:end-1] %}
+                            {% set balance = prev_transactions.sum() %}
+                        {% endif %}
                         {{ _balance(fields, balance) }}
+                        {% set accumulator = balance %}
                     {% endif %}
-                    {{ _data(fields, transactions, balance) }}
+                    {{ _data(fields, page_transactions, balance) }}
                 </tbody>
             </table>
         </div>

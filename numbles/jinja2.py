@@ -18,6 +18,7 @@ from widget_tweaks.templatetags.widget_tweaks import add_class, set_attr, widget
 
 def paginate(queryset, page):
     """
+    Create a Paginator from a queryset
     """
     paginator = Paginator(queryset, 15)
     try:
@@ -39,6 +40,16 @@ def qs(request, **kwargs):
     return get.urlencode()
 
 
+def safeint(v, default=0):
+    """
+    Safely convert a string to an integer
+    """
+    try:
+        return int(v)
+    except ValueError:
+        return default
+
+
 def environment(**kwargs):
     """
     Add some utility functions to the Jinja2 environment
@@ -57,6 +68,7 @@ def environment(**kwargs):
         'now': now,
         'paginate': paginate,
         'qs': qs,
+        'safeint': safeint,
         'static': staticfiles_storage.url,
         'timedelta': timedelta,
         'url': reverse,
