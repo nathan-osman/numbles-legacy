@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% import 'ledger/macros/transaction.html' as transaction %}
+{% import 'ledger/macros/util.html' as util %}
 {% import 'macros/form.html' as form_ with context %}
 {% import 'macros/ui.html' as ui %}
 
@@ -10,6 +11,16 @@
             {{ transaction.list(transactions, fields=('date', 'account', 'summary', 'tags', 'reconciled', 'amount', 'balance'), request=request, sortable=true, paginated=true) }}
         </div>
         <div class="col-md-2">
+            {% call ui.box(title='Stats', icon='calculator') %}
+                <h3 class="no-top-margin">
+                    <small>Number of Transactions</small><br>
+                    {{ transactions.count() }}
+                </h3>
+                <h3>
+                    <small>Sum of Transactions</small><br>
+                    {{ util.currency(transactions.sum()) }}
+                </h3>
+            {% endcall %}
             {% call ui.box(title='View', icon='eye') %}
                 <div id="columns">
                     Please enable JavaScript to select the columns to display.
@@ -32,8 +43,10 @@
     <script>
         $(function() {
 
-            // Remove the JS placeholder
-            $('#columns').empty();
+            // Remove the JS placeholder and add a <p>
+            $('#columns')
+            .empty()
+            .append('<p>').text("Show columns:");
 
             // Create a checkbox for each column
             $('.transactions th').each(function() {
