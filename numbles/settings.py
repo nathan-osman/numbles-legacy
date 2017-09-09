@@ -34,7 +34,7 @@ TIME_ZONE = 'UTC'  # the One True Timezone :)
 # Applications #
 ################
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     # Core Django applications
     'django.contrib.admin',
     'django.contrib.auth',
@@ -48,7 +48,12 @@ INSTALLED_APPS = (
     'numbles.accounts',
     'numbles.business',
     'numbles.ledger',
-)
+]
+
+# Enable the debug toolbar if debugging is enabled
+if DEBUG:
+    INSTALLED_APPS.append('debug_toolbar')
+    INTERNAL_IPS = ('127.0.0.1',)
 
 ################################
 # Project and Data Directories #
@@ -171,8 +176,14 @@ ARCHIVE_FORMAT = 'gz'
 MAX_DIGITS = 9
 DECIMAL_PLACES = 2
 
+MIDDLEWARE_CLASSES = []
+
+# Enable the debug toolbar middleware if debugging is enabled
+if DEBUG:
+    MIDDLEWARE_CLASSES.append('debug_toolbar.middleware.DebugToolbarMiddleware')
+
 # The list of middleware needs to be customized in order to activate timezones
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE_CLASSES += [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -180,4 +191,4 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'numbles.middleware.TimezoneMiddleware',
-)
+]
