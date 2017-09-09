@@ -34,6 +34,16 @@ class Invoice(models.Model):
     Invoice used for billing clients for work completed
     """
 
+    DRAFT = 'draft'
+    ISSUED = 'issued'
+    PAID = 'paid'
+
+    STATUSES = (
+        (DRAFT, 'Draft'),
+        (ISSUED, 'Issued'),
+        (PAID, 'Paid'),
+    )
+
     id = models.IntegerField(primary_key=True, verbose_name="ID")
     user = models.ForeignKey(User, related_name='invoices')
     client = models.ForeignKey(Client, related_name='invoices')
@@ -44,6 +54,8 @@ class Invoice(models.Model):
         decimal_places=settings.DECIMAL_PLACES,
         default=Decimal('0.00'),
     )
+
+    status = models.CharField(max_length=10, choices=STATUSES, default=DRAFT)
 
     class Meta:
         ordering = ('-id',)

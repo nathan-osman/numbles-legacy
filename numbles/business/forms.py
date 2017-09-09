@@ -25,4 +25,4 @@ class EditInvoiceForm(forms.ModelForm):
 
     class Meta:
         model = Invoice
-        fields = ('id', 'client', 'date')
+        fields = ('id', 'client', 'date', 'status')

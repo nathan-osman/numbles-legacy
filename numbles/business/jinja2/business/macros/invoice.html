@@ -3,10 +3,35 @@
 
 {% set new = ui.button(title='New Invoice', icon='plus', url=url('business:new_invoice')) %}
 
+{##
+ # Display invoice status
+ #}
+{% macro status(invoice) %}
+    {% if invoice.status == invoice.DRAFT %}
+        <span class="text-muted">
+    {% elif invoice.status == invoice.ISSUED %}
+        <span class="text-warning">
+    {% elif invoice.status == invoice.PAID %}
+        <span class="text-success">
+    {% else %}
+        <span>
+    {% endif %}
+    {{ invoice.get_status_display() }}
+    {% if invoice.status == invoice.DRAFT %}
+        &nbsp;
+        <span class="fa fa-question-circle" data-toggle="tooltip" title="Invoice has not yet been issued."></span>
+    {% elif invoice.status == invoice.ISSUED %}
+        &nbsp;
+        <span class="fa fa-question-circle" data-toggle="tooltip" title="Invoice has been issued but full payment has not yet been received."></span>
+    {% endif %}
+    </span>
+{% endmacro %}
+
 {% macro _header() %}
     <th>#</th>
     <th>Date</th>
     <th>Client</th>
+    <th>Status</th>
     <th class="text-right">Amount</th>
 {% endmacro %}
 
@@ -20,11 +45,14 @@
             </td>
             <td>{{ i.date }}</td>
             <td>{{ i.client }}</td>
+            <td>
+                {{ status(i) }}
+            </td>
             <td class="text-right">{{ util.currency(i.amount) }}</td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="4">
+            <td colspan="5">
                 <span class="text-muted">
                     No invoices entered
                 </span>

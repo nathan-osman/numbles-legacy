@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% import 'business/macros/entry.html' as entry %}
+{% import 'business/macros/invoice.html' as invoice_ %}
 {% import 'ledger/macros/util.html' as util %}
 {% import 'macros/ui.html' as ui %}
 
@@ -29,6 +30,10 @@
                                 {{ invoice.client }}
                             </a>
                         </td>
+                    </tr>
+                    <tr>
+                        <th>Status:</th>
+                        <td>{{ invoice_.status(invoice) }}</td>
                     </tr>
                     <tr>
                         <th>Amount:</th>
