@@ -3,5 +3,9 @@
 {% import 'business/macros/client.html' as client %}
 
 {% block content %}
-    {{ client.list(clients) }}
+    <div class="row">
+        <div class="col-lg-8">
+            {{ client.list(clients) }}
+        </div>
+    </div>
 {% endblock %}

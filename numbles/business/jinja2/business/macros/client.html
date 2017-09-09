@@ -6,6 +6,7 @@
     <th>Name</th>
     <th>Contact</th>
     <th>Email</th>
+    <th class="text-center">Paid</th>
     <th class="text-right">Invoices</th>
 {% endmacro %}
 
@@ -33,11 +34,14 @@
                     <span class="text-muted">None</span>
                 {% endif %}
             </td>
-            <td class="text-right">{{ c.invoices.count() }}</td>
+            <td class="text-center">
+                <span class="fa {% if not c.num_unpaid_invoices %}fa-check text-success{% else %}fa-times text-danger{% endif %}"></span>
+            </td>
+            <td class="text-right">{{ c.num_invoices }}</td>
         </tr>
     {% else %}
         <tr>
-            <td colspan="4">
+            <td colspan="5">
                 <span class="text-muted">
                     No clients
                 </span>

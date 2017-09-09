@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Max
+from django.db import models
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import now
@@ -16,9 +16,19 @@ def view_clients(request):
     """
     Show all clients
     """
+    q = Client.objects.filter(user=request.user).annotate(
+        num_invoices=models.Count('invoices'),
+        num_unpaid_invoices=models.Sum(
+            models.Case(
+                models.When(invoices__status=Invoice.ISSUED, then=1),
+                default=0,
+                output_field=models.IntegerField(),
+            ),
+        ),
+    )
     return render(request, 'business/pages/view_clients.html', {
         'title': "View Clients",
-        'clients': Client.objects.filter(user=request.user),
+        'clients': q,
     })
 
 
@@ -99,7 +109,7 @@ def edit_invoice(request, id=None):
         initial = {}
         if not invoice:
             initial['id'] = \
-                Invoice.objects.all().aggregate(m=Max('id'))['m'] or 0 + 1
+                Invoice.objects.all().aggregate(m=models.Max('id'))['m'] or 0 + 1
             initial['client'] = request.GET.get('client', None)
             initial['date'] = now()
         form = EditInvoiceForm(instance=invoice, initial=initial)
