@@ -1,4 +1,5 @@
-from .csv import write_csv
+from .csv import CSVExporter
+from .excel import ExcelExporter
 
 
 class InvalidFormatError(Exception):
@@ -8,15 +9,16 @@ class InvalidFormatError(Exception):
         )
 
 
-formats = {
-    'csv': write_csv,
+_formats = {
+    'csv': CSVExporter,
+    'excel': ExcelExporter,
 }
 
 
-def export(format, transactions):
+def export(fmt, transactions):
     """
-    Export the list of transactions in the specified format.
+    Export the list of transactions in the specified format
     """
-    if format in formats:
-        return formats[format](transactions)
-    raise InvalidFormatError(format)
+    if fmt in _formats:
+        return _formats[fmt]().export(transactions)
+    raise InvalidFormatError(fmt)
