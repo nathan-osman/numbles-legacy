@@ -4,17 +4,18 @@ from json import dumps
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Q
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.timezone import make_aware, now
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from numbles.forms import DeleteForm
+from numbles.ledger.exporters import export as export_transactions
 from numbles.ledger.forms import AttachForm, EditAccountForm, EditTagForm, \
-    EditTransactionForm, LinkForm, ToggleForm, TransactionForm, TransferForm
+    EditTransactionForm, LinkForm, ToggleForm, TransferForm
 from numbles.ledger.models import Account, Attachment, Tag, Transaction
+from numbles.ledger.util import parse_transaction_form
 
 
 @login_required
@@ -166,39 +167,7 @@ def transactions(request):
     """
     Fully customizable transaction list
     """
-    t = Transaction.objects.filter(user=request.user)
-    form = TransactionForm(request.user, data=request.GET)
-    if form.is_valid():
-        date_from = form.cleaned_data['date_from']
-        if date_from is not None:
-            t = t.filter(date__gte=date_from)
-        date_to = form.cleaned_data['date_to']
-        if date_to is not None:
-            t = t.filter(date__lte=date_to)
-        q = form.cleaned_data['query']
-        if q is not None:
-            t = t.filter(Q(summary__icontains=q) | Q(description__icontains=q))
-        account = form.cleaned_data['account']
-        if account is not None:
-            t = t.filter(account=account)
-        tag = form.cleaned_data['tag']
-        if tag is not None:
-            t = t.filter(tags=tag)
-        reconciled = form.cleaned_data['reconciled']
-        if reconciled is not None:
-            t = t.filter(reconciled=reconciled)
-        amount_min = form.cleaned_data['amount_min']
-        if amount_min is not None:
-            t = t.filter(amount__gte=amount_min)
-        amount_max = form.cleaned_data['amount_max']
-        if amount_max is not None:
-            t = t.filter(amount__lte=amount_max)
-        has_attachment = form.cleaned_data['has_attachment']
-        if has_attachment is not None:
-            if has_attachment:
-                t = t.filter(~Q(attachments=None))
-            else:
-                t = t.filter(attachments=None)
+    form, t = parse_transaction_form(request)
     return render(request, 'ledger/pages/transactions.html', {
         'title': "Transactions",
         'transactions': t,
@@ -376,6 +345,12 @@ def delete_transaction(request, id):
         'breadcrumbs': [transaction.account, transaction],
         'form': form,
     })
+
+
+@login_required
+def export(request):
+    form, t = parse_transaction_form(request)
+    return export_transactions(request.GET.get('format', ''), t)
 
 
 @login_required

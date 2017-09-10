@@ -33,6 +33,12 @@
                     Please enable JavaScript to select the columns to display.
                 </div>
             {% endcall %}
+            {% call ui.box(title='Export', icon='arrow-down') %}
+                <p>
+                    Use the links below to export transactions:
+                </p>
+                <a href="{{ url('ledger:export') }}?{{ qs(request, format='csv') }}">CSV</a>
+            {% endcall %}
         </div>
         <div class="col-md-3">
             {% call form_.form(method='get') %}
