@@ -11,6 +11,16 @@ class Exporter:
     COLUMN_RECONCILED = 'reconciled'
     COLUMN_AMOUNT = 'amount'
 
+    COLUMNS = (
+        COLUMN_ID,
+        COLUMN_DATE,
+        COLUMN_ACCOUNT,
+        COLUMN_SUMMARY,
+        COLUMN_TAGS,
+        COLUMN_RECONCILED,
+        COLUMN_AMOUNT,
+    )
+
     TITLES = {
         COLUMN_ID: "ID",
         COLUMN_DATE: "Date",
@@ -20,20 +30,6 @@ class Exporter:
         COLUMN_RECONCILED: "Reconciled",
         COLUMN_AMOUNT: "Amount",
     }
-
-    def columns(self):
-        """
-        Return a tuple of all of the columns that should be displayed
-        """
-        return (
-            self.COLUMN_ID,
-            self.COLUMN_DATE,
-            self.COLUMN_ACCOUNT,
-            self.COLUMN_SUMMARY,
-            self.COLUMN_TAGS,
-            self.COLUMN_RECONCILED,
-            self.COLUMN_AMOUNT,
-        )
 
     def column(self, column, transaction):
         """

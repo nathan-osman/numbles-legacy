@@ -1,5 +1,6 @@
 from .csv import CSVExporter
 from .excel import ExcelExporter
+from .pdf import PDFExporter
 
 
 class InvalidFormatError(Exception):
@@ -12,6 +13,7 @@ class InvalidFormatError(Exception):
 _formats = {
     'csv': CSVExporter,
     'excel': ExcelExporter,
+    'pdf': PDFExporter
 }
 
 

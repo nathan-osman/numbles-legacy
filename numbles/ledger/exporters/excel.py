@@ -16,13 +16,12 @@ class ExcelExporter(Exporter):
         wb = Workbook()
         ws = wb.active
         font = Font(bold=True)
-        columns = self.columns()
-        for i, c in zip(range(0, len(columns)), columns):
+        for i, c in zip(range(0, len(self.COLUMNS)), self.COLUMNS):
             cell = ws.cell(row=1, column=(i + 1))
             cell.value = self.TITLES[c]
             cell.font = font
         for j, t in zip(range(0, transactions.count()), transactions):
-            for i, c in zip(range(0, len(columns)), columns):
+            for i, c in zip(range(0, len(self.COLUMNS)), self.COLUMNS):
                 cell = ws.cell(row=(j + 2), column=(i + 1))
                 cell.value = self.column(c, t)
         wb.save(response)

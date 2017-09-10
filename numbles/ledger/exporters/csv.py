@@ -16,7 +16,7 @@ class CSVExporter(Exporter):
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="numbles.csv"'
         writer = csv.writer(response)
-        writer.writerow([self.TITLES[c] for c in self.columns()])
+        writer.writerow([self.TITLES[c] for c in self.COLUMNS])
         for t in transactions:
-            writer.writerow([self.column(c, t) for c in self.columns()])
+            writer.writerow([self.column(c, t) for c in self.COLUMNS])
         return response

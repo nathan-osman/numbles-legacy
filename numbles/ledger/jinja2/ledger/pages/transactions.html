@@ -37,8 +37,18 @@
                 <p>
                     Use the links below to export transactions:
                 </p>
-                <a href="{{ url('ledger:export') }}?{{ qs(request, format='csv') }}">CSV</a><br>
-                <a href="{{ url('ledger:export') }}?{{ qs(request, format='excel') }}">Excel 2010</a>
+                <div>
+                    <span class="fa fa-file-o"></span>
+                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='csv') }}">CSV</a>
+                </div>
+                <div>
+                    <span class="fa fa-file-pdf-o"></span>
+                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='pdf') }}">PDF</a>
+                </div>
+                <div>
+                    <span class="fa fa-file-excel-o"></span>
+                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='excel') }}">Excel 2010</a>
+                </div>
             {% endcall %}
         </div>
         <div class="col-md-3">
