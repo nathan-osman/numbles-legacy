@@ -35,19 +35,25 @@
             {% endcall %}
             {% call ui.box(title='Export', icon='arrow-down') %}
                 <p>
-                    Use the links below to export transactions:
+                    Create a file from the current view:
                 </p>
                 <div>
-                    <span class="fa fa-file-o"></span>
-                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='csv') }}">CSV</a>
+                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='csv') }}">
+                        <span class="fa fa-file-text-o"></span>
+                        &nbsp; CSV
+                    </a>
                 </div>
                 <div>
-                    <span class="fa fa-file-pdf-o"></span>
-                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='pdf') }}">PDF</a>
+                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='pdf') }}">
+                        <span class="fa fa-file-pdf-o"></span>
+                        &nbsp; PDF
+                    </a>
                 </div>
                 <div>
-                    <span class="fa fa-file-excel-o"></span>
-                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='excel') }}">Excel 2010</a>
+                    <a href="{{ url('ledger:export') }}?{{ qs(request, format='excel') }}">
+                        <span class="fa fa-file-excel-o"></span>
+                        &nbsp; Excel 2010
+                    </a>
                 </div>
             {% endcall %}
         </div>
