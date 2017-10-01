@@ -108,8 +108,8 @@ def edit_invoice(request, id=None):
     else:
         initial = {}
         if not invoice:
-            initial['id'] = \
-                Invoice.objects.all().aggregate(m=models.Max('id'))['m'] or 0 + 1
+            m = Invoice.objects.all().aggregate(m=models.Max('id'))['m']
+            initial['id'] = (m or 0) + 1
             initial['client'] = request.GET.get('client', None)
             initial['date'] = now()
         form = EditInvoiceForm(instance=invoice, initial=initial)
