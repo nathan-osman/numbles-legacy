@@ -96,6 +96,8 @@ class InvoiceGenerator:
         return Table(data, style=style, colWidths=colWidths)
 
     def _entry_table(self):
+        if not self._invoice.entries.count():
+            return Spacer(0, 0)
         data = []
         for e in self._invoice.entries.all():
             data.append(
