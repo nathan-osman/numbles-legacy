@@ -56,8 +56,8 @@ def delete_item(request, id):
     if request.method == 'POST':
         form = DeleteForm(data=request.POST)
         if form.is_valid():
-            client.delete()
-            return redirect('budget.index')
+            item.delete()
+            return redirect('budget:index')
     else:
         form = DeleteForm()
     return render(request, 'pages/delete.html', {
