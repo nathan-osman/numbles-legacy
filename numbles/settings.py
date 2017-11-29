@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_archive',
     # Numbles applications
     'numbles.accounts',
+    'numbles.budget',
     'numbles.business',
     'numbles.ledger',
 ]

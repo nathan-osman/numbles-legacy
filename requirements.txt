@@ -1,5 +1,6 @@
 Django>=1.8
 psycopg2
+crontab
 django-archive
 django-debug-toolbar
 django-widget-tweaks
