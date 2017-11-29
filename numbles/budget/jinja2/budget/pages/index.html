@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% import 'budget/macros/item.html' as item %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {{ item.list(items) }}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
+
+{% macro _header() %}
+    <th>Name</th>
+    <th>Cron</th>
+    <th>Next</th>
+    <th class="text-right">Amount</th>
+{% endmacro %}
+
+{% macro _data(items) %}
+    {% for i in items %}
+        <tr>
+            <td>{{ i.name }}</td>
+            <td>{{ i.cron }}</td>
+            <td title="{{ i.next }}">
+                {{ naturaltime(i.next) }}
+            </td>
+            <td class="text-right">{{ util.currency(i.amount) }}</td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">
+                <span class="text-muted">
+                    No clients
+                </span>
+            </td>
+        </tr>
+    {% endfor %}
+{% endmacro %}
+
+{##
+ # Display a list of budget items
+ #}
+{% macro list(items, title='Items') %}
+    {% call ui.box(title=title, icon='book') %}
+        <table class="table no-margin">
+            <thead>{{ _header() }}</thead>
+            <tbody>{{ _data(items) }}</tbody>
+        </table>
+    {% endcall %}
+{% endmacro %}
