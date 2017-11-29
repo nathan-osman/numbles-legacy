@@ -62,6 +62,10 @@ class Item(models.Model):
     def __unicode__(self):
         return self.name
 
+    @models.permalink
+    def get_absolute_url(self):
+        return ('budget:view_item', (), {'id': self.id})
+
     def total(self, start, end):
         """
         Calculate the total amount for the time range represented by the start

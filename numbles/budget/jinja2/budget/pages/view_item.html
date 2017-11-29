@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% import 'ledger/macros/util.html' as util %}
+{% import 'macros/ui.html' as ui %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6">
+            {% set edit = ui.button(title='Edit', icon='pencil', url=url('budget:edit_item', kwargs={'id': item.id})) %}
+            {% set delete = ui.button(title='Delete', icon='trash', url=url('budget:delete_item', kwargs={'id': item.id})) %}
+            {% call ui.box(title='Item Information', icon='book', buttons=(edit, delete)) %}
+                <p>Detailed information for the item is displayed below.</p>
+                <table class="table no-margin">
+                    <tr>
+                        <th>Name:</th>
+                        <td>{{ item.name }}</td>
+                    </tr>
+                    {% if item.description %}
+                        <tr>
+                            <th>Description:</th>
+                            <td>{{ linebreaksbr(item.description) }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Cron:</th>
+                        <td>{{ item.cron }}</td>
+                    </tr>
+                    <tr>
+                        <th>Next:</th>
+                        <td>
+                            {{ naturaltime(item.next) }}
+                            &nbsp;
+                            <span class="fa fa-question-circle" data-toggle="tooltip" title="{{ item.next }}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Amount:</th>
+                        <td>{{ util.currency(item.amount, color=false) }}</td>
+                    </tr>
+                </table>
+            {% endcall %}
+        </div>
+    </div>
+{% endblock %}

@@ -13,18 +13,22 @@
 {% macro _data(items) %}
     {% for i in items %}
         <tr>
-            <td>{{ i.name }}</td>
+            <td>
+                <a href="{{ i.get_absolute_url() }}">
+                    {{ i.name }}
+                </a>
+            </td>
             <td>{{ i.cron }}</td>
             <td title="{{ i.next }}">
                 {{ naturaltime(i.next) }}
             </td>
-            <td class="text-right">{{ util.currency(i.amount) }}</td>
+            <td class="text-right">{{ util.currency(i.amount, color=false) }}</td>
         </tr>
     {% else %}
         <tr>
             <td colspan="4">
                 <span class="text-muted">
-                    No clients
+                    No items
                 </span>
             </td>
         </tr>
