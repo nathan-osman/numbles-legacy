@@ -41,7 +41,7 @@ def edit_item(request, id=None):
             return redirect(item)
     else:
         form = EditItemForm(instance=item)
-    return render(request, 'pages/form.html', {
+    return render(request, 'budget/pages/edit_item.html', {
         'title': "{} Item".format("Edit" if id else "New"),
         'form': form,
     })

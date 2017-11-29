@@ -1,0 +1,45 @@
+{% extends 'pages/form.html' %}
+
+{% import 'macros/ui.html' as ui %}
+
+{% block help %}
+    <div class="col-sm-4">
+        {% call ui.box(title='Cron Help', icon='question-circle') %}
+            <p>
+                Cron is a special format for specifying the frequency of an item. A cron entry consists of five fields, separated by a space.
+            </p>
+            <p>
+                <code>[hour] [minute] [day of month] [month] [day of week]</code>
+            </p>
+            <p>
+                Each field may contain a numerical value that determines which of those intervals to use or an <code>*</code> to use all of them.
+            </p>
+            <p>
+                For example, to specify "11:00am every friday", one would use:
+            </p>
+            <p>
+                <code>11 0 * * 5</code>
+            </p>
+            <p>
+                To specify multiples, use a <code>/</code> followed by the multiple. For example, to specify "the first day of every other month", one would use:
+            </p>
+            <p>
+                <code>0 0 1 */2 *</code>
+            </p>
+            <p>
+                You may also specify one of the following special aliases:
+            </p>
+            <ul>
+                <li><code>@yearly</code> / <code>@anually</code></li>
+                <li><code>@monthly</code></li>
+                <li><code>@weekly</code></li>
+                <li><code>@daily</code></li>
+            </ul>
+            <p>
+                <a href="http://www.nncron.ru/help/EN/working/cron-format.htm" target="_blank">
+                    More detailed syntax description.
+                </a>
+            </p>
+        {% endcall %}
+    </div>
+{% endblock %}
