@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 
+from .forms import EditItemForm
 from .models import Item
 
 
@@ -9,4 +10,25 @@ def index(request):
     return render(request, 'budget/pages/index.html', {
         'title': "Budget",
         'items': Item.objects.filter(user=request.user),
+    })
+
+
+@login_required
+def edit_item(request, id=None):
+    """
+    Edit an item
+    """
+    item = id and get_object_or_404(Item, pk=id, user=request.user)
+    if request.method == 'POST':
+        form = EditItemForm(instance=item, data=request.POST)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.user = request.user
+            item.save()
+            return redirect('budget:index')
+    else:
+        form = EditItemForm(instance=item)
+    return render(request, 'pages/form.html', {
+        'title': "{} Item".format("Edit" if id else "New"),
+        'form': form,
     })

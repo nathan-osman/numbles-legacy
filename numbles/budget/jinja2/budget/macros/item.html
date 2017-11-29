@@ -1,6 +1,8 @@
 {% import 'ledger/macros/util.html' as util %}
 {% import 'macros/ui.html' as ui %}
 
+{% set new = ui.button(title='New Item', icon='plus', url=url('budget:new_item')) %}
+
 {% macro _header() %}
     <th>Name</th>
     <th>Cron</th>
@@ -32,8 +34,8 @@
 {##
  # Display a list of budget items
  #}
-{% macro list(items, title='Items') %}
-    {% call ui.box(title=title, icon='book') %}
+{% macro list(items, title='Items', buttons=(new,)) %}
+    {% call ui.box(title=title, icon='book', buttons=buttons) %}
         <table class="table no-margin">
             <thead>{{ _header() }}</thead>
             <tbody>{{ _data(items) }}</tbody>
