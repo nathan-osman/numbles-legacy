@@ -7,6 +7,7 @@ from datetime import timedelta
 from hashlib import md5
 from os.path import basename
 
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.urlresolvers import reverse
@@ -65,6 +66,7 @@ def environment(**kwargs):
         'linebreaksbr': linebreaksbr,
         'localtime': lambda x: template_localtime(x).strftime('%Y-%m-%d %H:%M:%S'),
         'md5': lambda x: md5(x).hexdigest(),
+        'naturaltime': naturaltime,
         'now': now,
         'paginate': paginate,
         'qs': qs,
