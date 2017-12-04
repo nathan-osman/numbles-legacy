@@ -3,14 +3,17 @@
 
 {% set new = ui.button(title='New Item', icon='plus', url=url('budget:new_item')) %}
 
-{% macro _header() %}
+{% macro _header(start, end) %}
     <th>Name</th>
     <th>Cron</th>
     <th>Next</th>
     <th class="text-right">Amount</th>
+    {% if start and end %}
+        <th class="text-right">Total</th>
+    {% endif %}
 {% endmacro %}
 
-{% macro _data(items) %}
+{% macro _data(items, start, end) %}
     {% for i in items %}
         <tr>
             <td>
@@ -22,11 +25,18 @@
             <td title="{{ i.next }}">
                 {{ naturaltime(i.next) }}
             </td>
-            <td class="text-right">{{ util.currency(i.amount, color=false) }}</td>
+            <td class="text-right">
+                {{ util.currency(i.amount, color=false) }}
+            </td>
+            {% if start and end %}
+                <td class="text-right">
+                    {{ util.currency(i.total(start, end), color=false) }}
+                </td>
+            {% endif %}
         </tr>
     {% else %}
         <tr>
-            <td colspan="4">
+            <td colspan="{% if start and end %}5{% else %}4{% endif %}">
                 <span class="text-muted">
                     No items
                 </span>
@@ -38,11 +48,11 @@
 {##
  # Display a list of budget items
  #}
-{% macro list(items, title='Items', buttons=(new,)) %}
+{% macro list(items, title='Items', buttons=(new,), start=none, end=none) %}
     {% call ui.box(title=title, icon='book', buttons=buttons) %}
         <table class="table no-margin">
-            <thead>{{ _header() }}</thead>
-            <tbody>{{ _data(items) }}</tbody>
+            <thead>{{ _header(start, end) }}</thead>
+            <tbody>{{ _data(items, start, end) }}</tbody>
         </table>
     {% endcall %}
 {% endmacro %}

@@ -1,5 +1,8 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils.timezone import localtime, make_aware, now
 
 from ..forms import DeleteForm
 from .forms import EditItemForm
@@ -8,9 +11,14 @@ from .models import Item
 
 @login_required
 def index(request):
+    n = localtime(now())
+    s = make_aware(datetime(n.year, 1, 1))
+    e = make_aware(datetime(n.year + 1, 1, 1))
     return render(request, 'budget/pages/index.html', {
         'title': "Budget",
         'items': Item.objects.filter(user=request.user),
+        'start': s,
+        'end': e,
     })
 
 
