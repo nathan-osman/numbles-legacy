@@ -94,6 +94,7 @@ else:
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': os.environ.get('NUMBLES_DB_NAME', 'postgres'),
             'USER': os.environ.get('NUMBLES_DB_USER', 'postgres'),
+            'PASSWORD': os.environ.get('NUMBLES_DB_PASSWORD', ''),
             'HOST': os.environ.get('NUMBLES_DB_HOST', 'postgres'),
         },
     }
