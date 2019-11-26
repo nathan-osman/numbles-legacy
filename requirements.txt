@@ -5,7 +5,7 @@ django-archive
 django-debug-toolbar
 django-widget-tweaks
 jinja2
-openpyxl
+openpyxl<3
 pyhectane
 pytz
 reportlab
