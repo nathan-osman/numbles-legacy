@@ -1,4 +1,5 @@
 Django<2
+Pillow<6
 psycopg2
 crontab
 django-archive
