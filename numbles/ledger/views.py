@@ -195,7 +195,9 @@ def edit_transaction(request, id=None):
         if not transaction:
             duplicate_id = request.GET.get('duplicate_id', None)
             if duplicate_id is not None:
-                initial = get_object_or_404(Transaction, pk=duplicate_id, user=request.user).__dict__
+                t = get_object_or_404(Transaction, pk=duplicate_id, user=request.user)
+                initial = t.__dict__
+                initial['tags'] = t.tags.all()
             else:
                 initial['account'] = request.GET.get('account', None)
                 initial['date'] = now()
