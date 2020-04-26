@@ -10,8 +10,9 @@
     <div class="row">
         <div class="col-md-6">
             {% set edit = ui.button(title='Edit', icon='pencil', url=url('ledger:edit_transaction', kwargs={'id': transaction.id})) %}
+            {% set duplicate = ui.button(title='Duplicate...', icon='files-o', url=url('ledger:new_transaction') + '?duplicate_id={}'.format(transaction.id)) %}
             {% set delete = ui.button(title='Delete', icon='trash', url=url('ledger:delete_transaction', kwargs={'id': transaction.id})) %}
-            {% call ui.box(title='Transaction Details', icon='info-circle', buttons=(edit, delete)) %}
+            {% call ui.box(title='Transaction Details', icon='info-circle', buttons=(edit, duplicate, delete)) %}
                 <p>Details for the transaction are displayed below.</p>
                 <table class="table no-margin">
                     <tr>

@@ -193,8 +193,12 @@ def edit_transaction(request, id=None):
     else:
         initial = {}
         if not transaction:
-            initial['account'] = request.GET.get('account', None)
-            initial['date'] = now()
+            duplicate_id = request.GET.get('duplicate_id', None)
+            if duplicate_id is not None:
+                initial = get_object_or_404(Transaction, pk=duplicate_id, user=request.user).__dict__
+            else:
+                initial['account'] = request.GET.get('account', None)
+                initial['date'] = now()
         form = EditTransactionForm(request.user, instance=transaction, initial=initial)
     return render(request, 'pages/form.html', {
         'title': "{} Transaction".format("Edit" if transaction else "New"),
