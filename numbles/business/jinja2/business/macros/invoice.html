@@ -13,6 +13,8 @@
         <span class="text-warning">
     {% elif invoice.status == invoice.PAID %}
         <span class="text-success">
+    {% elif invoice.status == invoice.VOIDED %}
+        <span class="text-danger">
     {% else %}
         <span>
     {% endif %}

@@ -37,11 +37,13 @@ class Invoice(models.Model):
     DRAFT = 'draft'
     ISSUED = 'issued'
     PAID = 'paid'
+    VOIDED = 'voided'
 
     STATUSES = (
         (DRAFT, 'Draft'),
         (ISSUED, 'Issued'),
         (PAID, 'Paid'),
+        (VOIDED, 'Voided'),
     )
 
     id = models.IntegerField(primary_key=True, verbose_name="ID")
