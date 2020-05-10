@@ -27,6 +27,10 @@
                     <small>Sum of Transactions</small><br>
                     {{ util.currency(transactions.sum()) }}
                 </h3>
+                <h3>
+                    <small>Sum of Reconciled Transactions</small><br>
+                    {{ util.currency(transactions.filter(reconciled=true).sum()) }}
+                </h3>
             {% endcall %}
             {% call ui.box(title='View', icon='eye') %}
                 <div id="columns">
